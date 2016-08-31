@@ -1,0 +1,699 @@
+/*
+Copyright (c) 2012 Advanced Micro Devices, Inc.  
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+//Originally written by Takahiro Harada
+#ifndef B3_CONTACT4DATA_H
+#define B3_CONTACT4DATA_H
+#ifndef B3_FLOAT4_H
+#define B3_FLOAT4_H
+#ifndef B3_PLATFORM_DEFINITIONS_H
+#define B3_PLATFORM_DEFINITIONS_H
+struct MyTest
+{
+	int bla;
+};
+#ifdef __cplusplus
+#else
+//keep B3_LARGE_FLOAT*B3_LARGE_FLOAT < FLT_MAX
+#define B3_LARGE_FLOAT 1e18f
+#define B3_INFINITY 1e18f
+#define b3Assert(a)
+#define b3ConstArray(a) __global const a*
+#define b3AtomicInc atomic_inc
+#define b3AtomicAdd atomic_add
+#define b3Fabs fabs
+#define b3Sqrt native_sqrt
+#define b3Sin native_sin
+#define b3Cos native_cos
+#endif
+#endif
+#ifdef __cplusplus
+#else
+	typedef float4	b3Float4;
+	#define b3Float4ConstArg const b3Float4
+	#define b3MakeFloat4 (float4)
+	float b3Dot3F4(b3Float4ConstArg v0,b3Float4ConstArg v1)
+	{
+		float4 a1 = b3MakeFloat4(v0.xyz,0.f);
+		float4 b1 = b3MakeFloat4(v1.xyz,0.f);
+		return dot(a1, b1);
+	}
+	b3Float4 b3Cross3(b3Float4ConstArg v0,b3Float4ConstArg v1)
+	{
+		float4 a1 = b3MakeFloat4(v0.xyz,0.f);
+		float4 b1 = b3MakeFloat4(v1.xyz,0.f);
+		return cross(a1, b1);
+	}
+	#define b3MinFloat4 min
+	#define b3MaxFloat4 max
+	#define b3Normalized(a) normalize(a)
+#endif 
+		
+inline bool b3IsAlmostZero(b3Float4ConstArg v)
+{
+	if(b3Fabs(v.x)>1e-6 || b3Fabs(v.y)>1e-6 || b3Fabs(v.z)>1e-6)	
+		return false;
+	return true;
+}
+inline int    b3MaxDot( b3Float4ConstArg vec, __global const b3Float4* vecArray, int vecLen, float* dotOut )
+{
+    float maxDot = -B3_INFINITY;
+    int i = 0;
+    int ptIndex = -1;
+    for( i = 0; i < vecLen; i++ )
+    {
+        float dot = b3Dot3F4(vecArray[i],vec);
+            
+        if( dot > maxDot )
+        {
+            maxDot = dot;
+            ptIndex = i;
+        }
+    }
+	b3Assert(ptIndex>=0);
+    if (ptIndex<0)
+	{
+		ptIndex = 0;
+	}
+    *dotOut = maxDot;
+    return ptIndex;
+}
+#endif //B3_FLOAT4_H
+typedef  struct b3Contact4Data b3Contact4Data_t;
+struct b3Contact4Data
+{
+	b3Float4	m_worldPosB[4];
+//	b3Float4	m_localPosA[4];
+//	b3Float4	m_localPosB[4];
+	b3Float4	m_worldNormalOnB;	//	w: m_nPoints
+	unsigned short  m_restituitionCoeffCmp;
+	unsigned short  m_frictionCoeffCmp;
+	int m_batchIdx;
+	int m_bodyAPtrAndSignBit;//x:m_bodyAPtr, y:m_bodyBPtr
+	int m_bodyBPtrAndSignBit;
+	int	m_childIndexA;
+	int	m_childIndexB;
+	int m_unused1;
+	int m_unused2;
+};
+inline int b3Contact4Data_getNumPoints(const struct b3Contact4Data* contact)
+{
+	return (int)contact->m_worldNormalOnB.w;
+};
+inline void b3Contact4Data_setNumPoints(struct b3Contact4Data* contact, int numPoints)
+{
+	contact->m_worldNormalOnB.w = (float)numPoints;
+};
+#endif //B3_CONTACT4DATA_H
+#ifndef B3_CONTACT_CONSTRAINT5_H
+#define B3_CONTACT_CONSTRAINT5_H
+#ifndef B3_FLOAT4_H
+#ifdef __cplusplus
+#else
+#endif 
+#endif //B3_FLOAT4_H
+typedef struct b3ContactConstraint4 b3ContactConstraint4_t;
+struct b3ContactConstraint4
+{
+	b3Float4 m_linear;//normal?
+	b3Float4 m_worldPos[4];
+	b3Float4 m_center;	//	friction
+	float m_jacCoeffInv[4];
+	float m_b[4];
+	float m_appliedRambdaDt[4];
+	float m_fJacCoeffInv[2];	//	friction
+	float m_fAppliedRambdaDt[2];	//	friction
+	unsigned int m_bodyA;
+	unsigned int m_bodyB;
+	int			m_batchIdx;
+	unsigned int m_paddings;
+};
+//inline	void setFrictionCoeff(float value) { m_linear[3] = value; }
+inline	float b3GetFrictionCoeff(b3ContactConstraint4_t* constraint) 
+{
+	return constraint->m_linear.w; 
+}
+#endif //B3_CONTACT_CONSTRAINT5_H
+#ifndef B3_RIGIDBODY_DATA_H
+#define B3_RIGIDBODY_DATA_H
+#ifndef B3_FLOAT4_H
+#ifdef __cplusplus
+#else
+#endif 
+#endif //B3_FLOAT4_H
+#ifndef B3_QUAT_H
+#define B3_QUAT_H
+#ifndef B3_PLATFORM_DEFINITIONS_H
+#ifdef __cplusplus
+#else
+#endif
+#endif
+#ifndef B3_FLOAT4_H
+#ifdef __cplusplus
+#else
+#endif 
+#endif //B3_FLOAT4_H
+#ifdef __cplusplus
+#else
+	typedef float4	b3Quat;
+	#define b3QuatConstArg const b3Quat
+	
+	
+inline float4 b3FastNormalize4(float4 v)
+{
+	v = (float4)(v.xyz,0.f);
+	return fast_normalize(v);
+}
+	
+inline b3Quat b3QuatMul(b3Quat a, b3Quat b);
+inline b3Quat b3QuatNormalized(b3QuatConstArg in);
+inline b3Quat b3QuatRotate(b3QuatConstArg q, b3QuatConstArg vec);
+inline b3Quat b3QuatInvert(b3QuatConstArg q);
+inline b3Quat b3QuatInverse(b3QuatConstArg q);
+inline b3Quat b3QuatMul(b3QuatConstArg a, b3QuatConstArg b)
+{
+	b3Quat ans;
+	ans = b3Cross3( a, b );
+	ans += a.w*b+b.w*a;
+//	ans.w = a.w*b.w - (a.x*b.x+a.y*b.y+a.z*b.z);
+	ans.w = a.w*b.w - b3Dot3F4(a, b);
+	return ans;
+}
+inline b3Quat b3QuatNormalized(b3QuatConstArg in)
+{
+	b3Quat q;
+	q=in;
+	//return b3FastNormalize4(in);
+	float len = native_sqrt(dot(q, q));
+	if(len > 0.f)
+	{
+		q *= 1.f / len;
+	}
+	else
+	{
+		q.x = q.y = q.z = 0.f;
+		q.w = 1.f;
+	}
+	return q;
+}
+inline float4 b3QuatRotate(b3QuatConstArg q, b3QuatConstArg vec)
+{
+	b3Quat qInv = b3QuatInvert( q );
+	float4 vcpy = vec;
+	vcpy.w = 0.f;
+	float4 out = b3QuatMul(b3QuatMul(q,vcpy),qInv);
+	return out;
+}
+inline b3Quat b3QuatInverse(b3QuatConstArg q)
+{
+	return (b3Quat)(-q.xyz, q.w);
+}
+inline b3Quat b3QuatInvert(b3QuatConstArg q)
+{
+	return (b3Quat)(-q.xyz, q.w);
+}
+inline float4 b3QuatInvRotate(b3QuatConstArg q, b3QuatConstArg vec)
+{
+	return b3QuatRotate( b3QuatInvert( q ), vec );
+}
+inline b3Float4 b3TransformPoint(b3Float4ConstArg point, b3Float4ConstArg translation, b3QuatConstArg  orientation)
+{
+	return b3QuatRotate( orientation, point ) + (translation);
+}
+	
+#endif 
+#endif //B3_QUAT_H
+#ifndef B3_MAT3x3_H
+#define B3_MAT3x3_H
+#ifndef B3_QUAT_H
+#ifdef __cplusplus
+#else
+#endif 
+#endif //B3_QUAT_H
+#ifdef __cplusplus
+#else
+typedef struct
+{
+	b3Float4 m_row[3];
+}b3Mat3x3;
+#define b3Mat3x3ConstArg const b3Mat3x3
+#define b3GetRow(m,row) (m.m_row[row])
+inline b3Mat3x3 b3QuatGetRotationMatrix(b3Quat quat)
+{
+	b3Float4 quat2 = (b3Float4)(quat.x*quat.x, quat.y*quat.y, quat.z*quat.z, 0.f);
+	b3Mat3x3 out;
+	out.m_row[0].x=1-2*quat2.y-2*quat2.z;
+	out.m_row[0].y=2*quat.x*quat.y-2*quat.w*quat.z;
+	out.m_row[0].z=2*quat.x*quat.z+2*quat.w*quat.y;
+	out.m_row[0].w = 0.f;
+	out.m_row[1].x=2*quat.x*quat.y+2*quat.w*quat.z;
+	out.m_row[1].y=1-2*quat2.x-2*quat2.z;
+	out.m_row[1].z=2*quat.y*quat.z-2*quat.w*quat.x;
+	out.m_row[1].w = 0.f;
+	out.m_row[2].x=2*quat.x*quat.z-2*quat.w*quat.y;
+	out.m_row[2].y=2*quat.y*quat.z+2*quat.w*quat.x;
+	out.m_row[2].z=1-2*quat2.x-2*quat2.y;
+	out.m_row[2].w = 0.f;
+	return out;
+}
+inline b3Mat3x3 b3AbsoluteMat3x3(b3Mat3x3ConstArg matIn)
+{
+	b3Mat3x3 out;
+	out.m_row[0] = fabs(matIn.m_row[0]);
+	out.m_row[1] = fabs(matIn.m_row[1]);
+	out.m_row[2] = fabs(matIn.m_row[2]);
+	return out;
+}
+__inline
+b3Mat3x3 mtZero();
+__inline
+b3Mat3x3 mtIdentity();
+__inline
+b3Mat3x3 mtTranspose(b3Mat3x3 m);
+__inline
+b3Mat3x3 mtMul(b3Mat3x3 a, b3Mat3x3 b);
+__inline
+b3Float4 mtMul1(b3Mat3x3 a, b3Float4 b);
+__inline
+b3Float4 mtMul3(b3Float4 a, b3Mat3x3 b);
+__inline
+b3Mat3x3 mtZero()
+{
+	b3Mat3x3 m;
+	m.m_row[0] = (b3Float4)(0.f);
+	m.m_row[1] = (b3Float4)(0.f);
+	m.m_row[2] = (b3Float4)(0.f);
+	return m;
+}
+__inline
+b3Mat3x3 mtIdentity()
+{
+	b3Mat3x3 m;
+	m.m_row[0] = (b3Float4)(1,0,0,0);
+	m.m_row[1] = (b3Float4)(0,1,0,0);
+	m.m_row[2] = (b3Float4)(0,0,1,0);
+	return m;
+}
+__inline
+b3Mat3x3 mtTranspose(b3Mat3x3 m)
+{
+	b3Mat3x3 out;
+	out.m_row[0] = (b3Float4)(m.m_row[0].x, m.m_row[1].x, m.m_row[2].x, 0.f);
+	out.m_row[1] = (b3Float4)(m.m_row[0].y, m.m_row[1].y, m.m_row[2].y, 0.f);
+	out.m_row[2] = (b3Float4)(m.m_row[0].z, m.m_row[1].z, m.m_row[2].z, 0.f);
+	return out;
+}
+__inline
+b3Mat3x3 mtMul(b3Mat3x3 a, b3Mat3x3 b)
+{
+	b3Mat3x3 transB;
+	transB = mtTranspose( b );
+	b3Mat3x3 ans;
+	//	why this doesn't run when 0ing in the for{}
+	a.m_row[0].w = 0.f;
+	a.m_row[1].w = 0.f;
+	a.m_row[2].w = 0.f;
+	for(int i=0; i<3; i++)
+	{
+//	a.m_row[i].w = 0.f;
+		ans.m_row[i].x = b3Dot3F4(a.m_row[i],transB.m_row[0]);
+		ans.m_row[i].y = b3Dot3F4(a.m_row[i],transB.m_row[1]);
+		ans.m_row[i].z = b3Dot3F4(a.m_row[i],transB.m_row[2]);
+		ans.m_row[i].w = 0.f;
+	}
+	return ans;
+}
+__inline
+b3Float4 mtMul1(b3Mat3x3 a, b3Float4 b)
+{
+	b3Float4 ans;
+	ans.x = b3Dot3F4( a.m_row[0], b );
+	ans.y = b3Dot3F4( a.m_row[1], b );
+	ans.z = b3Dot3F4( a.m_row[2], b );
+	ans.w = 0.f;
+	return ans;
+}
+__inline
+b3Float4 mtMul3(b3Float4 a, b3Mat3x3 b)
+{
+	b3Float4 colx = b3MakeFloat4(b.m_row[0].x, b.m_row[1].x, b.m_row[2].x, 0);
+	b3Float4 coly = b3MakeFloat4(b.m_row[0].y, b.m_row[1].y, b.m_row[2].y, 0);
+	b3Float4 colz = b3MakeFloat4(b.m_row[0].z, b.m_row[1].z, b.m_row[2].z, 0);
+	b3Float4 ans;
+	ans.x = b3Dot3F4( a, colx );
+	ans.y = b3Dot3F4( a, coly );
+	ans.z = b3Dot3F4( a, colz );
+	return ans;
+}
+#endif
+#endif //B3_MAT3x3_H
+typedef struct b3RigidBodyData b3RigidBodyData_t;
+struct b3RigidBodyData
+{
+	b3Float4				m_pos;
+	b3Quat					m_quat;
+	b3Float4				m_linVel;
+	b3Float4				m_angVel;
+	int 					m_collidableIdx;
+	float 				m_invMass;
+	float 				m_restituitionCoeff;
+	float 				m_frictionCoeff;
+};
+typedef struct b3InertiaData b3InertiaData_t;
+struct b3InertiaData
+{
+	b3Mat3x3 m_invInertiaWorld;
+	b3Mat3x3 m_initInvInertia;
+};
+#endif //B3_RIGIDBODY_DATA_H
+	
+void b3PlaneSpace1 (b3Float4ConstArg n, b3Float4* p, b3Float4* q);
+ void b3PlaneSpace1 (b3Float4ConstArg n, b3Float4* p, b3Float4* q)
+{
+  if (b3Fabs(n.z) > 0.70710678f) {
+    // choose p in y-z plane
+    float a = n.y*n.y + n.z*n.z;
+    float k = 1.f/sqrt(a);
+    p[0].x = 0;
+	p[0].y = -n.z*k;
+	p[0].z = n.y*k;
+    // set q = n x p
+    q[0].x = a*k;
+	q[0].y = -n.x*p[0].z;
+	q[0].z = n.x*p[0].y;
+  }
+  else {
+    // choose p in x-y plane
+    float a = n.x*n.x + n.y*n.y;
+    float k = 1.f/sqrt(a);
+    p[0].x = -n.y*k;
+	p[0].y = n.x*k;
+	p[0].z = 0;
+    // set q = n x p
+    q[0].x = -n.z*p[0].y;
+	q[0].y = n.z*p[0].x;
+	q[0].z = a*k;
+  }
+}
+ 
+void setLinearAndAngular( b3Float4ConstArg n, b3Float4ConstArg r0, b3Float4ConstArg r1, b3Float4* linear, b3Float4* angular0, b3Float4* angular1)
+{
+	*linear = b3MakeFloat4(n.x,n.y,n.z,0.f);
+	*angular0 = b3Cross3(r0, n);
+	*angular1 = -b3Cross3(r1, n);
+}
+float calcRelVel( b3Float4ConstArg l0, b3Float4ConstArg l1, b3Float4ConstArg a0, b3Float4ConstArg a1, b3Float4ConstArg linVel0,
+	b3Float4ConstArg angVel0, b3Float4ConstArg linVel1, b3Float4ConstArg angVel1 )
+{
+	return b3Dot3F4(l0, linVel0) + b3Dot3F4(a0, angVel0) + b3Dot3F4(l1, linVel1) + b3Dot3F4(a1, angVel1);
+}
+float calcJacCoeff(b3Float4ConstArg linear0, b3Float4ConstArg linear1, b3Float4ConstArg angular0, b3Float4ConstArg angular1,
+					float invMass0, const b3Mat3x3* invInertia0, float invMass1, const b3Mat3x3* invInertia1)
+{
+	//	linear0,1 are normlized
+	float jmj0 = invMass0;//b3Dot3F4(linear0, linear0)*invMass0;
+	float jmj1 = b3Dot3F4(mtMul3(angular0,*invInertia0), angular0);
+	float jmj2 = invMass1;//b3Dot3F4(linear1, linear1)*invMass1;
+	float jmj3 = b3Dot3F4(mtMul3(angular1,*invInertia1), angular1);
+	return -1.f/(jmj0+jmj1+jmj2+jmj3);
+}
+void setConstraint4( b3Float4ConstArg posA, b3Float4ConstArg linVelA, b3Float4ConstArg angVelA, float invMassA, b3Mat3x3ConstArg invInertiaA,
+	b3Float4ConstArg posB, b3Float4ConstArg linVelB, b3Float4ConstArg angVelB, float invMassB, b3Mat3x3ConstArg invInertiaB, 
+	__global struct b3Contact4Data* src, float dt, float positionDrift, float positionConstraintCoeff,
+	b3ContactConstraint4_t* dstC )
+{
+	dstC->m_bodyA = abs(src->m_bodyAPtrAndSignBit);
+	dstC->m_bodyB = abs(src->m_bodyBPtrAndSignBit);
+	float dtInv = 1.f/dt;
+	for(int ic=0; ic<4; ic++)
+	{
+		dstC->m_appliedRambdaDt[ic] = 0.f;
+	}
+	dstC->m_fJacCoeffInv[0] = dstC->m_fJacCoeffInv[1] = 0.f;
+	dstC->m_linear = src->m_worldNormalOnB;
+	dstC->m_linear.w = 0.7f ;//src->getFrictionCoeff() );
+	for(int ic=0; ic<4; ic++)
+	{
+		b3Float4 r0 = src->m_worldPosB[ic] - posA;
+		b3Float4 r1 = src->m_worldPosB[ic] - posB;
+		if( ic >= src->m_worldNormalOnB.w )//npoints
+		{
+			dstC->m_jacCoeffInv[ic] = 0.f;
+			continue;
+		}
+		float relVelN;
+		{
+			b3Float4 linear, angular0, angular1;
+			setLinearAndAngular(src->m_worldNormalOnB, r0, r1, &linear, &angular0, &angular1);
+			dstC->m_jacCoeffInv[ic] = calcJacCoeff(linear, -linear, angular0, angular1,
+				invMassA, &invInertiaA, invMassB, &invInertiaB );
+			relVelN = calcRelVel(linear, -linear, angular0, angular1,
+				linVelA, angVelA, linVelB, angVelB);
+			float e = 0.f;//src->getRestituitionCoeff();
+			if( relVelN*relVelN < 0.004f ) e = 0.f;
+			dstC->m_b[ic] = e*relVelN;
+			//float penetration = src->m_worldPosB[ic].w;
+			dstC->m_b[ic] += (src->m_worldPosB[ic].w + positionDrift)*positionConstraintCoeff*dtInv;
+			dstC->m_appliedRambdaDt[ic] = 0.f;
+		}
+	}
+	if( src->m_worldNormalOnB.w > 0 )//npoints
+	{	//	prepare friction
+		b3Float4 center = b3MakeFloat4(0.f,0.f,0.f,0.f);
+		for(int i=0; i<src->m_worldNormalOnB.w; i++) 
+			center += src->m_worldPosB[i];
+		center /= (float)src->m_worldNormalOnB.w;
+		b3Float4 tangent[2];
+		b3PlaneSpace1(src->m_worldNormalOnB,&tangent[0],&tangent[1]);
+		
+		b3Float4 r[2];
+		r[0] = center - posA;
+		r[1] = center - posB;
+		for(int i=0; i<2; i++)
+		{
+			b3Float4 linear, angular0, angular1;
+			setLinearAndAngular(tangent[i], r[0], r[1], &linear, &angular0, &angular1);
+			dstC->m_fJacCoeffInv[i] = calcJacCoeff(linear, -linear, angular0, angular1,
+				invMassA, &invInertiaA, invMassB, &invInertiaB );
+			dstC->m_fAppliedRambdaDt[i] = 0.f;
+		}
+		dstC->m_center = center;
+	}
+	for(int i=0; i<4; i++)
+	{
+		if( i<src->m_worldNormalOnB.w )
+		{
+			dstC->m_worldPos[i] = src->m_worldPosB[i];
+		}
+		else
+		{
+			dstC->m_worldPos[i] = b3MakeFloat4(0.f,0.f,0.f,0.f);
+		}
+	}
+}
+#pragma OPENCL EXTENSION cl_amd_printf : enable
+#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
+#pragma OPENCL EXTENSION cl_khr_local_int32_extended_atomics : enable
+#pragma OPENCL EXTENSION cl_khr_global_int32_extended_atomics : enable
+#ifdef cl_ext_atomic_counters_32
+#pragma OPENCL EXTENSION cl_ext_atomic_counters_32 : enable
+#else
+#define counter32_t volatile global int*
+#endif
+typedef unsigned int u32;
+typedef unsigned short u16;
+typedef unsigned char u8;
+#define GET_GROUP_IDX get_group_id(0)
+#define GET_LOCAL_IDX get_local_id(0)
+#define GET_GLOBAL_IDX get_global_id(0)
+#define GET_GROUP_SIZE get_local_size(0)
+#define GET_NUM_GROUPS get_num_groups(0)
+#define GROUP_LDS_BARRIER barrier(CLK_LOCAL_MEM_FENCE)
+#define GROUP_MEM_FENCE mem_fence(CLK_LOCAL_MEM_FENCE)
+#define AtomInc(x) atom_inc(&(x))
+#define AtomInc1(x, out) out = atom_inc(&(x))
+#define AppendInc(x, out) out = atomic_inc(x)
+#define AtomAdd(x, value) atom_add(&(x), value)
+#define AtomCmpxhg(x, cmp, value) atom_cmpxchg( &(x), cmp, value )
+#define AtomXhg(x, value) atom_xchg ( &(x), value )
+#define SELECT_UINT4( b, a, condition ) select( b,a,condition )
+#define make_float4 (float4)
+#define make_float2 (float2)
+#define make_uint4 (uint4)
+#define make_int4 (int4)
+#define make_uint2 (uint2)
+#define make_int2 (int2)
+#define max2 max
+#define min2 min
+///////////////////////////////////////
+//	Vector
+///////////////////////////////////////
+__inline
+float fastDiv(float numerator, float denominator)
+{
+	return native_divide(numerator, denominator);	
+//	return numerator/denominator;	
+}
+__inline
+float4 fastDiv4(float4 numerator, float4 denominator)
+{
+	return native_divide(numerator, denominator);	
+}
+__inline
+float fastSqrtf(float f2)
+{
+	return native_sqrt(f2);
+//	return sqrt(f2);
+}
+__inline
+float fastRSqrt(float f2)
+{
+	return native_rsqrt(f2);
+}
+__inline
+float fastLength4(float4 v)
+{
+	return fast_length(v);
+}
+__inline
+float4 fastNormalize4(float4 v)
+{
+	return fast_normalize(v);
+}
+__inline
+float sqrtf(float a)
+{
+//	return sqrt(a);
+	return native_sqrt(a);
+}
+__inline
+float4 cross3(float4 a, float4 b)
+{
+	return cross(a,b);
+}
+__inline
+float dot3F4(float4 a, float4 b)
+{
+	float4 a1 = make_float4(a.xyz,0.f);
+	float4 b1 = make_float4(b.xyz,0.f);
+	return dot(a1, b1);
+}
+__inline
+float length3(const float4 a)
+{
+	return sqrtf(dot3F4(a,a));
+}
+__inline
+float dot4(const float4 a, const float4 b)
+{
+	return dot( a, b );
+}
+//	for height
+__inline
+float dot3w1(const float4 point, const float4 eqn)
+{
+	return dot3F4(point,eqn) + eqn.w;
+}
+__inline
+float4 normalize3(const float4 a)
+{
+	float4 n = make_float4(a.x, a.y, a.z, 0.f);
+	return fastNormalize4( n );
+//	float length = sqrtf(dot3F4(a, a));
+//	return 1.f/length * a;
+}
+__inline
+float4 normalize4(const float4 a)
+{
+	float length = sqrtf(dot4(a, a));
+	return 1.f/length * a;
+}
+__inline
+float4 createEquation(const float4 a, const float4 b, const float4 c)
+{
+	float4 eqn;
+	float4 ab = b-a;
+	float4 ac = c-a;
+	eqn = normalize3( cross3(ab, ac) );
+	eqn.w = -dot3F4(eqn,a);
+	return eqn;
+}
+#define WG_SIZE 64
+typedef struct
+{
+	int m_nConstraints;
+	int m_start;
+	int m_batchIdx;
+	int m_nSplit;
+//	int m_paddings[1];
+} ConstBuffer;
+typedef struct
+{
+	int m_solveFriction;
+	int m_maxBatch;	//	long batch really kills the performance
+	int m_batchIdx;
+	int m_nSplit;
+//	int m_paddings[1];
+} ConstBufferBatchSolve;
+ 
+typedef struct 
+{
+	int m_valInt0;
+	int m_valInt1;
+	int m_valInt2;
+	int m_valInt3;
+	float m_val0;
+	float m_val1;
+	float m_val2;
+	float m_val3;
+} SolverDebugInfo;
+typedef struct
+{
+	int m_nContacts;
+	float m_dt;
+	float m_positionDrift;
+	float m_positionConstraintCoeff;
+} ConstBufferCTC;
+__kernel
+__attribute__((reqd_work_group_size(WG_SIZE,1,1)))
+void ContactToConstraintKernel(__global struct b3Contact4Data* gContact, __global b3RigidBodyData_t* gBodies, __global b3InertiaData_t* gShapes, __global b3ContactConstraint4_t* gConstraintOut, 
+int nContacts,
+float dt,
+float positionDrift,
+float positionConstraintCoeff
+)
+{
+	int gIdx = GET_GLOBAL_IDX;
+	
+	if( gIdx < nContacts )
+	{
+		int aIdx = abs(gContact[gIdx].m_bodyAPtrAndSignBit);
+		int bIdx = abs(gContact[gIdx].m_bodyBPtrAndSignBit);
+		float4 posA = gBodies[aIdx].m_pos;
+		float4 linVelA = gBodies[aIdx].m_linVel;
+		float4 angVelA = gBodies[aIdx].m_angVel;
+		float invMassA = gBodies[aIdx].m_invMass;
+		b3Mat3x3 invInertiaA = gShapes[aIdx].m_initInvInertia;
+		float4 posB = gBodies[bIdx].m_pos;
+		float4 linVelB = gBodies[bIdx].m_linVel;
+		float4 angVelB = gBodies[bIdx].m_angVel;
+		float invMassB = gBodies[bIdx].m_invMass;
+		b3Mat3x3 invInertiaB = gShapes[bIdx].m_initInvInertia;
+		b3ContactConstraint4_t cs;
+    	setConstraint4( posA, linVelA, angVelA, invMassA, invInertiaA, posB, linVelB, angVelB, invMassB, invInertiaB,
+			&gContact[gIdx], dt, positionDrift, positionConstraintCoeff,
+			&cs );
+		
+		cs.m_batchIdx = gContact[gIdx].m_batchIdx;
+		gConstraintOut[gIdx] = cs;
+	}
+}

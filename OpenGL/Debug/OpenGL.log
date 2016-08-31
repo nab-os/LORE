@@ -1,0 +1,9 @@
+﻿  Scene.cpp
+opengl32.lib(OPENGL32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR dÚjÓ dÚfini dans glew32d.lib(glew32d.dll)á; seconde dÚfinition ignorÚe
+opengl32.lib(OPENGL32.dll) : warning LNK4221: Ce fichier objet ne dÚfinit pas de symboles publics jusqu'ici non dÚfinis. Par consÚquent, il ne sera utilisÚ par aucune opÚration de lien utilisant cette bibliothÞque
+glfw3.lib(context.c.obj) : warning LNK4078: plusieurs sections '.drectve' trouvÚes avec diffÚrents attributs (00100A00)
+gdi32.lib(GDI32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR dÚjÓ dÚfini dans glew32d.lib(glew32d.dll)á; seconde dÚfinition ignorÚe
+gdi32.lib(GDI32.dll) : warning LNK4221: Ce fichier objet ne dÚfinit pas de symboles publics jusqu'ici non dÚfinis. Par consÚquent, il ne sera utilisÚ par aucune opÚration de lien utilisant cette bibliothÞque
+libBulletCollision.a(btBroadphaseProxy.o) : warning LNK4221: Ce fichier objet ne dÚfinit pas de symboles publics jusqu'ici non dÚfinis. Par consÚquent, il ne sera utilisÚ par aucune opÚration de lien utilisant cette bibliothÞque
+libLinearMath.a(btVector3.o) : warning LNK4221: Ce fichier objet ne dÚfinit pas de symboles publics jusqu'ici non dÚfinis. Par consÚquent, il ne sera utilisÚ par aucune opÚration de lien utilisant cette bibliothÞque
+  OpenGL.vcxproj -> D:\Documents\Users\Guy\Programmation\C++\OpenGL\OpenGL\Debug\OpenGL.lib
