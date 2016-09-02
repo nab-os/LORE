@@ -8,6 +8,8 @@ using namespace std;
 Material::Material(): m__shader()
 {
 
+	cout << "[Material] constructor" << endl;
+
 	m__shader = new Shader();
 
 }
@@ -24,7 +26,9 @@ Material::~Material()
 void Material::load()
 {
 
-	m__shader->charger();
+	cout << "[Material] load" << endl;
+
+	m__shader->load();
 
 }
 

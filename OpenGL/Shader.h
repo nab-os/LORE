@@ -17,7 +17,7 @@ class Shader
 		Shader(std::string shaderName = "default");
 		virtual ~Shader();
 
-		bool charger();
+		bool load();
 
 		GLuint getProgramID();
 

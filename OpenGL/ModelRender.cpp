@@ -23,8 +23,6 @@ ModelRender::ModelRender():	Model(),
 	m__normals.push_back(vec3(0, 1, 0));
 	m__normals.push_back(vec3(1, 0, 0));
 
-	cout << "test : " << getMaterial() << endl;
-
 }
 
 
@@ -44,8 +42,6 @@ ModelRender::ModelRender(const ModelRender*) : Model(),
 	m__normals.push_back(vec3(-1, 0, 0));
 	m__normals.push_back(vec3(0, 1, 0));
 	m__normals.push_back(vec3(1, 0, 0));
-
-	cout << "test : " << getMaterial() << endl;
 
 }
 
@@ -195,14 +191,24 @@ void ModelRender::load()
 
 
 			// Accès aux vertices dans la mémoire vidéo
+
+			//Vertices
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 			glEnableVertexAttribArray(0);
+
+			//UVs
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes));
 			glEnableVertexAttribArray(1);
+
+			//Normals
 			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes));
 			glEnableVertexAttribArray(2);
+
+			//Tangents
 			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes));
 			glEnableVertexAttribArray(3);
+
+			//Bytangents
 			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes + sizeNormalsBytes)); //sizeTangentBytes
 			glEnableVertexAttribArray(4);
 
@@ -212,6 +218,7 @@ void ModelRender::load()
 	// Déverrouillage du VAO
 	glBindVertexArray(0);
 
+	/*
 	cout << "[ModelRender] load() : Vertices : \n";
 	vector<vec3> vecVertices = this->getVertices();
 	for (int i = 0; i < this->getVertexCount(); i++)
@@ -236,6 +243,7 @@ void ModelRender::load()
 		cout << m__normals[i].x << ", " << m__normals[i].y << ", " << m__normals[i].z << endl;
 
 	}
+	*/
 
 }
 
@@ -243,24 +251,22 @@ void ModelRender::load()
 void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 {
 
-
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-
 	/*glm::vec3 posVec3 = m__object->getPhysics()->getPosition();
 	model = glm::translate(model, posVec3);*/
-	/*
+	
 	Shader* s = getMaterial()->getShader();
 
 	glUseProgram(s->getProgramID());
 
-	glBindVertexArray(getVAO());*/
+	glBindVertexArray(getVAO());
 
-	/*s->envoyerMat4("projection", projection);
+	s->envoyerMat4("projection", projection);
 	s->envoyerMat4("view", view);
 	s->envoyerMat4("model", model);
-	s->envoyerMat4("MVP", projection * view * model);*/
+	s->envoyerMat4("MVP", projection * view * model);
 
 	/*s->envoyerVec3("cameraPos", cameraPos);
 	s->envoyerMat4("cameraProjection", depthProjection);
@@ -348,9 +354,11 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureRefraction()->getTextureID());
 
 	}*/
-
+	
 	/*glPatchParameteri(GL_PATCH_VERTICES, 3);
-	glDrawArrays(GL_PATCHES, 0, this->getVertexCount());*/
+	glDrawArrays(GL_PATCHES, 0, getVertexCount());*/
+
+	glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
 
 	/*glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -367,16 +375,13 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	glActiveTexture(GL_TEXTURE6);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE7);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 
 	glBindVertexArray(0);
 
-	glUseProgram(0);*/
+	glUseProgram(0);
 
-
-
-
-
+	/*
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((const GLfloat*)&projection[0]);
 
@@ -387,15 +392,8 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 
 	glColor3f(0,0,1);
 
-	glBegin(GL_TRIANGLE_STRIP);
-
-		glVertex3f(-1, 0, 0);
-
-		glVertex3f(0, 1, 0);
-
-		glVertex3f(1, 0, 0);
-
-	/*
+	glBegin(GL_LINES);
+	
 	std::vector<glm::vec3> vertices = this->getVertices();
 
 	for (unsigned int i=0; i < vertices.size()-1; i++){
@@ -407,9 +405,9 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 		p+=o*0.1f;
 		glVertex3fv(&p.x);
 
-	}*/
+	}
 
-	glEnd();
+	glEnd();*/
 
 }
 

@@ -1,20 +1,34 @@
 #pragma once
 
 #include <string>
+#include <iostream>
+#include <fstream>
+
+#define DEBUT 0
+#define CURSEUR 1
+#define FIN 2
 
 class Loader
 {
 
 	public:
 
-		Loader();
+		Loader(std::string path = "/Objects/Default");
 		virtual ~Loader();
 
-		void* load(std::string path = "/Objects/default") {};
+		void* load() {};
+		
+	protected:
 
-	private:
+		bool ouvrir();
+		void fermer();
+
+		long getPositionCurseur();
+		long setPositionCurseur(int offset, char whence);
 
 
+		std::string m__emplacementFichier;
+		std::ifstream* m__fichier;
 
 };
 

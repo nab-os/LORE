@@ -228,7 +228,7 @@ void Window::endFrame(int startTime)
 	
 	glfwSwapBuffers(m__window);
 
-	//glfwPollEvents();
+	glfwPollEvents();
 
 	int endTime = int(glfwGetTime() * 1000);
 	int elapsedTime = endTime - startTime;

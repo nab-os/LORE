@@ -1,4 +1,8 @@
-﻿  Scene.cpp
+﻿  ObjectLoader.cpp
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\objectloader.cpp(29): warning C4101: 'tailleFichier' : variable locale non référencée
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\objectloader.cpp(390): warning C4244: 'argument' : conversion de 'float' en 'unsigned int', perte possible de données
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\objectloader.cpp(410): warning C4244: 'argument' : conversion de 'float' en 'unsigned int', perte possible de données
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\objectloader.cpp(430): warning C4244: 'argument' : conversion de 'float' en 'unsigned int', perte possible de données
 opengl32.lib(OPENGL32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR dÚjÓ dÚfini dans glew32d.lib(glew32d.dll)á; seconde dÚfinition ignorÚe
 opengl32.lib(OPENGL32.dll) : warning LNK4221: Ce fichier objet ne dÚfinit pas de symboles publics jusqu'ici non dÚfinis. Par consÚquent, il ne sera utilisÚ par aucune opÚration de lien utilisant cette bibliothÞque
 glfw3.lib(context.c.obj) : warning LNK4078: plusieurs sections '.drectve' trouvÚes avec diffÚrents attributs (00100A00)

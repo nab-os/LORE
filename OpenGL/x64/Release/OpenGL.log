@@ -1,0 +1,33 @@
+﻿  stdafx.cpp
+  Camera.cpp
+  Controller.cpp
+  Light.cpp
+  Loader.cpp
+  Material.cpp
+  Model.cpp
+Model.cpp(45): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+Model.cpp(53): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
+  ModelBullet.cpp
+  ModelLibrary.cpp
+  ModelLoader.cpp
+  ModelRender.cpp
+ModelRender.cpp(437): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+ModelRender.cpp(445): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+ModelRender.cpp(479): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+ModelRender.cpp(487): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+  Object.cpp
+  ObjectLibrary.cpp
+  ObjectLoader.cpp
+  ObjectManager.cpp
+  Player.cpp
+  Scene.cpp
+  Shader.cpp
+  ShaderLibrary.cpp
+  ShaderManager.cpp
+  ModelManager.cpp
+  Compilation en cours...
+  Texture.cpp
+  Window.cpp
+opengl32.lib(OPENGL32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR dÚjÓ dÚfini dans glew32d.lib(glew32d.dll)á; seconde dÚfinition ignorÚe
+gdi32.lib(GDI32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR dÚjÓ dÚfini dans glew32d.lib(glew32d.dll)á; seconde dÚfinition ignorÚe
+  OpenGL.vcxproj -> D:\Documents\Users\Guy\Programmation\C++\OpenGL\OpenGL\x64\Release\OpenGL.lib

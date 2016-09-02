@@ -29,6 +29,7 @@ class Model
 
 		int getVertexCount();
 		int getVerticesSize();
+		void setVertices(std::vector<glm::vec3> vertices) { m__vertices = vertices; };
 		std::vector<glm::vec3> getVertices();
 		float* getVerticesFloat();
 

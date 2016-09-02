@@ -21,7 +21,7 @@ int main()
 
 	Scene* s = w->addScene("scene");
 
-	Object* obj = s->addObject();
+	//Object* obj = s->addObject();
 
 	s->load();
 	

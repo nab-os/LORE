@@ -39,7 +39,7 @@ void Scene::load()
 
 	Object::load();
 
-	m__projection = perspective(70.0, (double)m__width / m__height, 0.1, 500.0);
+	m__projection = ortho(-100, 100, -100, 100);//perspective(70.0, (double)m__width / m__height, 0.1, 500.0);
 	m__model = mat4(1.0);
 
 	m__cam = new Camera(vec3(3.5, 3, 4), vec3(0, 0, 0), vec3(0, 1, 0), 0.1f, 0.5f);

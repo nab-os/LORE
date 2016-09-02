@@ -20,7 +20,7 @@ Shader::Shader(std::string shaderName): m__programID(),
 										m__fragmentShaderFile("Shaders/" + shaderName + "/" + shaderName + ".frag")
 {
 
-
+	cout << "[Shader] constructor" << endl;
 
 }
 
@@ -33,8 +33,10 @@ Shader::~Shader()
 }
 
 
-bool Shader::charger()
+bool Shader::load()
 {
+
+	cout << "[Shader] load" << endl;
 
 	// Destruction d'un éventuel ancien Shader
 	if (glIsShader(m__vertexID) == GL_TRUE)

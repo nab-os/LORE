@@ -1,0 +1,3 @@
+﻿  stdafx.cpp
+  Test OpenGL.cpp
+OpenGL.lib(glew32d.dll) : fatal error LNK1112: type d'ordinateur module 'X86' en conflit avec le type d'ordinateur cible 'x64'

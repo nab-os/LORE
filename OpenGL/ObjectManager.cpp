@@ -34,9 +34,9 @@ Object* ObjectManager::get(string path)
 	else
 	{
 
-		ObjectLoader loader;
+		ObjectLoader loader(path);
 
-		return loader.load(path);
+		return loader.load();
 
 	}
 
