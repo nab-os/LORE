@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <map>
 
 #if defined(_WIN32)
  #define GLFW_EXPOSE_NATIVE_WIN32
@@ -38,6 +37,7 @@ class Window
 		virtual ~Window();
 
 		int init();
+		void close();
 
 		int shouldClose();
 
@@ -46,9 +46,8 @@ class Window
 
 		void render();
 
-		Scene* addScene(std::string name);
-		void addScene(std::string name, Scene* scene);
-		Scene* getScene(std::string name);
+		Scene* getScene() { return m__rootScene; };
+		GLFWwindow* getWindow() { return m__window; };
 
 	private:
 
@@ -61,13 +60,15 @@ class Window
 		
 		int m__frameRate;
 
-		std::map<std::string, Scene*> m__scenes;
+		Scene* m__rootScene;
 
 		static void error_callback(int error, const char* description);
 
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void window_size_callback(GLFWwindow* window, int width, int height);
 		static void window_focus_callback(GLFWwindow* window, int state);
+		static void window_close_callback(GLFWwindow* window);
+		static void mouse_move_callback(GLFWwindow* window, double x, double y);
 
 };
 

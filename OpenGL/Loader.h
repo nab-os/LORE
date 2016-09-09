@@ -13,7 +13,7 @@ class Loader
 
 	public:
 
-		Loader(std::string path = "/Objects/Default");
+		Loader(std::string path = "", std::string name = "");
 		virtual ~Loader();
 
 		void* load() {};
@@ -26,7 +26,7 @@ class Loader
 		long getPositionCurseur();
 		long setPositionCurseur(int offset, char whence);
 
-
+		std::string m__nom;
 		std::string m__emplacementFichier;
 		std::ifstream* m__fichier;
 

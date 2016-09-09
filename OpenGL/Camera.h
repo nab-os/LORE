@@ -9,8 +9,6 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Controller.h"
-
 class Camera
 {
 
@@ -20,7 +18,6 @@ class Camera
 		virtual ~Camera();
 
 		void orienter(int xRel, int yRel);
-		void deplacer(/*Controller* c*/);
 		void lookAt(glm::mat4 &modelview);
 
 		void setPointcible(glm::vec3 pointCible);
@@ -54,6 +51,7 @@ class Camera
 		float m_vitesse;
 
 		bool m_fly;
+
 
 };
 

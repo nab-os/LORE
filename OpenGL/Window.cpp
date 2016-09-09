@@ -15,10 +15,10 @@ Window::Window(std::string tittle, int width, int height, double fps):  m__windo
 																		m__width(width),
 																		m__height(height),
 																		m__frameRate(int(1000/fps)),
-																		m__scenes()
+																		m__rootScene()
 {
 
-
+	m__rootScene = new Scene();
 
 }
 
@@ -26,32 +26,34 @@ Window::Window(std::string tittle, int width, int height, double fps):  m__windo
 Window::~Window()
 {
 
-	for (auto const &pair : m__scenes) {
-		
-		delete(pair.second);
-		
-	}
+	cout << "[Window] destructor" << endl;
+
+	delete m__rootScene;
 
 }
 
 
 void Window::error_callback(int error, const char* description)
 {
-	std::cout << description << "\n";
+	cout << "[Window] error_callback() :" << description << "\n";
 }
 
 
 void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 
-	//if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		//glfwSetWindowShouldClose(window, GL_TRUE);
+	cout << "[Window] key_callback" << endl;
+
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
 
 }
 
 
 void Window::window_size_callback(GLFWwindow* window, int width, int height)
 {
+
+	cout << "[Window] window_size_callback" << endl;
 
 	/*
 	Window* scene = static_cast<Window*>(glfwGetWindowUserPointer(window));
@@ -69,7 +71,27 @@ void Window::window_size_callback(GLFWwindow* window, int width, int height)
 void Window::window_focus_callback(GLFWwindow* window, int state)
 {
 
+	cout << "[Window] window_focus_callback" << endl;
+	
 	//static_cast<Window*>(glfwGetWindowUserPointer(window))->m__paused = !state;
+
+}
+
+void Window::window_close_callback(GLFWwindow* window)
+{
+
+	cout << "[Window] window_close_callback" << endl;
+
+	Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	w->close();
+
+}
+
+void Window::mouse_move_callback(GLFWwindow* window, double x, double y)
+{
+
+	//cout << "[Window] mouse_move_callback" << endl;
 
 }
 
@@ -77,7 +99,7 @@ void Window::window_focus_callback(GLFWwindow* window, int state)
 int Window::init()
 {
 
-	//glfwSetErrorCallback(SceneOpenGL::error_callback);
+	glfwSetErrorCallback(error_callback);
 
 	// Initialize our session with the Oculus HMD.
 	//if (ovr_Initialize(nullptr) == ovrSuccess)
@@ -173,7 +195,8 @@ int Window::init()
 	glfwSetWindowUserPointer(m__window, this);
 	glfwSetWindowSizeCallback(m__window, window_size_callback);
 	glfwSetWindowFocusCallback(m__window, window_focus_callback);
-	
+	glfwSetWindowCloseCallback(m__window, window_close_callback);
+	glfwSetCursorPosCallback(m__window, mouse_move_callback);
 
 	//=====================
 
@@ -204,6 +227,13 @@ int Window::init()
 	return true;
 }
 
+
+void Window::close() 
+{
+
+	glfwSetWindowShouldClose(m__window, GL_TRUE);
+
+}
 
 int Window::shouldClose()
 {
@@ -244,37 +274,7 @@ void Window::endFrame(int startTime)
 void Window::render() 
 {
 
-	for (std::pair<std::string, Scene*> p : m__scenes) 
-	{
-	
-		p.second->render();
-	
-	}
-
-}
-
-
-Scene* Window::addScene(string name)
-{
-	
-	Scene* scene = (Scene*)ObjectManager::get("scene");
-	this->addScene(name, scene);
-	return scene;
-
-}
-
-
-void Window::addScene(string name, Scene* scene)
-{
-
-	m__scenes.insert(pair<string, Scene*>(name, scene));
-
-}
-
-
-Scene* Window::getScene(string name)
-{
-
-	return m__scenes.find(name)->second;
+	glfwMakeContextCurrent(m__window);
+	m__rootScene->render();
 
 }

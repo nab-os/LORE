@@ -17,7 +17,7 @@ Camera::Camera(vec3 position, vec3 pointCible, vec3 axeVertical, float sensibili
 Camera::~Camera()
 {
 
-
+	cout << "[Camera] destructor" << endl;
 
 }
 
@@ -95,8 +95,8 @@ void Camera::orienter(int xRel, int yRel)
 	m_pointCible = m_position + m_orientation;
 }
 
-
-void Camera::deplacer(/*Controller* c*/)
+/*
+void Camera::deplacer()
 {
 	// Gestion de l'orientation
 
@@ -176,14 +176,16 @@ void Camera::deplacer(/*Controller* c*/)
 		else {
 			m_fly = false;
 		}
-	}*/
-}
+	}
+}*/
 
 
-void Camera::lookAt(glm::mat4 &modelview)
+void Camera::lookAt(glm::mat4 &view)
 {
 	// Actualisation de la vue dans la matrice
-	modelview = glm::lookAt(m_position, m_pointCible, m_axeVertical);
+
+	//view = glm::lookAt(m_position, m_pointCible, m_axeVertical);
+	view = glm::lookAt(dvec3(5, 5, 5), dvec3(0, 0, 0), dvec3(0, 1, 0));
 }
 
 

@@ -183,12 +183,8 @@
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialLoader.h" />
-    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelBullet.h" />
-    <ClInclude Include="ModelLibrary.h" />
-    <ClInclude Include="ModelLoader.h" />
-    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="ModelRender.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectLibrary.h" />
@@ -211,11 +207,8 @@
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialLoader.cpp" />
-    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelBullet.cpp" />
-    <ClCompile Include="ModelLibrary.cpp" />
-    <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ModelRender.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectLibrary.cpp" />
@@ -226,7 +219,6 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderLibrary.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
-    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

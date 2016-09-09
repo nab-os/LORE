@@ -18,7 +18,7 @@ Material::Material(): m__shader()
 Material::~Material()
 {
 
-	delete(m__shader);
+	delete m__shader;
 
 }
 

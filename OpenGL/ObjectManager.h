@@ -11,7 +11,7 @@ class ObjectManager
 
 		virtual ~ObjectManager();
 
-		static Object* get(std::string path);
+		static Object* get(std::string name);
 
 	private:
 		

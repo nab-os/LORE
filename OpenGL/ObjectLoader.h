@@ -8,14 +8,14 @@
 #include <string>
 
 #include "TextureLibrary.h"
-#include "MaterialLibrary.h"
+#include "Material.h"
 
 class ObjectLoader: public Loader
 {
 
 	public:
 
-		ObjectLoader(std::string path = "/Objects/default");
+		ObjectLoader(std::string name = "default");
 		virtual ~ObjectLoader();
 
 		Object* load();
@@ -27,11 +27,17 @@ class ObjectLoader: public Loader
 		std::vector<glm::vec3> chargerVertice();
 		std::vector<glm::vec2> chargerCoordTexture();
 		std::vector<glm::vec3> chargerNormale();
-		void chargerFace(std::vector<glm::vec3> *facesVertices, std::vector<glm::vec3> *facesCoordTexture, std::vector<glm::vec3> *facesNormals);
-		std::vector<glm::vec2> associerCoordTextureFaces(std::vector<glm::vec2> coordTextures, std::vector<glm::vec3> facesCoordTexture);
-		std::vector<glm::vec3> associerVertexIndices(std::vector<glm::vec3> vertices, std::vector<glm::vec3> indices);
-		std::vector<glm::vec3> associerNormalIndices(std::vector<glm::vec3> normals, std::vector<glm::vec3> indices);
-		std::string chargerMaterial();
+		void chargerFace(std::vector<glm::ivec3> *facesVertices, std::vector<glm::ivec3> *facesCoordTexture, std::vector<glm::ivec3> *facesNormals);
+		std::vector<glm::vec3> associerVertexIndices(std::vector<glm::vec3> vertices, std::vector<glm::ivec3> indices);
+		std::vector<glm::vec2> associerCoordTextureFaces(std::vector<glm::vec2> coordTextures, std::vector<glm::ivec3> indices);
+		std::vector<glm::vec3> associerNormalIndices(std::vector<glm::vec3> normals, std::vector<glm::ivec3> indices);
+		Material* chargerMaterial();
+
+		std::vector<glm::vec3> m__vertices;
+		std::vector<glm::vec2> m__coordTextures;
+		std::vector<glm::vec3> m__normals;
+
+		std::map<std::string, Material*> m__materials;
 				
 };
 

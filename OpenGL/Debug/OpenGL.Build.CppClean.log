@@ -2,13 +2,14 @@ d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.pch
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.pdb
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.idb
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\stdafx.obj
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\controller.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\light.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\loader.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\material.obj
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\materialloader.obj
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\materialmanager.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\model.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\modelbullet.obj
-d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\modellibrary.obj
-d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\modelloader.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\modelrender.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\object.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\objectlibrary.obj
@@ -19,11 +20,9 @@ d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\scene.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\shader.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\shaderlibrary.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\shadermanager.obj
-d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\modelmanager.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\texture.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\window.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\camera.obj
-d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\controller.obj
 d:\documents\users\guy\programmation\c++\opengl\opengl\debug\opengl.lib
 d:\documents\users\guy\programmation\c++\opengl\opengl\debug\opengl.pdb
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\cl.command.1.tlog
@@ -32,3 +31,6 @@ d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\lib-link.read.1.tlog
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\lib-link.write.1.tlog
 d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\lib.command.1.tlog
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\metagen.read.1.tlog
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\metagen.write.1.tlog
+d:\documents\users\guy\programmation\c++\opengl\opengl\opengl\debug\opengl.tlog\tzres.dll.bi

@@ -22,19 +22,19 @@ ObjectManager::~ObjectManager()
 }
 
 
-Object* ObjectManager::get(string path)
+Object* ObjectManager::get(string name)
 {
 
-	if (ObjectLibrary::getInstance()->has(path))
+	if (ObjectLibrary::getInstance()->has(name))
 	{
 
-		return ObjectLibrary::getInstance()->get(path);
+		return ObjectLibrary::getInstance()->get(name);
 
 	}
 	else
 	{
 
-		ObjectLoader loader(path);
+		ObjectLoader loader(name);
 
 		return loader.load();
 

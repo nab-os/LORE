@@ -14,15 +14,7 @@ ModelRender::ModelRender():	Model(),
 {
 
 	cout << "[ModelRender] constructor" << endl;
-
-	m__UVs.push_back(vec2(1, 0));
-	m__UVs.push_back(vec2(0, 1));
-	m__UVs.push_back(vec2(1, 0));
-
-	m__normals.push_back(vec3(-1, 0, 0));
-	m__normals.push_back(vec3(0, 1, 0));
-	m__normals.push_back(vec3(1, 0, 0));
-
+	
 }
 
 
@@ -49,7 +41,7 @@ ModelRender::ModelRender(const ModelRender*) : Model(),
 ModelRender::~ModelRender()
 {
 
-
+	cout << "[ModelRender] destructor" << endl;
 
 }
 
@@ -118,7 +110,6 @@ void ModelRender::load()
 
 	cout << "[ModelRender] load" << endl;
 
-
 	int sizeVerticesBytes = this->getVerticesSize();
 	int sizeUVsBytes = this->getUVsSize();
 	int sizeNormalsBytes = this->getNormalsSize();
@@ -131,7 +122,7 @@ void ModelRender::load()
 	vector<vec3> vecTangents;
 	vector<vec3> vecBytangents;
 
-	computeTangentBasis(this->getVertices(), this->getUVs(), this->getNormals(), vecTangents, vecBytangents);
+	//computeTangentBasis(this->getVertices(), this->getUVs(), this->getNormals(), vecTangents, vecBytangents);
 
 	float* tangents = this->vec3ToFloat(vecTangents);
 	float* bytangents = this->vec3ToFloat(vecBytangents);
@@ -244,6 +235,10 @@ void ModelRender::load()
 
 	}
 	*/
+
+	free(vertices);
+	free(UVs);
+	free(normals);
 
 }
 
@@ -381,7 +376,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 
 	glUseProgram(0);
 
-	/*
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((const GLfloat*)&projection[0]);
 
@@ -407,7 +402,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 
 	}
 
-	glEnd();*/
+	glEnd();
 
 }
 

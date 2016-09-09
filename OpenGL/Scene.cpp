@@ -10,9 +10,9 @@ Scene::Scene(int width, int height):	Object(),
 										m__width(width),
 										m__height(height),
 										m__paused(false),
-										m__projection(),
-										m__view(),
-										m__model(),
+										m__projection(mat4(1.0)),
+										m__view(mat4(1.0)),
+										m__model(mat4(1.0)),
 										m__cam(),
 										m__lights()
 {
@@ -25,10 +25,11 @@ Scene::Scene(int width, int height):	Object(),
 Scene::~Scene()
 {
 
-	delete(m__cam);
+	cout << "[ModelRender] destructor" << endl;
 
-	Object::~Object();
-
+	if(m__cam)
+		delete m__cam;
+	
 }
 
 
@@ -39,12 +40,13 @@ void Scene::load()
 
 	Object::load();
 
-	m__projection = ortho(-100, 100, -100, 100);//perspective(70.0, (double)m__width / m__height, 0.1, 500.0);
+	m__projection = perspective(70.0, (double)m__width / m__height, 0.1, 500.0);
 	m__model = mat4(1.0);
 
 	m__cam = new Camera(vec3(3.5, 3, 4), vec3(0, 0, 0), vec3(0, 1, 0), 0.1f, 0.5f);
 
 }
+
 
 void Scene::render()
 {
@@ -52,7 +54,7 @@ void Scene::render()
 	if (!m__paused)
 	{
 	
-		m__cam->deplacer();
+		//m__cam->deplacer();
 		m__cam->lookAt(m__view);
 	
 	}

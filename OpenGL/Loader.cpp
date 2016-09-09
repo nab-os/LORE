@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Loader::Loader(std::string path): m__emplacementFichier(path)
+Loader::Loader(std::string path, string name): m__emplacementFichier(path), m__nom(name)
 {
 
 
@@ -22,10 +22,10 @@ Loader::~Loader()
 bool Loader::ouvrir()
 {
 	
-	m__fichier = new ifstream(m__emplacementFichier + "/default.obj", ios::in);
-	if (m__fichier == nullptr)
+	m__fichier = new ifstream(m__emplacementFichier);
+	if (!m__fichier->is_open() && !m__fichier->good())
 	{
-		std::cout << "Erreur d'ouverture du fichier : " << m__emplacementFichier;
+		std::cout << "Erreur d'ouverture du fichier : " << m__emplacementFichier << endl;
 		return false;
 	}
 
@@ -45,7 +45,7 @@ void Loader::fermer()
 long Loader::getPositionCurseur()
 {
 
-	return m__fichier->tellg();
+	return (long) m__fichier->tellg();
 
 }
 
@@ -54,16 +54,16 @@ long Loader::setPositionCurseur(int offset, char whence)
 {
 	if (whence == DEBUT)
 	{
-		m__fichier->seekg(offset, ios::beg);
+		m__fichier->seekg(offset, ios_base::beg);
 	}
 	if (whence == CURSEUR)
 	{
-		m__fichier->seekg(offset, ios::cur);
+		m__fichier->seekg(offset, ios_base::cur);
 	}
 
 	if (whence == FIN)
 	{
-		m__fichier->seekg(offset, ios::end);
+		m__fichier->seekg(offset, ios_base::end);
 	}
 	return getPositionCurseur();
 }

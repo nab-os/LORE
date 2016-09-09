@@ -36,11 +36,13 @@ class ModelRender :	public Model
 		GLuint& getVAO();
 		GLuint& getVBO();
 
+		void setUVs(std::vector<glm::vec2> uvs) { m__UVs = uvs; };
 		int getUVCount();
 		int getUVsSize();
 		std::vector<glm::vec2> getUVs();
 		float* getUVsFloat();
 
+		void setNormals(std::vector<glm::vec3> normals) { m__normals = normals; };
 		int getNormalCount();
 		int getNormalsSize();
 		std::vector<glm::vec3> getNormals();

@@ -2,9 +2,14 @@
 
 in vec3 in_Vertex;
 
+uniform mat4 projection;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 MVP;
+
 void main()
 {
 
-    gl_Position = vec4(in_Vertex, 1);
+    gl_Position = projection * view * vec4(in_Vertex, 1);
     
 }

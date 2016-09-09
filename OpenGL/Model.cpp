@@ -10,20 +10,17 @@ Model::Model(): m__vertices(), m__material()
 {
 
 	cout << "[Model] constructor" << endl;
-
-	m__vertices.push_back(vec3(-0.5, -0.5, 0));
-	m__vertices.push_back(vec3( 0, 0.5, 0));
-	m__vertices.push_back(vec3( 0.5, -0.5, 0));
-
-	m__material = new Material();
-
+	
 }
 
 
 Model::~Model()
 {
 
-	delete(m__material);
+	cout << "[Model] destructor" << endl;
+
+	if (m__material)
+		delete m__material;
 
 }
 
@@ -33,7 +30,8 @@ void Model::load()
 
 	cout << "[Model] load" << endl;
 
-	m__material->load();
+	if(m__material)
+		m__material->load();
 	
 }
 

@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "ObjectLoader.h"
 
+#include <regex>
+
 using namespace std;
 
-ObjectLoader::ObjectLoader(std::string path): Loader(path)
+ObjectLoader::ObjectLoader(std::string name): Loader("Objects/" + name + "/" + name +  ".obj", name)
 {
 
 
@@ -26,28 +28,31 @@ Object* ObjectLoader::load()
 
 	Object* root = new Object();
 
-	int tailleFichier;
-
 	if(ouvrir()){
 
-		cout << "[ObjectLoader] : load() : fichier ouvert avec succes" << endl;
-		char caractere = '0';
-		setPositionCurseur(0, DEBUT);
+		/*TODO: CHargement des materials*/
 
+		char* code = (char*)malloc(sizeof(char) * 250);
+		std::regex reg_object("^o");
+
+		setPositionCurseur(0, DEBUT);
 		while (!m__fichier->eof())
 		{
 
-			cout << "[ObjectLoader] : load() : test : " << caractere << endl;
-
-			m__fichier->getline(caractere, 1);
-
-			if (caractere == 'o')
+			m__fichier->get(code, 200, ' ');
+						
+			if (std::regex_match(code, reg_object))
 			{
+
 				chargerObjet(root);
 
 			}
 
+			m__fichier->ignore(200, '\n');
+
 		}
+
+		free(code);
 
 		fermer();
 
@@ -60,84 +65,88 @@ Object* ObjectLoader::load()
 
 void ObjectLoader::chargerObjet(Object* parent)
 {
-	char caractere = '0';
-	bool continuer = true;
+	char* code = (char*) malloc(sizeof(char) * 250);
+	cout << "[ObjectLoader] chargerObjet() : new object" << endl;
 
-	std::string material_name;
+	Material* material;
 	std::string nom;
 	
-	std::vector<glm::vec3> indicesVertices;
-	std::vector<glm::vec3> indicesNormals;
-	std::vector<glm::vec3> indicesCoordTextures;
+	std::vector<glm::ivec3> indicesVertices;
+	std::vector<glm::ivec3> indicesNormals;
+	std::vector<glm::ivec3> indicesCoordTextures;
 
-	std::vector<glm::vec3> finalVertices;
-	std::vector<glm::vec2> finalCoordTextures;
-	std::vector<glm::vec3> finalNormals;
+	//==Regex de detection de lignes==//
+	std::regex reg_object("^o");
+	std::regex reg_vertex("^v");
+	std::regex reg_texture_coord("^vt");
+	std::regex reg_normal("^vn");
+	std::regex reg_face("^f");
+	std::regex reg_material("^usemtl");
 
-	setPositionCurseur(1, CURSEUR);
+	*m__fichier >> code;
 
-	while (caractere != '\n')
+	while (!m__fichier->eof())
 	{
-		m__fichier->get(caractere);
-		if (caractere != '\n')
-			nom.push_back(caractere);
-	}
-	setPositionCurseur(-2, CURSEUR);
 
-	while (continuer)
-	{
-		m__fichier->get(caractere);
-		if (caractere == '\n')
+		m__fichier->ignore(200, '\n');
+		m__fichier->get(code, 10, ' ');
+		cout << "[ObjectLoader] chargerObjet() : code : " << code << endl;
+
+		if (std::regex_match(code, reg_object) ) //Si c'est un autre objet
 		{
-			m__fichier->get(caractere);
-			if ((caractere == 'o') || (m__fichier->eof()))
-			{
-				setPositionCurseur(-2, CURSEUR);
 
-				continuer = false;
+			chargerObjet(parent);
 
-			}
-
-			if (caractere == 'v')
-			{
-
-				m__fichier->get(caractere);
-				if (caractere == ' ') //Si c'est un vertice
-				{
-					std::vector<glm::vec3> temp = chargerVertice();
-					finalVertices.insert(finalVertices.end(), temp.begin(), temp.end());
-				}
-
-				if (caractere == 't') //Si c'est une coordonné de texture
-				{
-					std::vector<glm::vec2> temp = chargerCoordTexture();
-					finalCoordTextures.insert(finalCoordTextures.end(), temp.begin(), temp.end());
-				}
-
-				if (caractere == 'n') //Si c'est une normale
-				{
-					std::vector<glm::vec3> temp = chargerNormale();
-					finalNormals.insert(finalNormals.end(), temp.begin(), temp.end());
-				}
-
-			}
-
-			if (caractere == 'u')
-			{
-				material_name = chargerMaterial();
-			}
-
-			if (caractere == 'f') //Si c'est une face
-			{
-				chargerFace(&indicesVertices, &indicesCoordTextures, &indicesNormals);
-			}
 		}
+		else if (std::regex_match(code, reg_vertex)) //Si c'est un vertex
+		{
+			std::vector<glm::vec3> temp = chargerVertice();
+			m__vertices.insert(m__vertices.end(), temp.begin(), temp.end());
+		}
+		else if (std::regex_match(code, reg_texture_coord)) //Si c'est une coordonné de texture
+		{
+			std::vector<glm::vec2> temp = chargerCoordTexture();
+			m__coordTextures.insert(m__coordTextures.end(), temp.begin(), temp.end());
+		}
+		else if (std::regex_match(code, reg_normal)) //Si c'est une normale
+		{
+			std::vector<glm::vec3> temp = chargerNormale();
+			m__normals.insert(m__normals.end(), temp.begin(), temp.end());
+		}
+		else if (std::regex_match(code, reg_material))
+		{
+			material = chargerMaterial();
+		}
+		else if (std::regex_match(code, reg_face)) //Si c'est une face
+		{
+			chargerFace(&indicesVertices, &indicesCoordTextures, &indicesNormals);
+		}
+		
 	}
+
+	free(code);
+
+	cout << "[ObjectLoader] chargerObjet() : test_1" << endl;
+
+	Object* obj = new Object();
+
+	std::vector<glm::vec3> finalVertices = associerVertexIndices(m__vertices, indicesVertices);
+	std::vector<glm::vec2> finalCoordTextures = associerCoordTextureFaces(m__coordTextures, indicesCoordTextures);
+	std::vector<glm::vec3> finalNormals = associerNormalIndices(m__normals, indicesNormals);
 
 	ModelRender* model = new ModelRender();
 	model->setVertices(finalVertices);
-	
-	parent->setRenderModel(model);
+	model->setUVs(finalCoordTextures);
+	model->setNormals(finalNormals);
+		
+	Material* mat = new Material();
+
+	model->setMaterial(mat); //model->setMaterial(material);
+
+	obj->setRenderModel(model);
+
+	parent->addObject(obj);
+
 	
 	/*
 	FichierMTL fichierM(m_emplacementFichier, material_name);
@@ -146,63 +155,6 @@ void ObjectLoader::chargerObjet(Object* parent)
 
 
 	m_objets.push_back(new ObjectData(nom));
-
-
-
-
-
-	float* tempVert = (float*)malloc(sizeof(float) * m_vertices.size());
-	for (unsigned int i = 0; i < m_vertices.size(); i++) { tempVert[i] = m_vertices[i]; }
-
-	m_objets[m_objets.size() - 1]->setVertices(tempVert);
-	m_objets[m_objets.size() - 1]->setVerticesCount(m_vertices.size() / 3);
-
-
-	float* tempVertIndices = (float*)malloc(sizeof(float) * indicesVertices.size());
-	for (unsigned int i = 0; i < indicesVertices.size(); i++) { tempVertIndices[i] = indicesVertices[i]; }
-
-	m_objets[m_objets.size() - 1]->setVerticesIndices(tempVertIndices);
-	m_objets[m_objets.size() - 1]->setVerticesIndicesCount(indicesVertices.size() / 3);
-
-
-
-
-
-
-	float* tempNormal = (float*)malloc(sizeof(float) * m_normales.size());
-	for (unsigned int i = 0; i < m_normales.size(); i++) { tempNormal[i] = m_normales[i]; }
-
-	m_objets[m_objets.size() - 1]->setNormals(tempNormal);
-	m_objets[m_objets.size() - 1]->setNormalsCount(m_normales.size() / 3);
-
-
-
-	float* tempNormalIndices = (float*)malloc(sizeof(float) * indicesNormals.size());
-	for (unsigned int i = 0; i < indicesNormals.size(); i++) { tempNormalIndices[i] = indicesNormals[i]; }
-
-	m_objets[m_objets.size() - 1]->setNormals(tempNormalIndices);
-	m_objets[m_objets.size() - 1]->setNormalsCount(indicesNormals.size() / 3);
-
-
-
-
-
-
-	float* tempCoords = (float*)malloc(sizeof(float) * m_coordTexture.size());
-	for (unsigned int i = 0; i < m_coordTexture.size(); i++) { tempCoords[i] = m_coordTexture[i]; }
-
-	m_objets[m_objets.size() - 1]->setCoords(tempCoords);
-	m_objets[m_objets.size() - 1]->setCoordsCount(m_coordTexture.size() / 2);
-
-
-
-	float* tempCoordsIndices = (float*)malloc(sizeof(float) * indicesCoordTextures.size());
-	for (unsigned int i = 0; i < indicesCoordTextures.size(); i++) { tempCoordsIndices[i] = indicesCoordTextures[i]; }
-
-	m_objets[m_objets.size() - 1]->setCoords(tempCoordsIndices);
-	m_objets[m_objets.size() - 1]->setCoordsCount(indicesCoordTextures.size() / 2);
-
-
 
 
 	Material* mat = new Material(material);
@@ -311,13 +263,11 @@ std::vector<glm::vec3> ObjectLoader::chargerVertice()
 {
 
 	std::vector<glm::vec3> vertices;
-
-	setPositionCurseur(-1, CURSEUR);
-
+	
 	float x, y, z;
 
 	*m__fichier >> x >> y >> z;
-
+	
 	vertices.push_back(glm::vec3(x, y, z));
 
 	return vertices;
@@ -328,8 +278,6 @@ std::vector<glm::vec2> ObjectLoader::chargerCoordTexture()
 {
 	float value = 0;
 	std::vector<glm::vec2> coordTexture;
-
-	setPositionCurseur(1, CURSEUR);
 
 	float x, y;
 
@@ -346,8 +294,6 @@ std::vector<glm::vec3> ObjectLoader::chargerNormale()
 
 	std::vector<glm::vec3> normales;
 
-	setPositionCurseur(-1, CURSEUR);
-
 	float x, y, z;
 
 	*m__fichier >> x >> y >> z;
@@ -358,45 +304,60 @@ std::vector<glm::vec3> ObjectLoader::chargerNormale()
 }
 
 
-void ObjectLoader::chargerFace(std::vector<glm::vec3> *facesVertices, std::vector<glm::vec3> *facesCoordTexture, std::vector<glm::vec3> *facesNormals)
+void ObjectLoader::chargerFace(std::vector<glm::ivec3> *facesVertices, std::vector<glm::ivec3> *facesCoordTexture, std::vector<glm::ivec3> *facesNormals)
 {
-
+	
 	unsigned int vertex_1, vertex_2, vertex_3;
 	unsigned int coordTexture_1, coordTexture_2, coordTexture_3;
 	unsigned int normal_1, normal_2, normal_3;
 
-	*m__fichier >> vertex_1 >> coordTexture_1 >> normal_1;
-	*m__fichier >> vertex_2 >> coordTexture_2 >> normal_2;
-	*m__fichier >> vertex_3 >> coordTexture_3 >> normal_3;
+	*m__fichier >> vertex_1;
+	m__fichier->ignore(200, '/');
+	*m__fichier >> coordTexture_1;
+	m__fichier->ignore(200, '/');
+	*m__fichier >> normal_1;
 
-	facesVertices->push_back(glm::vec3(vertex_1, vertex_2, vertex_3));
-	facesCoordTexture->push_back(glm::vec3(coordTexture_1, coordTexture_2, coordTexture_3));
-	facesNormals->push_back(glm::vec3(normal_1, normal_2, normal_3));
+	*m__fichier >> vertex_2;
+	m__fichier->ignore(200, '/');
+	*m__fichier >> coordTexture_2;
+	m__fichier->ignore(200, '/');
+	*m__fichier >> normal_2;
+
+	*m__fichier >> vertex_3;
+	m__fichier->ignore(200, '/');
+	*m__fichier >> coordTexture_3;
+	m__fichier->ignore(200, '/');
+	*m__fichier >> normal_3;
+
+
+	facesVertices->push_back(glm::ivec3(vertex_1, vertex_2, vertex_3));
+	facesCoordTexture->push_back(glm::ivec3(coordTexture_1, coordTexture_2, coordTexture_3));
+	facesNormals->push_back(glm::ivec3(normal_1, normal_2, normal_3));
 		
 }
 
 
-std::vector<glm::vec3> ObjectLoader::associerVertexIndices(std::vector<glm::vec3> vertices, std::vector<glm::vec3> indices)
+std::vector<glm::vec3> ObjectLoader::associerVertexIndices(std::vector<glm::vec3> vertices, std::vector<glm::ivec3> indices)
 {
 
 	std::vector<glm::vec3> finalVertices;
 
 	for (unsigned int i = 0; i < indices.size(); i++)
 	{
-		
+
 		for (unsigned int j = 0; j < 3; j++)
 		{
 
-			finalVertices.push_back(vertices[indices[i][j]]);
+			finalVertices.push_back(vertices[indices[i][j]-1]);
 
 		}
 
 	}
-	return indices;
+	return finalVertices;
 }
 
 
-std::vector<glm::vec2> ObjectLoader::associerCoordTextureFaces(std::vector<glm::vec2> coordTextures, std::vector<glm::vec3> indices)
+std::vector<glm::vec2> ObjectLoader::associerCoordTextureFaces(std::vector<glm::vec2> coordTextures, std::vector<glm::ivec3> indices)
 {
 
 	std::vector<glm::vec2> finalCoordTextures;
@@ -407,7 +368,7 @@ std::vector<glm::vec2> ObjectLoader::associerCoordTextureFaces(std::vector<glm::
 		for (unsigned int j = 0; j < 3; j++)
 		{
 
-			finalCoordTextures.push_back(coordTextures[indices[i][j]]);
+			finalCoordTextures.push_back(coordTextures[indices[i][j]-1]);
 
 		}
 
@@ -416,7 +377,7 @@ std::vector<glm::vec2> ObjectLoader::associerCoordTextureFaces(std::vector<glm::
 }
 
 
-std::vector<glm::vec3> ObjectLoader::associerNormalIndices(std::vector<glm::vec3> normals, std::vector<glm::vec3> indices)
+std::vector<glm::vec3> ObjectLoader::associerNormalIndices(std::vector<glm::vec3> normals, std::vector<glm::ivec3> indices)
 {
 
 	std::vector<glm::vec3> finalNormals;
@@ -427,7 +388,7 @@ std::vector<glm::vec3> ObjectLoader::associerNormalIndices(std::vector<glm::vec3
 		for (unsigned int j = 0; j < 3; j++)
 		{
 
-			finalNormals.push_back(normals[indices[i][j]]);
+			finalNormals.push_back(normals[indices[i][j]-1]);
 
 		}
 
@@ -436,22 +397,13 @@ std::vector<glm::vec3> ObjectLoader::associerNormalIndices(std::vector<glm::vec3
 }
 
 
-std::string ObjectLoader::chargerMaterial()
+Material* ObjectLoader::chargerMaterial()
 {
-	std::string material;
-	char caractere = '0';
-	while (caractere != ' ')
-	{
-		m__fichier->get(caractere);
-	}
-	while (caractere != '\n')
-	{
-		m__fichier->get(caractere);
-		material.push_back(caractere);
-	}
-	material.erase(material.size() - 1);
 
-	setPositionCurseur(-1, CURSEUR);
-	return material;
+	string matName;
+
+	*m__fichier >> matName;
+
+	return m__materials[matName];;
 
 }

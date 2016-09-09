@@ -33,6 +33,7 @@ class Model
 		std::vector<glm::vec3> getVertices();
 		float* getVerticesFloat();
 
+		void setMaterial(Material* mat) { m__material = mat; };
 		Material* getMaterial() { return m__material;  };
 
 	private:

@@ -41,3 +41,21 @@ void Controller::unbind()
 	m__keyBindings.clear();
 
 }
+
+
+void Controller::check(Window* w)
+{
+
+	for (const auto p : m__keyBindings)
+	{
+
+		if (glfwGetKey(w->getWindow(), p.first) == GLFW_PRESS) 
+		{
+		
+			p.second();
+		
+		}
+
+	}
+
+}

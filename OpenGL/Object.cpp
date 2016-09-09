@@ -4,28 +4,31 @@
 #include <iostream>
 
 #include "ObjectManager.h"
-#include "ModelManager.h"
 
 using namespace std;
 using namespace glm;
 
 Object::Object():	m__renderModel(),
-					m__childs()
+					m__childs(),
+					m__position()
 {
 
-
-
+	cout << "[Object] constructor" << endl;
+	
 }
 
 
 Object::~Object()
 {
 
-	delete(m__renderModel);
+	cout << "[Object] destructor" << endl;
+
+	if (m__renderModel)
+		delete m__renderModel;
 
 	for (auto const &child : m__childs) {
 
-		delete(child);
+		delete child;
 
 	}
 
@@ -35,7 +38,8 @@ Object::~Object()
 void Object::load()
 {
 
-	m__renderModel->load();
+	if (m__renderModel)
+		m__renderModel->load();
 
 	for (auto const &child : m__childs) {
 
@@ -50,22 +54,16 @@ void Object::load()
 void Object::render(mat4 &projection, mat4 &view, mat4 &model)
 {
 
-	m__renderModel->render(projection, view, model);
+	model = translate(model, m__position);
+
+	if(m__renderModel)
+		m__renderModel->render(projection, view, model);
 
 	for (auto const &child : m__childs) {
 
 		child->render(projection, view, model);
 
 	}
-
-}
-
-
-void Object::setRenderModel(string name)
-{
-
-	Model* model = ModelManager::get("Models/" + name);
-	m__renderModel = new ModelRender((ModelRender*) model);
 
 }
 
@@ -86,6 +84,14 @@ Object* Object::addObject(std::string path)
 	m__childs.push_back(obj);
 
 	return obj;
+
+}
+
+
+void Object::addObject(Object* obj)
+{
+
+	m__childs.push_back(obj);
 
 }
 

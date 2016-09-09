@@ -24,11 +24,13 @@ class Object
 		void load();
 		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
 		
-		void setRenderModel(std::string name);
 		void setRenderModel(Model* model);
 
-		Object* addObject(std::string path = "Objects/default");
+		Object* addObject(std::string path = "default");
+		void addObject(Object* obj);
 		std::vector<Object*> getObjects();
+
+		void setPosition(glm::vec3 pos) { m__position = pos; };
 
 	private:
 
@@ -36,6 +38,7 @@ class Object
 		//ModelBullet* m__bulletModel;
 
 		std::vector<Object*> m__childs;
+		glm::vec3 m__position;
 
 };
 
