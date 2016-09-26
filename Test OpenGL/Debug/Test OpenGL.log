@@ -1,3 +1,0 @@
-﻿LINK : warning LNK4098: conflit entre la bibliothÞque par dÚfaut 'MSVCRT' et les autres bibliothÞquesá; utilisez /NODEFAULTLIB:library
-  Test OpenGL.vcxproj -> D:\Documents\Users\Guy\Programmation\C++\OpenGL\OpenGL\Debug\Test OpenGL.exe
-  Test OpenGL.vcxproj -> D:\Documents\Users\Guy\Programmation\C++\OpenGL\OpenGL\Debug\Test OpenGL.pdb (Full PDB)
