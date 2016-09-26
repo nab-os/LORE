@@ -16,8 +16,8 @@ class Loader
 		Loader(std::string path = "", std::string name = "");
 		virtual ~Loader();
 
-		void* load() {};
-		
+		void* load() { return nullptr; };
+
 	protected:
 
 		bool ouvrir();

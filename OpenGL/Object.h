@@ -10,6 +10,9 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <bullet/btBulletDynamicsCommon.h>
+
+#include "ModelBullet.h"
 #include "ModelRender.h"
 #include "Material.h"
 
@@ -21,24 +24,22 @@ class Object
 		Object();
 		~Object();
 
-		void load();
+		void load(btDiscreteDynamicsWorld* world = nullptr);
 		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
-		
+
 		void setRenderModel(Model* model);
+		void setBulletModel(Model* model);
 
 		Object* addObject(std::string path = "default");
 		void addObject(Object* obj);
 		std::vector<Object*> getObjects();
 
-		void setPosition(glm::vec3 pos) { m__position = pos; };
-
 	private:
 
 		ModelRender* m__renderModel;
-		//ModelBullet* m__bulletModel;
+		ModelBullet* m__bulletModel;
 
 		std::vector<Object*> m__childs;
-		glm::vec3 m__position;
 
 };
 

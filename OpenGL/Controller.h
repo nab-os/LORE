@@ -8,7 +8,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Window.h"
+#include "OpenGL_Window.h"
 
 class Controller
 {
@@ -22,7 +22,7 @@ class Controller
 		void unbind(const int key);
 		void unbind();
 
-		void check(Window* w);
+		void check(OpenGL_Window* w);
 
 	private:
 

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Object.h"
 
 #include <iostream>
@@ -9,12 +8,12 @@ using namespace std;
 using namespace glm;
 
 Object::Object():	m__renderModel(),
-					m__childs(),
-					m__position()
+					m__bulletModel(),
+					m__childs()
 {
 
 	cout << "[Object] constructor" << endl;
-	
+
 }
 
 
@@ -26,6 +25,9 @@ Object::~Object()
 	if (m__renderModel)
 		delete m__renderModel;
 
+	if (m__bulletModel)
+		delete m__bulletModel;
+
 	for (auto const &child : m__childs) {
 
 		delete child;
@@ -35,16 +37,19 @@ Object::~Object()
 }
 
 
-void Object::load()
+void Object::load(btDiscreteDynamicsWorld* world)
 {
 
 	if (m__renderModel)
 		m__renderModel->load();
 
+	/*if (world && m__bulletModel)
+		m__bulletModel->load(world);*/
+
 	for (auto const &child : m__childs) {
 
 		cout << "[Object] for m__childs" << endl;
-		child->load();
+		child->load(world);
 
 	}
 
@@ -54,7 +59,12 @@ void Object::load()
 void Object::render(mat4 &projection, mat4 &view, mat4 &model)
 {
 
-	model = translate(model, m__position);
+	glm::vec3 pos = vec3(0, 0, 0);
+
+	if (m__bulletModel)
+		pos = m__bulletModel->getPosition();
+
+	model = glm::translate(model, pos);
 
 	if(m__renderModel)
 		m__renderModel->render(projection, view, model);
@@ -72,6 +82,14 @@ void Object::setRenderModel(Model* model)
 {
 
 	m__renderModel = (ModelRender*)model;
+
+}
+
+
+void Object::setBulletModel(Model* model)
+{
+
+	m__bulletModel = (ModelBullet*)model;
 
 }
 

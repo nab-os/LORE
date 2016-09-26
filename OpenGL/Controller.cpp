@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Controller.h"
 
 using namespace std;
@@ -43,17 +42,17 @@ void Controller::unbind()
 }
 
 
-void Controller::check(Window* w)
+void Controller::check(OpenGL_Window* w)
 {
 
 	for (const auto p : m__keyBindings)
 	{
 
-		if (glfwGetKey(w->getWindow(), p.first) == GLFW_PRESS) 
+		if (glfwGetKey(w->getWindow(), p.first) == GLFW_PRESS)
 		{
-		
+
 			p.second();
-		
+
 		}
 
 	}

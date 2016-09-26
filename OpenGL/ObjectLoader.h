@@ -1,14 +1,16 @@
 #pragma once
 
+#include <vector>
+#include <map>
+#include <string>
+
 #include "Loader.h"
 #include "Object.h"
 #include "ModelRender.h"
 
-#include <deque>
-#include <string>
-
 #include "TextureLibrary.h"
 #include "Material.h"
+#include "MaterialLoader.h"
 
 class ObjectLoader: public Loader
 {

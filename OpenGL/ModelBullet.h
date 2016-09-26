@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <btBulletDynamicsCommon.h>
+
 #include "Model.h"
 
 
@@ -19,11 +21,15 @@ class ModelBullet : public Model
 		ModelBullet();
 		virtual ~ModelBullet();
 
-		void load();
+		void load(btDiscreteDynamicsWorld* world);
+
+		glm::vec3 getPosition();
 
 	private:
 
-		
+		btCollisionShape* m__fallShape;
+		btDefaultMotionState* m__fallMotionState;
+		btRigidBody* m__fallRigidBody;
 
 };
 

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Model.h"
 
 #include <iostream>
@@ -10,7 +9,7 @@ Model::Model(): m__vertices(), m__material()
 {
 
 	cout << "[Model] constructor" << endl;
-	
+
 }
 
 
@@ -32,7 +31,7 @@ void Model::load()
 
 	if(m__material)
 		m__material->load();
-	
+
 }
 
 

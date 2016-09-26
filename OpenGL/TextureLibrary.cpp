@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "TextureLibrary.h"
 
 using namespace std;

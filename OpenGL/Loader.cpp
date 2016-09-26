@@ -1,9 +1,8 @@
-#include "stdafx.h"
 #include "Loader.h"
 
 using namespace std;
 
-Loader::Loader(std::string path, string name): m__emplacementFichier(path), m__nom(name)
+Loader::Loader(std::string path, string name): m__nom(name), m__emplacementFichier(path)
 {
 
 
@@ -21,7 +20,7 @@ Loader::~Loader()
 
 bool Loader::ouvrir()
 {
-	
+
 	m__fichier = new ifstream(m__emplacementFichier);
 	if (!m__fichier->is_open() && !m__fichier->good())
 	{

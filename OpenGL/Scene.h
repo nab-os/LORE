@@ -5,6 +5,8 @@
 
 #include <GL/glew.h>
 
+//#include <btBulletDynamicsCommon.h>
+
 // Includes GLM
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -25,6 +27,7 @@ class Scene: public Object
 
 		void load();
 
+		void step(int fps = 60);
 		void render();
 
 	private:
@@ -39,6 +42,16 @@ class Scene: public Object
 		glm::mat4 m__model;
 
 		Camera* m__cam;
+
+		/*btBroadphaseInterface* m__broadphase;
+		btDefaultCollisionConfiguration* m__collisionConfiguration;
+		btCollisionDispatcher* m__dispatcher;
+		btSequentialImpulseConstraintSolver* m__solver;
+		btDiscreteDynamicsWorld* m__dynamicsWorld;
+
+		btCollisionShape* m__groundShape;
+		btDefaultMotionState* m__groundMotionState;
+		btRigidBody* m__groundRigidBody;*/
 
 		//EnvironmentObject* m__environmentObject;
 		//PostProcessObject* m__postProcess;

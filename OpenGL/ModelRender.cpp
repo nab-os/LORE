@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ModelRender.h"
 
 #include <iostream>
@@ -6,7 +5,7 @@
 using namespace std;
 using namespace glm;
 
-ModelRender::ModelRender():	Model(), 
+ModelRender::ModelRender():	Model(),
 							m__VAO(),
 							m__VBO(),
 							m__UVs(),
@@ -14,7 +13,7 @@ ModelRender::ModelRender():	Model(),
 {
 
 	cout << "[ModelRender] constructor" << endl;
-	
+
 }
 
 
@@ -249,9 +248,6 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	/*glm::vec3 posVec3 = m__object->getPhysics()->getPosition();
-	model = glm::translate(model, posVec3);*/
-	
 	Shader* s = getMaterial()->getShader();
 
 	glUseProgram(s->getProgramID());
@@ -272,8 +268,9 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	/*s->envoyerMat3("MV3x3", glm::mat3(view * model));
 	s->envoyerMat3("M3x3", glm::mat3(model));*/
 
-	/*s->envoyerVec3("lightPositionWorldspace", Light::getInstance()->getLightPos());
-	s->envoyerVec4("colorDiffuse", m__data->getMaterial()->getColorDiffuse().toVec4());*/
+	/*s->envoyerVec3("lightPositionWorldspace", Light::getInstance()->getLightPos());*/
+
+	s->envoyerVec3("colorDiffuse", getMaterial()->getDiffuseColor());
 
 	/*s->envoyerFloat("utilisationDiffuse", m__material->getUtilisationDiffuse());
 	s->envoyerFloat("utilisationNormal", m__material->getUtilisationNormal());
@@ -349,7 +346,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureRefraction()->getTextureID());
 
 	}*/
-	
+
 	/*glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDrawArrays(GL_PATCHES, 0, getVertexCount());*/
 
@@ -376,7 +373,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 
 	glUseProgram(0);
 
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((const GLfloat*)&projection[0]);
 
@@ -388,7 +385,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	glColor3f(0,0,1);
 
 	glBegin(GL_LINES);
-	
+
 	std::vector<glm::vec3> vertices = this->getVertices();
 
 	for (unsigned int i=0; i < vertices.size()-1; i++){

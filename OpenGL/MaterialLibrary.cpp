@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "MaterialLibrary.h"
 
 using namespace std;

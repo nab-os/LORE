@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ObjectLoader.h"
 
 #include <regex>
@@ -23,24 +22,26 @@ ObjectLoader::~ObjectLoader()
 
 Object* ObjectLoader::load()
 {
-	
+
 	cout << "[ObjectLoader] : load" << endl;
 
 	Object* root = new Object();
 
 	if(ouvrir()){
 
-		/*TODO: CHargement des materials*/
+		MaterialLoader* loader = new MaterialLoader(m__nom);
 
-		char* code = (char*)malloc(sizeof(char) * 250);
+		m__materials = loader->load();
+
+		string code;
 		std::regex reg_object("^o");
 
 		setPositionCurseur(0, DEBUT);
 		while (!m__fichier->eof())
 		{
 
-			m__fichier->get(code, 200, ' ');
-						
+			*m__fichier >> code;
+
 			if (std::regex_match(code, reg_object))
 			{
 
@@ -51,8 +52,6 @@ Object* ObjectLoader::load()
 			m__fichier->ignore(200, '\n');
 
 		}
-
-		free(code);
 
 		fermer();
 
@@ -65,12 +64,13 @@ Object* ObjectLoader::load()
 
 void ObjectLoader::chargerObjet(Object* parent)
 {
-	char* code = (char*) malloc(sizeof(char) * 250);
+	string code;
 	cout << "[ObjectLoader] chargerObjet() : new object" << endl;
 
 	Material* material;
 	std::string nom;
-	
+	*m__fichier >> nom;
+
 	std::vector<glm::ivec3> indicesVertices;
 	std::vector<glm::ivec3> indicesNormals;
 	std::vector<glm::ivec3> indicesCoordTextures;
@@ -83,13 +83,10 @@ void ObjectLoader::chargerObjet(Object* parent)
 	std::regex reg_face("^f");
 	std::regex reg_material("^usemtl");
 
-	*m__fichier >> code;
-
 	while (!m__fichier->eof())
 	{
 
-		m__fichier->ignore(200, '\n');
-		m__fichier->get(code, 10, ' ');
+		*m__fichier >> code;
 		cout << "[ObjectLoader] chargerObjet() : code : " << code << endl;
 
 		if (std::regex_match(code, reg_object) ) //Si c'est un autre objet
@@ -121,12 +118,10 @@ void ObjectLoader::chargerObjet(Object* parent)
 		{
 			chargerFace(&indicesVertices, &indicesCoordTextures, &indicesNormals);
 		}
-		
+
+		m__fichier->ignore(200, '\n');
+
 	}
-
-	free(code);
-
-	cout << "[ObjectLoader] chargerObjet() : test_1" << endl;
 
 	Object* obj = new Object();
 
@@ -138,16 +133,14 @@ void ObjectLoader::chargerObjet(Object* parent)
 	model->setVertices(finalVertices);
 	model->setUVs(finalCoordTextures);
 	model->setNormals(finalNormals);
-		
-	Material* mat = new Material();
 
-	model->setMaterial(mat); //model->setMaterial(material);
+	model->setMaterial(material);
 
 	obj->setRenderModel(model);
 
 	parent->addObject(obj);
 
-	
+
 	/*
 	FichierMTL fichierM(m_emplacementFichier, material_name);
 	fichierM.ouvrir();
@@ -263,11 +256,11 @@ std::vector<glm::vec3> ObjectLoader::chargerVertice()
 {
 
 	std::vector<glm::vec3> vertices;
-	
+
 	float x, y, z;
 
 	*m__fichier >> x >> y >> z;
-	
+
 	vertices.push_back(glm::vec3(x, y, z));
 
 	return vertices;
@@ -306,7 +299,7 @@ std::vector<glm::vec3> ObjectLoader::chargerNormale()
 
 void ObjectLoader::chargerFace(std::vector<glm::ivec3> *facesVertices, std::vector<glm::ivec3> *facesCoordTexture, std::vector<glm::ivec3> *facesNormals)
 {
-	
+
 	unsigned int vertex_1, vertex_2, vertex_3;
 	unsigned int coordTexture_1, coordTexture_2, coordTexture_3;
 	unsigned int normal_1, normal_2, normal_3;
@@ -333,7 +326,7 @@ void ObjectLoader::chargerFace(std::vector<glm::ivec3> *facesVertices, std::vect
 	facesVertices->push_back(glm::ivec3(vertex_1, vertex_2, vertex_3));
 	facesCoordTexture->push_back(glm::ivec3(coordTexture_1, coordTexture_2, coordTexture_3));
 	facesNormals->push_back(glm::ivec3(normal_1, normal_2, normal_3));
-		
+
 }
 
 
@@ -342,7 +335,9 @@ std::vector<glm::vec3> ObjectLoader::associerVertexIndices(std::vector<glm::vec3
 
 	std::vector<glm::vec3> finalVertices;
 
-	for (unsigned int i = 0; i < indices.size(); i++)
+
+
+	for (unsigned int i = 0; i < indices.size()-1; i++)
 	{
 
 		for (unsigned int j = 0; j < 3; j++)
@@ -362,7 +357,7 @@ std::vector<glm::vec2> ObjectLoader::associerCoordTextureFaces(std::vector<glm::
 
 	std::vector<glm::vec2> finalCoordTextures;
 
-	for (unsigned int i = 0; i < indices.size(); i++)
+	for (unsigned int i = 0; i < indices.size()-1; i++)
 	{
 
 		for (unsigned int j = 0; j < 3; j++)
@@ -382,7 +377,7 @@ std::vector<glm::vec3> ObjectLoader::associerNormalIndices(std::vector<glm::vec3
 
 	std::vector<glm::vec3> finalNormals;
 
-	for (unsigned int i = 0; i < indices.size(); i++)
+	for (unsigned int i = 0; i < indices.size()-1; i++)
 	{
 
 		for (unsigned int j = 0; j < 3; j++)
@@ -404,6 +399,8 @@ Material* ObjectLoader::chargerMaterial()
 
 	*m__fichier >> matName;
 
-	return m__materials[matName];;
+	cout << "[ObjectLoader] chargerMaterial() : " << matName << " : " << m__materials[matName] << endl;
+
+	return m__materials[matName];
 
 }
