@@ -1,4 +1,4 @@
-EXEC=OpenGL.lib
+EXEC=libGamePack.a
 
 SOURCES=OpenGL_Window.cpp Scene.cpp Camera.cpp Controller.cpp Loader.cpp \
 		Material.cpp MaterialLibrary.cpp MaterialLoader.cpp \
@@ -27,7 +27,7 @@ all: init $(EXEC_DIR)/$(EXEC)
 
 $(EXEC_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
-	ar rcs $@ $^ #$(LDIR) #$(LFLAGS)
+	ar rcs $@ $^
 
 $(OBJ_DIR)/%.o: %.cpp
 	@echo "\n=======COMPILING $@======="
