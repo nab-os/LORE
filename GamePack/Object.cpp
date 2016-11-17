@@ -7,12 +7,15 @@
 using namespace std;
 using namespace glm;
 
-Object::Object():	m__renderModel(),
+Object::Object():   m__renderModel(),
 					m__bulletModel(),
-					m__childs()
+					m__childs(),
+					m__positionProxy(),
+					m__scaleProxy(vec3(1.0)),
+					m__physicsEnabled(true)
 {
 
-	cout << "[Object] constructor" << endl;
+	cout << this << " [Object] constructor" << endl;
 
 }
 
@@ -20,7 +23,7 @@ Object::Object():	m__renderModel(),
 Object::~Object()
 {
 
-	cout << "[Object] destructor" << endl;
+	cout << this << " [Object] destructor" << endl;
 
 	if (m__renderModel)
 		delete m__renderModel;
@@ -40,15 +43,16 @@ Object::~Object()
 void Object::load(btDiscreteDynamicsWorld* world)
 {
 
+    cout << this << " [Object] load" << endl;
+
 	if (m__renderModel)
 		m__renderModel->load();
 
-	/*if (world && m__bulletModel)
-		m__bulletModel->load(world);*/
+	if (world && m__bulletModel)
+		m__bulletModel->load(world);
 
 	for (auto const &child : m__childs) {
 
-		cout << "[Object] for m__childs" << endl;
 		child->load(world);
 
 	}
@@ -56,24 +60,35 @@ void Object::load(btDiscreteDynamicsWorld* world)
 }
 
 
-void Object::render(mat4 &projection, mat4 &view, mat4 &model)
+void Object::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
 {
 
-	glm::vec3 pos = vec3(0, 0, 0);
+    mat4 save = model;
 
-	if (m__bulletModel)
+	glm::vec3 pos = m__positionProxy;
+	glm::vec3 scale = m__scaleProxy;
+	//glm::vec3 rot = vec3(0, 0, 0);
+
+	if (m__bulletModel && m__physicsEnabled)
+    {
 		pos = m__bulletModel->getPosition();
+		//rot = m__bulletModel->getRotation();
+    }
 
+	//model = glm::scale(model, scale);
 	model = glm::translate(model, pos);
+	//model = glm::rotate(model, );
 
 	if(m__renderModel)
-		m__renderModel->render(projection, view, model);
+		m__renderModel->render(projection, view, model, environmentMapID);
 
 	for (auto const &child : m__childs) {
 
-		child->render(projection, view, model);
+		child->render(projection, view, model, environmentMapID);
 
 	}
+
+    model = save;
 
 }
 
@@ -120,3 +135,97 @@ vector<Object*> Object::getObjects()
 	return m__childs;
 
 }
+
+void Object::applyForce(glm::vec3 pos)
+{
+
+    if(m__bulletModel)
+        m__bulletModel->applyForce(pos);
+
+}
+
+
+void Object::setLinearVelocity(glm::vec3 vec)
+{
+
+    if(m__bulletModel)
+        m__bulletModel->setLinearVelocity(vec);
+
+}
+
+
+void Object::move(glm::vec3 pos)
+{
+
+    if(m__bulletModel)
+        m__bulletModel->move(pos);
+
+}
+
+
+void Object::setPosition(glm::vec3 pos)
+{
+
+    if(m__bulletModel)
+        m__bulletModel->setPosition(pos);
+
+    m__positionProxy = pos;
+
+}
+
+
+glm::vec3 Object::getPosition()
+{
+
+    if(m__bulletModel && m__physicsEnabled)
+    {
+        m__positionProxy = m__bulletModel->getPosition();
+    }
+
+    return m__positionProxy;
+
+}
+
+
+void Object::setScale(glm::vec3 scale)
+{
+
+    m__scaleProxy = scale;
+
+}
+
+
+void Object::forcePhysics()
+{
+
+	if(m__bulletModel)
+        m__bulletModel->forcePhysics();
+
+    m__physicsEnabled = true;
+
+    for (auto const &child : m__childs) {
+
+		child->forcePhysics();
+
+	}
+
+}
+
+
+void Object::disablePhysics()
+{
+
+	if(m__bulletModel)
+        m__bulletModel->disablePhysics();
+
+    m__physicsEnabled = false;
+
+    for (auto const &child : m__childs) {
+
+		child->disablePhysics();
+
+	}
+
+}
+
+

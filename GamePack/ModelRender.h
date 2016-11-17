@@ -18,7 +18,7 @@ class ModelRender :	public Model
 
 		explicit ModelRender();
 		explicit ModelRender(const ModelRender*);
-		virtual ~ModelRender();
+		~ModelRender();
 
 		void computeTangentBasis(
 			// inputs
@@ -31,7 +31,7 @@ class ModelRender :	public Model
 			std::vector<glm::vec3> & bitangents);
 
 		void load();
-		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
+		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
 		GLuint& getVAO();
 		GLuint& getVBO();

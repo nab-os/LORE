@@ -1,10 +1,13 @@
 #pragma once
 
 
+#include <string>
 #include <map>
 
 #include "Loader.h"
 #include "Material.h"
+#include "Shader.h"
+#include "Texture.h"
 
 class MaterialLoader : public Loader
 {
@@ -19,9 +22,6 @@ class MaterialLoader : public Loader
 	private:
 
 		void chargerMaterial();
-
-		glm::vec3 chargerDiffuseColor();
-		glm::vec3 chargerSpecularColor();
 
 		std::map<std::string, Material*> m__materials;
 		

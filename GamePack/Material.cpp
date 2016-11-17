@@ -3,11 +3,12 @@
 #include <iostream>
 
 using namespace std;
+using namespace glm;
 
-Material::Material(): m__shader()
+Material::Material(): m__shader(), m__diffuseColor(vec3(0.5, 0, 0))
 {
 
-	cout << "[Material] constructor" << endl;
+	cout << this << " [Material] constructor" << endl;
 
 	m__shader = new Shader();
 
@@ -17,7 +18,12 @@ Material::Material(): m__shader()
 Material::~Material()
 {
 
-	delete m__shader;
+	if(m__shader)
+		delete m__shader;
+	if(m__diffuseTexture)
+		delete m__diffuseTexture;
+	if(m__diffuseSpecular)
+		delete m__diffuseSpecular;
 
 }
 
@@ -25,25 +31,9 @@ Material::~Material()
 void Material::load()
 {
 
-	cout << "[Material] load" << endl;
+	cout << this << " [Material] load" << endl;
 
 	m__shader->load();
-
-}
-
-
-//=====Shader=====
-Shader* Material::getShader()
-{
-
-	return m__shader;
-
-}
-
-
-void Material::setShader(Shader* shader)
-{
-
-	m__shader = shader;
+	m__diffuseTexture->load();
 
 }

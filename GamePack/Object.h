@@ -25,7 +25,7 @@ class Object
 		~Object();
 
 		void load(btDiscreteDynamicsWorld* world = nullptr);
-		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
+		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
 		void setRenderModel(Model* model);
 		void setBulletModel(Model* model);
@@ -34,12 +34,29 @@ class Object
 		void addObject(Object* obj);
 		std::vector<Object*> getObjects();
 
+        void applyForce(glm::vec3 pos);
+        void setLinearVelocity(glm::vec3 vec);
+        void move(glm::vec3 pos);
+        void setPosition(glm::vec3 pos);
+        glm::vec3 getPosition();
+        void setScale(glm::vec3 scale);
+
+		void forcePhysics();		
+		void disablePhysics();
+
+		ModelBullet* getModelBullet() { return m__bulletModel; };
+		ModelRender* getModelRender() { return m__renderModel; };
+
 	private:
 
 		ModelRender* m__renderModel;
 		ModelBullet* m__bulletModel;
 
 		std::vector<Object*> m__childs;
+
+		glm::vec3 m__positionProxy;
+		glm::vec3 m__scaleProxy;
+		bool m__physicsEnabled;
 
 };
 

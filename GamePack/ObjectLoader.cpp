@@ -23,9 +23,13 @@ ObjectLoader::~ObjectLoader()
 Object* ObjectLoader::load()
 {
 
-	cout << "[ObjectLoader] : load" << endl;
+	cout << this << " [ObjectLoader] : load" << endl;
 
 	Object* root = new Object();
+
+    ModelBullet* modelB = new ModelBullet();
+
+    root->setBulletModel(modelB);
 
 	if(ouvrir()){
 
@@ -65,9 +69,9 @@ Object* ObjectLoader::load()
 void ObjectLoader::chargerObjet(Object* parent)
 {
 	string code;
-	cout << "[ObjectLoader] chargerObjet() : new object" << endl;
+	//cout << "[ObjectLoader] chargerObjet() : new object" << endl;
 
-	Material* material;
+	Material* material = nullptr;
 	std::string nom;
 	*m__fichier >> nom;
 
@@ -87,7 +91,7 @@ void ObjectLoader::chargerObjet(Object* parent)
 	{
 
 		*m__fichier >> code;
-		cout << "[ObjectLoader] chargerObjet() : code : " << code << endl;
+		//cout << "[ObjectLoader] chargerObjet() : code : " << code << endl;
 
 		if (std::regex_match(code, reg_object) ) //Si c'est un autre objet
 		{
@@ -97,18 +101,15 @@ void ObjectLoader::chargerObjet(Object* parent)
 		}
 		else if (std::regex_match(code, reg_vertex)) //Si c'est un vertex
 		{
-			std::vector<glm::vec3> temp = chargerVertice();
-			m__vertices.insert(m__vertices.end(), temp.begin(), temp.end());
+			m__vertices.push_back(getVec3());
 		}
 		else if (std::regex_match(code, reg_texture_coord)) //Si c'est une coordonné de texture
 		{
-			std::vector<glm::vec2> temp = chargerCoordTexture();
-			m__coordTextures.insert(m__coordTextures.end(), temp.begin(), temp.end());
+			m__coordTextures.push_back(getVec2());
 		}
 		else if (std::regex_match(code, reg_normal)) //Si c'est une normale
 		{
-			std::vector<glm::vec3> temp = chargerNormale();
-			m__normals.insert(m__normals.end(), temp.begin(), temp.end());
+			m__normals.push_back(getVec3());
 		}
 		else if (std::regex_match(code, reg_material))
 		{
@@ -137,6 +138,11 @@ void ObjectLoader::chargerObjet(Object* parent)
 	model->setMaterial(material);
 
 	obj->setRenderModel(model);
+
+
+    ModelBullet* modelB = new ModelBullet();
+
+    obj->setBulletModel(modelB);
 
 	parent->addObject(obj);
 
@@ -252,51 +258,6 @@ void ObjectLoader::chargerObjet(Object* parent)
 }
 
 
-std::vector<glm::vec3> ObjectLoader::chargerVertice()
-{
-
-	std::vector<glm::vec3> vertices;
-
-	float x, y, z;
-
-	*m__fichier >> x >> y >> z;
-
-	vertices.push_back(glm::vec3(x, y, z));
-
-	return vertices;
-}
-
-
-std::vector<glm::vec2> ObjectLoader::chargerCoordTexture()
-{
-	float value = 0;
-	std::vector<glm::vec2> coordTexture;
-
-	float x, y;
-
-	*m__fichier >> x >> y;
-
-	coordTexture.push_back(glm::vec2(x, y));
-
-	return coordTexture;
-}
-
-
-std::vector<glm::vec3> ObjectLoader::chargerNormale()
-{
-
-	std::vector<glm::vec3> normales;
-
-	float x, y, z;
-
-	*m__fichier >> x >> y >> z;
-
-	normales.push_back(glm::vec3(x, y, z));
-
-	return normales;
-}
-
-
 void ObjectLoader::chargerFace(std::vector<glm::ivec3> *facesVertices, std::vector<glm::ivec3> *facesCoordTexture, std::vector<glm::ivec3> *facesNormals)
 {
 
@@ -334,7 +295,6 @@ std::vector<glm::vec3> ObjectLoader::associerVertexIndices(std::vector<glm::vec3
 {
 
 	std::vector<glm::vec3> finalVertices;
-
 
 
 	for (unsigned int i = 0; i < indices.size()-1; i++)
@@ -399,7 +359,7 @@ Material* ObjectLoader::chargerMaterial()
 
 	*m__fichier >> matName;
 
-	cout << "[ObjectLoader] chargerMaterial() : " << matName << " : " << m__materials[matName] << endl;
+	//cout << "[ObjectLoader] chargerMaterial() : " << matName << " : " << m__materials[matName] << endl;
 
 	return m__materials[matName];
 

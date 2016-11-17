@@ -12,7 +12,7 @@ ModelRender::ModelRender():	Model(),
 							m__normals()
 {
 
-	cout << "[ModelRender] constructor" << endl;
+	cout << this << " [ModelRender] constructor" << endl;
 
 }
 
@@ -24,7 +24,7 @@ ModelRender::ModelRender(const ModelRender*) : Model(),
 												m__normals()
 {
 
-	cout << "[ModelRender] copy-constructor" << endl;
+	cout << this << " [ModelRender] copy-constructor" << endl;
 
 	m__UVs.push_back(vec2(1, 0));
 	m__UVs.push_back(vec2(0, 1));
@@ -40,7 +40,7 @@ ModelRender::ModelRender(const ModelRender*) : Model(),
 ModelRender::~ModelRender()
 {
 
-	cout << "[ModelRender] destructor" << endl;
+	cout << this << " [ModelRender] destructor" << endl;
 
 }
 
@@ -107,7 +107,7 @@ void ModelRender::load()
 
 	Model::load();
 
-	cout << "[ModelRender] load" << endl;
+	cout << this << " [ModelRender] load" << endl;
 
 	int sizeVerticesBytes = this->getVerticesSize();
 	int sizeUVsBytes = this->getUVsSize();
@@ -118,8 +118,8 @@ void ModelRender::load()
 	float* normals = this->getNormalsFloat();
 
 	//Tangent compute
-	vector<vec3> vecTangents;
-	vector<vec3> vecBytangents;
+	vector<vec3> vecTangents = this->getNormals();
+	vector<vec3> vecBytangents = this->getNormals();
 
 	//computeTangentBasis(this->getVertices(), this->getUVs(), this->getNormals(), vecTangents, vecBytangents);
 
@@ -153,9 +153,11 @@ void ModelRender::load()
 		// Transfert des données
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeVerticesBytes, vertices);
 		glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes,  sizeUVsBytes,  UVs);
+
 		glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes,  sizeNormalsBytes, normals);
 		glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes, sizeNormalsBytes, tangents);
 		glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes * 2, sizeNormalsBytes, bytangents);
+
 
 
 	// Déverrouillage de l'objet
@@ -191,7 +193,7 @@ void ModelRender::load()
 			glEnableVertexAttribArray(1);
 
 			//Normals
-			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes));
+			/*glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes));
 			glEnableVertexAttribArray(2);
 
 			//Tangents
@@ -200,7 +202,7 @@ void ModelRender::load()
 
 			//Bytangents
 			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes + sizeNormalsBytes)); //sizeTangentBytes
-			glEnableVertexAttribArray(4);
+			glEnableVertexAttribArray(4);*/
 
 		// Déverrouillage du VBO
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -242,7 +244,7 @@ void ModelRender::load()
 }
 
 
-void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
+void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
 {
 
 	glEnable(GL_DEPTH_TEST);
@@ -279,7 +281,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	s->envoyerFloat("utilisationReflection", m__data->getMaterial()->getUtilisationReflection());
 	s->envoyerFloat("utilisationRefraction", m__data->getMaterial()->getUtilisationRefraction());*/
 
-	/*s->envoyer1I("shadowMap1", 0);
+	s->envoyer1I("shadowMap1", 0);
 	s->envoyer1I("shadowMap2", 0);
 	s->envoyer1I("environment", 1);
 	s->envoyer1I("diffuse", 2);
@@ -288,25 +290,21 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model)
 	s->envoyer1I("displacement", 5);
 	s->envoyer1I("reflection", 6);
 	s->envoyer1I("refraction", 7);
-	*/
+	
 	//s->envoyerFloat("spreadFactor", Light::getInstance()->spread);
 
 
 	/*glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, shadowMap);
+	glBindTexture(GL_TEXTURE_2D, shadowMap);*/
 
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, env->getTexture()->getTextureID());
-
-	if (m__data->getMaterial()->getUtilisationDiffuse())
-	{
+	glBindTexture(GL_TEXTURE_CUBE_MAP, environmentMapID);
 
 	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureDiffuse()->getTextureID());
+	glBindTexture(GL_TEXTURE_2D, getMaterial()->getDiffuseTexture()->getID());
 
-	}
-
+/*
 	if (m__data->getMaterial()->getUtilisationNormal())
 	{
 

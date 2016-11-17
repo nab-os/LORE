@@ -21,8 +21,8 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
+#include "Camera.h"
 #include "Scene.h"
-
 
 //#include <OVR_CAPI.h>
 //#include <OVR_CAPI_GL.h>
@@ -46,9 +46,14 @@ class OpenGL_Window
 
 		void step();
 		void render();
+		void load();
 
-		Scene* getScene() { return m__rootScene; };
 		GLFWwindow* getWindow() { return m__window; };
+		Scene* getScene() { return m__scene; };
+		Camera* getCamera() { return m__camera; };
+
+        int getWidth() { return m__width; };
+        int getHeight() { return m__height; };
 
 	private:
 
@@ -61,7 +66,8 @@ class OpenGL_Window
 
 		int m__frameRate;
 
-		Scene* m__rootScene;
+		Scene* m__scene;
+		Camera* m__camera;
 
 		static void error_callback(int error, const char* description);
 

@@ -5,10 +5,10 @@
 using namespace std;
 using namespace glm;
 
-Model::Model(): m__vertices(), m__material()
+Model::Model(): m__material(), m__vertices()
 {
 
-	cout << "[Model] constructor" << endl;
+	cout << this << " [Model] constructor" << endl;
 
 }
 
@@ -16,7 +16,7 @@ Model::Model(): m__vertices(), m__material()
 Model::~Model()
 {
 
-	cout << "[Model] destructor" << endl;
+	cout << this << " [Model] destructor" << endl;
 
 	if (m__material)
 		delete m__material;
@@ -27,7 +27,7 @@ Model::~Model()
 void Model::load()
 {
 
-	cout << "[Model] load" << endl;
+	cout << this << " [Model] load" << endl;
 
 	if(m__material)
 		m__material->load();

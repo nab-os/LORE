@@ -9,16 +9,24 @@
 #include "ObjectManager.h"
 
 using namespace std;
+using namespace glm;
 
-OpenGL_Window::OpenGL_Window(std::string tittle, int width, int height, int fps):  m__window(),
+OpenGL_Window::OpenGL_Window(std::string tittle, int width, int height, int fps): m__window(),
 																		m__title(tittle),
 																		m__width(width),
 																		m__height(height),
-																		m__frameRate(int(1000/fps)),
-																		m__rootScene()
+																		m__frameRate(int(1000/fps))
 {
 
-	m__rootScene = new Scene();
+	m__scene = new Scene();
+	m__camera = new Camera(width, height, vec3(0, 0, 0), vec3(0, 0, 1), vec3(0.0, 1.0, 0.0));
+
+    m__camera->setScene(m__scene);
+
+    m__camera->disablePhysics();
+    m__camera->setBackgroundColor(vec3(0.2, 0.0, 0.2));
+    m__camera->setProjection(ortho(0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f));
+    //m__camera->setProjection(ortho((float)width / -2, (float)width / 2, 0.0f, (float)height, 0.001f, 10000.0f));
 
 }
 
@@ -26,9 +34,11 @@ OpenGL_Window::OpenGL_Window(std::string tittle, int width, int height, int fps)
 OpenGL_Window::~OpenGL_Window()
 {
 
-	cout << "[Window] destructor" << endl;
-
-	delete m__rootScene;
+	cout << this << " [Window] destructor" << endl;
+	if(m__scene)
+		delete m__scene;
+	if(m__camera)
+		delete m__camera;
 
 }
 
@@ -54,16 +64,6 @@ void OpenGL_Window::window_size_callback(GLFWwindow* window, int width, int heig
 {
 
 	cout << "[Window] window_size_callback" << endl;
-
-	/*
-	OpenGL_Window* scene = static_cast<Window*>(glfwGetWindowUserPointer(window));
-
-	scene->m__width = width;
-	scene->m__height = height;
-
-	free(scene->m__postProcess);
-	scene->m__postProcess = new PostProcessObject(scene->m__width, scene->m__height);
-	scene->m__postProcess->charger();*/
 
 }
 
@@ -101,69 +101,6 @@ int OpenGL_Window::init()
 
 	glfwSetErrorCallback(error_callback);
 
-	// Initialize our session with the Oculus HMD.
-	//if (ovr_Initialize(nullptr) == ovrSuccess)
-	//{
-		//ovrSession session = nullptr;
-		//ovrGraphicsLuid luid;
-		/*ovrResult result = ovr_Create(&session, &luid);
-
-		if (result == ovrSuccess)
-		{   // Then we're connected to an HMD!
-
-			// Let's take a look at some orientation data.
-			ovrTrackingState ts;
-
-			while (true)
-			{
-				ts = ovr_GetTrackingState(session, 0, true);
-
-				ovrPoseStatef tempHeadPose = ts.HeadPose;
-				ovrPosef tempPose = tempHeadPose.ThePose;
-				ovrQuatf tempOrient = tempPose.Orientation;
-
-				cout << "Orientation (x,y,z):  " << COLW << tempOrient.x << ","
-					<< COLW << tempOrient.y << "," << COLW << tempOrient.z
-					<< endl;
-
-				// Wait a bit to let us actually read stuff.
-				std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			}
-
-			ovr_Destroy(session);
-		}
-
-		ovr_Shutdown();
-		// If we've fallen through to this point, the HMD is no longer
-		// connected.*/
-	//}
-
-
-
-	/*
-	vr::EVRInitError eError = vr::VRInitError_None;
-	vr::IVRSystem *m_pHMD = vr::VR_Init(&eError, vr::VRApplication_Scene);
-
-	if (eError != vr::VRInitError_None)
-	{
-		m_pHMD = NULL;
-		char buf[1024];
-		//sprintf_s(buf, sizeof(buf), "Unable to init VR runtime: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
-		return false;
-	}
-
-
-	vr::IVRRenderModels* m_pRenderModels = nullptr;//(vr::IVRRenderModels *)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
-	if (!m_pRenderModels)
-	{
-		m_pHMD = NULL;
-		//vr::VR_Shutdown();
-
-		char buf[1024];
-		//sprintf_s(buf, sizeof(buf), "Unable to get render model interface: %s", vr::VR_GetVRInitErrorAsEnglishDescription(eError));
-		return false;
-	}
-	*/
 	if (!glfwInit()) {
 
 		std::cout << "Failed to initialize GLFW\n";
@@ -271,18 +208,23 @@ void OpenGL_Window::endFrame(int startTime)
 }
 
 
-void OpenGL_Window::step()
-{
-
-	m__rootScene->step(m__frameRate);
-
-}
-
-
 void OpenGL_Window::render()
 {
 
 	glfwMakeContextCurrent(m__window);
-	m__rootScene->render();
+	m__camera->render();
+
+}
+
+
+void OpenGL_Window::load()
+{
+
+    cout << this << " [OpenGL_Window] load" << endl;
+
+    m__scene->load();
+    m__camera->load();
+
+    //m__scene->addObject(m__camera);
 
 }

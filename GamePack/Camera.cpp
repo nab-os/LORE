@@ -5,10 +5,26 @@
 using namespace std;
 using namespace glm;
 
-Camera::Camera(vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse)
+Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse): Object(), 
+m__scene(), 
+m_pointCible(pointCible), 
+m_axeVertical(axeVertical), 
+m_phi(0),
+m_theta(0),
+m_orientation(vec3(0)),
+m_sensibilite(sensibilite), 
+m_vitesse(vitesse), 
+m__model(mat4(1.0)),
+m__width(width),
+m__height(height),
+m__backgroundColor(vec3(0.2, 0.2, 0.2))
 {
 
+    cout << this << " [Camera] constructor" << endl;
 
+    m__projection = perspective(90.0, (double)m__width / m__height, 0.1, 500.0);
+	
+    Object::setPosition(position);
 
 }
 
@@ -16,13 +32,55 @@ Camera::Camera(vec3 position, vec3 pointCible, vec3 axeVertical, float sensibili
 Camera::~Camera()
 {
 
-	cout << "[Camera] destructor" << endl;
+	cout << this << " [Camera] destructor" << endl;
 
 }
 
 
+void Camera::load()
+{
+
+    cout << this << " [Camera] load" << endl;
+
+    ModelBullet* m = new ModelBullet();
+
+    setBulletModel(m);
+
+    Object::load(m__scene->getWorld());
+
+    m__scene->addRigidBody(m);
+
+    //Object::forcePhysics();
+    Object::disablePhysics();
+
+}
+
+
+void Camera::render()
+{
+
+	glViewport(0, 0, m__width, m__height);
+
+	glClearColor(m__backgroundColor.x, m__backgroundColor.y, m__backgroundColor.z, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    glm::mat4 view = mat4(1.0);
+
+    if(m__scene)
+    {
+
+        view = getView();
+
+    }
+
+    m__scene->render(m__projection, m__model, view);
+
+}
+
 // Méthodes
-void Camera::orienter(int xRel, int yRel)
+void Camera::orienter(double xRel, double yRel)
 {
 	// Récupération des angles
 
@@ -91,100 +149,34 @@ void Camera::orienter(int xRel, int yRel)
 
 	// Calcul du point ciblé pour OpenGL
 
-	m_pointCible = m_position + m_orientation;
+	m_pointCible = Object::getPosition() + m_orientation;
 }
 
-/*
-void Camera::deplacer()
+
+void Camera::deplacer(glm::vec3 direction)
 {
-	// Gestion de l'orientation
 
-	//std::cout<< "Fly mode : " << m_fly << "\n";
-	/*if (input.mouvementSouris())
-		orienter(input.getXRel(), input.getYRel());
+	//glm::vec3 position = Object::getPosition();
 
+	Object::move(direction * m_orientation * m_vitesse);
 
-	if (!m_fly) {
+	//glm::vec3 deplacement = normalize(m_orientation + direction);
 
-		// Avancée de la caméra
-		if ((input.getTouche(GLFW_KEY_UP)) || (input.getTouche(GLFW_KEY_W)) || (input.getTouche(GLFW_KEY_Z)))
-		{
-			m_position = m_position + m_deplacement * m_vitesse;
-			m_pointCible = m_position + m_orientation;
-		}
+	/*position = position + deplacement * m_vitesse;
 
-		// Recul de la caméra
-		if ((input.getTouche(GLFW_KEY_DOWN)) || (input.getTouche(GLFW_KEY_S)))
-		{
-			m_position = m_position - m_deplacement * m_vitesse;
-			m_pointCible = m_position + m_orientation;
-		}
+	m_pointCible = position + m_orientation;
 
-	}
-	else
-	{
+	Object::setPosition(position);*/
 
-		// Avancée de la caméra
-		if ((input.getTouche(GLFW_KEY_UP)) || (input.getTouche(GLFW_KEY_W)) || (input.getTouche(GLFW_KEY_Z)))
-		{
-			m_position = m_position + m_orientation * m_vitesse;
-			m_pointCible = m_position + m_orientation;
-		}
-
-		// Recul de la caméra
-
-		if (input.getTouche(GLFW_KEY_DOWN) || (input.getTouche(GLFW_KEY_S)))
-		{
-			m_position = m_position - m_orientation * m_vitesse;
-			m_pointCible = m_position + m_orientation;
-		}
-	}
+}
 
 
-	// Déplacement vers la gauche
-	if ((input.getTouche(GLFW_KEY_LEFT)) || (input.getTouche(GLFW_KEY_Q)) || (input.getTouche(GLFW_KEY_A)))
-	{
-		m_position = m_position + m_deplacementLateral * m_vitesse;
-		m_pointCible = m_position + m_orientation;
-	}
-
-	// Déplacement vers la droite
-	if ((input.getTouche(GLFW_KEY_RIGHT)) || (input.getTouche(GLFW_KEY_D)))
-	{
-		m_position = m_position - m_deplacementLateral * m_vitesse;
-		m_pointCible = m_position + m_orientation;
-	}
-
-	if (input.getTouche(GLFW_KEY_SPACE))
-	{
-		m_position = m_position + vec3(0.0, 1.0, 0.0) * m_vitesse;
-		m_pointCible = m_position + m_orientation;
-	}
-
-	if (input.getTouche(GLFW_KEY_LEFT_SHIFT))
-	{
-		m_position = m_position - vec3(0.0, 1.0, 0.0)  * m_vitesse;
-		m_pointCible = m_position + m_orientation;
-	}
-
-	if (input.getTouche(GLFW_KEY_F))
-	{
-		if (m_fly == false) {
-			m_fly = true;
-		}
-		else {
-			m_fly = false;
-		}
-	}
-}*/
-
-
-void Camera::lookAt(glm::mat4 &view)
+glm::mat4 Camera::getView()
 {
-	// Actualisation de la vue dans la matrice
 
-	//view = glm::lookAt(m_position, m_pointCible, m_axeVertical);
-	view = glm::lookAt(dvec3(5, 5, 5), dvec3(0, 0, 0), dvec3(0, 1, 0));
+    //return glm::lookAt( glm::vec3(10,10, 10), glm::vec3(m_pointCible), glm::vec3(0, 1, 0));
+    return glm::lookAt( Object::getPosition(), glm::vec3(m_pointCible), glm::vec3(0, 1, 0));
+
 }
 
 
@@ -193,7 +185,9 @@ void Camera::setPointcible(glm::vec3 pointCible)
 {
 	// Calcul du vecteur orientation
 
-	m_orientation = m_pointCible - m_position;
+	glm::vec3 position = Object::getPosition();
+
+	m_orientation = m_pointCible - position;
 	m_orientation = normalize(m_orientation);
 
 
@@ -246,19 +240,6 @@ void Camera::setPointcible(glm::vec3 pointCible)
 }
 
 
-void Camera::setPosition(glm::vec3 position)
-{
-	// Mise à jour de la position
-
-	m_position = position;
-
-
-	// Actualisation du point ciblé
-
-	m_pointCible = m_position + m_orientation;
-}
-
-
 float Camera::getSensibilite() const
 {
 	return m_vitesse;
@@ -280,21 +261,6 @@ void Camera::setSensibilite(float sensibilite)
 void Camera::setVitesse(float vitesse)
 {
 	m_vitesse = vitesse;
-}
-
-
-
-glm::dvec3 Camera::getPosition() const
-{
-
-	return m_position;
-
-}
-
-
-glm::dvec3 Camera::getRotation() const
-{
-	return m_orientation;//180/PI * atan2( m_position.x - m_pointCible.x  , m_position.z - m_pointCible.z);
 }
 
 

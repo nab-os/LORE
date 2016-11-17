@@ -40,6 +40,6 @@ class ObjectLoader: public Loader
 		std::vector<glm::vec3> m__normals;
 
 		std::map<std::string, Material*> m__materials;
-				
+		
 };
 

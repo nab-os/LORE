@@ -66,3 +66,39 @@ long Loader::setPositionCurseur(int offset, char whence)
 	}
 	return getPositionCurseur();
 }
+
+
+glm::vec3 Loader::getVec3()
+{
+
+	float x, y, z;
+
+	*m__fichier >> x >> y >> z;
+
+	return glm::vec3(x, y, z);
+
+}
+
+
+glm::vec2 Loader::getVec2()
+{
+
+	float x, y;
+
+	*m__fichier >> x >> y;
+
+	return glm::vec2(x, y);
+
+}
+
+
+std::string Loader::getString()
+{
+
+	string s;
+
+	*m__fichier >> s;
+
+	return s;
+
+}

@@ -23,7 +23,7 @@ MaterialLoader::~MaterialLoader()
 std::map<std::string, Material*> MaterialLoader::load()
 {
 
-	cout << "[MaterialLoader] : load" << endl;
+	cout << this << " [MaterialLoader] : load" << endl;
 
 	if (ouvrir()) {
 
@@ -38,7 +38,7 @@ std::map<std::string, Material*> MaterialLoader::load()
 
 			*m__fichier >> code;
 
-			cout << "[MaterialLoader] load() : code : " << code << endl;
+			//cout << "[MaterialLoader] load() : code : " << code << endl;
 			if (std::regex_match(code, reg_material))
 			{
 
@@ -66,21 +66,25 @@ void MaterialLoader::chargerMaterial()
 
 	std::string nom;
 	*m__fichier >> nom;
-	cout << "[MaterialLoader] chargerMaterial() : new material : " << nom << endl;
+	//cout << "[MaterialLoader] chargerMaterial() : new material : " << nom << endl;
 
 	glm::vec3 diffuseColor;
 	glm::vec3 specularColor;
+	std::string diffuseTexture = "default.png";
+	std::string specularTexture = "default.png";
 
 	//==Regex de detection de lignes==//
 	std::regex reg_diffuse_color("^Kd");
 	std::regex reg_specular_color("^Ks");
+	std::regex reg_diffuse_texture("^map_Kd");
+	std::regex reg_specular_texture("^map_Ks");
 	std::regex reg_material("^newmtl");
 
 	while (!m__fichier->eof())
 	{
 
 		*m__fichier >> code;
-		cout << "[MaterialLoader] chargerMaterial() : code : " << code << endl;
+		//cout << "[MaterialLoader] chargerMaterial() : code : " << code << endl;
 
 		if (std::regex_match(code, reg_material)) //Si c'est un autre objet
 		{
@@ -90,11 +94,19 @@ void MaterialLoader::chargerMaterial()
 		}
 		else if (std::regex_match(code, reg_diffuse_color)) //Si c'est la couleur diffuse
 		{
-			diffuseColor = chargerDiffuseColor();
+			diffuseColor = getVec3();
 		}
 		else if (std::regex_match(code, reg_specular_color)) //Si c'est la couleur spéculaire
 		{
-			specularColor = chargerSpecularColor();
+			specularColor = getVec3();
+		}
+		else if (std::regex_match(code, reg_diffuse_texture)) //Si c'est la couleur spéculaire
+		{
+			diffuseTexture = getString();
+		}
+		else if (std::regex_match(code, reg_specular_texture)) //Si c'est la couleur spéculaire
+		{
+			specularTexture = getString();
 		}
 
 		m__fichier->ignore(200, '\n');
@@ -105,36 +117,15 @@ void MaterialLoader::chargerMaterial()
 
 	Shader* shader = new Shader();
 
+	Texture* textureD = new Texture(diffuseTexture);
+	Texture* textureS = new Texture(specularTexture);
+
 	mat->setShader(shader);
 	mat->setDiffuseColor(diffuseColor);
 	mat->setSpecularColor(specularColor);
+	mat->setDiffuseTexture(textureD);
+	mat->setSpecularTexture(textureS);
 
 	m__materials.insert(std::pair<std::string, Material*>(nom, mat));
-
-}
-
-
-glm::vec3 MaterialLoader::chargerDiffuseColor()
-{
-
-	float r, g, b;
-
-	*m__fichier >> r >> g >> b;
-
-	cout << "[MaterialLoader] chargerDiffuseColor() : " << r << " " << g << " " << b << endl;
-
-	return glm::vec3(r, g, b);
-
-}
-
-
-glm::vec3 MaterialLoader::chargerSpecularColor()
-{
-
-	float r, g, b;
-
-	*m__fichier >> r >> g >> b;
-
-	return glm::vec3(r, g, b);
 
 }
