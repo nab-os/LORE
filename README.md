@@ -6,7 +6,58 @@ You can create games, use it to visualize raw data, etc...
 ##Exemple
 
 ```C++
-//Wait for it
+#include <iostream>
+
+#include <GamePack.h>
+
+using namespace std;
+
+int main(int argc, char** argv)
+{
+
+	cout << "===== INIT =====" << endl;
+
+	OpenGL_Window* window = GamePack::init();
+	if(!window)
+	{
+		cout << "Erreur lors de l'initialisation du contexte OpenGL." << endl;
+		return -1;
+	}
+
+    //----------
+
+	Controller* controller = new Controller();
+
+	c->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
+
+		window->close();
+
+    });
+
+	//===================================
+	cout << "===== RENDER =====" << endl;
+
+	while (!window->shouldClose())
+	{
+
+		int start = w->startFrame();
+
+		controller>check(window);
+
+		window->render();
+
+		window->endFrame(start);
+
+	}
+
+	//================================
+	cout << "===== END =====" << endl;
+
+	GamePack::unload();
+
+    return 0;
+
+}
 ```
 ## Why ?
 
