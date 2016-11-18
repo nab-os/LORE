@@ -3,6 +3,12 @@
 Light 3D library based on OpenGL that allows you to create/import 3D environment.
 You can create games, or use it to visualize raw data.
 
+##Exemple
+
+```C++
+printf();
+```
+
 ## Installation
 
 Clone the project
