@@ -29,11 +29,11 @@ apt install gcc
 
 You will need to install multiple libraries :
 
--glew: OpenGL development environment
--glm: Math objects for OpenGL
--glfw3: Window and context handler
--soil: Texture loading library
--bullet physics: Physics library
+* -glew: OpenGL development environment
+* -glm: Math objects for OpenGL
+* -glfw3: Window and context handler
+* -soil: Texture loading library
+* -bullet physics: Physics library
 
 ```bash
 apt install libglew-dev, glew-utils, libglfw3, libglfw3-dev, libglm-dev, libbullet-dev
