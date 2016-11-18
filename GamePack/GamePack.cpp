@@ -35,18 +35,36 @@ void GamePack::error_callback(int error, const char* description)
 	cout << "[Window] error_callback() :" << description << "\n";
 }
 
-
-int GamePack::init()
+/**
+ * Initialize Glfw and Glew and returns an OpenGL_Window
+ * @return returns a window
+ **/
+OpenGL_Window* GamePack::init()
 {
 
-	glfwSetErrorCallback(GamePack::error_callback);
+	cout << "[GamePack] init" << endl;
+
+	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit()) {
 
 		std::cout << "Failed to initialize GLFW\n";
-		return -1;
+		return nullptr;
 
 	}
+
+	//=====================
+
+	OpenGL_Window* w = GamePack::createWindow("Window_1", "Test");
+	w->load();
+
+	//=====================
+
+	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); //OpenGL 4.3
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 	// On initialise GLEW
 	GLenum initialisationGLEW(glewInit());
@@ -61,10 +79,9 @@ int GamePack::init()
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 
-		return false;
 	}
 
-	return true;
+	return w;
 }
 
 
@@ -80,6 +97,9 @@ void GamePack::unload()
 	GamePack::m__materialLibrary->flush();
 	GamePack::m__textureLibrary->flush();
 	GamePack::m__shaderLibrary->flush();
+
+	glfwTerminate();
+
 }
 
 
