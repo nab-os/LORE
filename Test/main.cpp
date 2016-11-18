@@ -34,6 +34,9 @@ int main(int argc, char** argv)
 
 	GamePack::init();
 
+	OpenGL_Window* window = GamePack::createWindow("Window_1", "Test");
+	Scene* scene = GamePack::createScene("Scene_1", "first");
+
 	OpenGL_Window* w = new OpenGL_Window("test_1", 1600, 900);
 	w->init();
 

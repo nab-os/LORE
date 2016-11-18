@@ -71,7 +71,7 @@ int GamePack::init()
 void GamePack::unload()
 {
 
-	/*GamePack::m__windowLibrary->flush();
+	GamePack::m__windowLibrary->flush();
 	GamePack::m__sceneLibrary->flush();
 	GamePack::m__cameraLibrary->flush();
 	GamePack::m__objectLibrary->flush();
@@ -79,7 +79,7 @@ void GamePack::unload()
 	GamePack::m__modelBulletLibrary->flush();
 	GamePack::m__materialLibrary->flush();
 	GamePack::m__textureLibrary->flush();
-	GamePack::m__shaderLibrary->flush();*/
+	GamePack::m__shaderLibrary->flush();
 }
 
 
@@ -88,7 +88,7 @@ OpenGL_Window* GamePack::createWindow(string id, string name)
 
 	OpenGL_Window* w = new OpenGL_Window(name);
 
-	//GamePack::m__windowLibrary->add(id, w);
+	GamePack::m__windowLibrary->add(id, w);
 
 	return w;
 
@@ -100,7 +100,7 @@ Scene* GamePack::createScene(string id, string name)
 
 	Scene* s = new Scene(/*name*/);
 
-	//GamePack::m__sceneLibrary->add(id, s);
+	GamePack::m__sceneLibrary->add(id, s);
 
 	return s;
 
@@ -112,7 +112,7 @@ Camera* GamePack::createCamera(string id, string name)
 
 	Camera* c = new Camera(/*name*/);
 
-	//GamePack::m__cameraLibrary->add(id, c);
+	GamePack::m__cameraLibrary->add(id, c);
 
 	return c;
 
@@ -124,7 +124,7 @@ Object* GamePack::createObject(string id, string name)
 
 	Object* o = new Object(/*name*/);
 
-	//GamePack::m__objectLibrary->add(id, o);
+	GamePack::m__objectLibrary->add(id, o);
 
 	return o;
 
@@ -136,7 +136,7 @@ ModelRender* GamePack::createModelRender(string id, string name)
 
 	ModelRender* m = new ModelRender(/*name*/);
 
-	//GamePack::m__modelRenderLibrary->add(id, m);
+	GamePack::m__modelRenderLibrary->add(id, m);
 
 	return m;
 
@@ -148,7 +148,7 @@ ModelBullet* GamePack::createModelBullet(string id, string name)
 
 	ModelBullet* m = new ModelBullet(/*name*/);
 
-	//GamePack::m__modelBulletLibrary->add(id, m);
+	GamePack::m__modelBulletLibrary->add(id, m);
 
 	return m;
 
@@ -160,7 +160,7 @@ Material* GamePack::createMaterial(string id, string name)
 
 	Material* m = new Material(/*name*/);
 
-	//GamePack::m__materialLibrary->add(id, m);
+	GamePack::m__materialLibrary->add(id, m);
 
 	return m;
 
@@ -172,7 +172,7 @@ Texture* GamePack::createTexture(string id, string name)
 
 	Texture* t = new Texture(/*name*/);
 
-	//GamePack::m__textureLibrary->add(id, t);
+	GamePack::m__textureLibrary->add(id, t);
 
 	return t;
 
@@ -184,7 +184,7 @@ Shader* GamePack::createShader(string id, string name)
 
 	Shader* s = new Shader(/*name*/);
 
-	//GamePack::m__shaderLibrary->add(id, s);
+	GamePack::m__shaderLibrary->add(id, s);
 
 	return s;
 

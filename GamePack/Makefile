@@ -5,7 +5,7 @@ SOURCES=OpenGL_Window.cpp Scene.cpp Camera.cpp Controller.cpp Loader.cpp \
 		ModelBullet.cpp Model.cpp ModelRender.cpp Object.cpp \
 		ObjectLibrary.cpp ObjectLoader.cpp ObjectManager.cpp \
 		Shader.cpp ShaderLibrary.cpp ShaderManager.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
-		GamePack.cpp  Library.cpp
+		GamePack.cpp Library.cpp
 
 EXEC_DIR=bin
 OBJ_DIR=obj
