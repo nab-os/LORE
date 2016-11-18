@@ -7,11 +7,9 @@ You can create games, use it to visualize raw data, etc...
 
 ```C++
 #include <iostream>
-
 #include <GamePack.h>
 
 using namespace std;
-
 int main(int argc, char** argv)
 {
 
