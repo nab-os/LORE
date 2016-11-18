@@ -36,7 +36,7 @@ You will need to install multiple libraries :
 * -bullet physics: Physics library
 
 ```bash
-apt install libglew-dev, glew-utils, libglfw3, libglfw3-dev, libglm-dev, libbullet-dev
+apt install libglew-dev glew-utils libglfw3 libglfw3-dev libglm-dev libbullet-dev
 ```
 
 ## Licence
