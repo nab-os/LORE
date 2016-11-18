@@ -5,6 +5,8 @@ You can create games, use it to visualize raw data, etc...
 
 ##Exemple
 
+A simple window that closes when ESCAPE key is pressed
+
 ```C++
 #include <iostream>
 #include <GamePack.h>
@@ -15,18 +17,19 @@ int main(int argc, char** argv)
 
 	cout << "===== INIT =====" << endl;
 
-	OpenGL_Window* window = GamePack::init();
+	OpenGL_Window* window = GamePack::init(); // Initializes OpenGL context and creates a Window
 	if(!window)
 	{
-		cout << "Erreur lors de l'initialisation du contexte OpenGL." << endl;
+		cout << "Error during OpenGL context initialization." << endl;
+		GamePack::unload();
 		return -1;
 	}
 
     //----------
 
-	Controller* controller = new Controller();
+	Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
 
-	c->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
+	controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
 
 		window->close();
 
@@ -38,20 +41,20 @@ int main(int argc, char** argv)
 	while (!window->shouldClose())
 	{
 
-		int start = w->startFrame();
+		int start = window->startFrame(); // Begin the frame render process
 
-		controller>check(window);
+		controller->check(window); // Checks all bindings for the Window and execute de fonction if it matches
 
-		window->render();
+		window->render(); // 
 
-		window->endFrame(start);
+		window->endFrame(start); // End the frame render process and display the image on the window
 
 	}
 
 	//================================
 	cout << "===== END =====" << endl;
 
-	GamePack::unload();
+	GamePack::unload(); // Unload all dictionnaries, and unload OpenGL context
 
     return 0;
 
