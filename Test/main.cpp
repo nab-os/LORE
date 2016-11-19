@@ -2,7 +2,10 @@
 #include <string>
 
 #include <GamePack.h>
-#include <tinyxml2.h>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 using namespace std;
 int main(int argc, char** argv)
@@ -18,10 +21,33 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	tinyxml2::XMLDocument doc;
-    doc.LoadFile("/home/guy/Bureau/simple.dae");
-    string title = doc.FirstChildElement("COLLADA")->FirstChildElement("asset")->FirstChildElement("contributor")->FirstChildElement("author")->GetText();
-    cout << "test : " << title << endl;
+	string file = "/home/guy/Bureau/simple.dae";
+
+	if(argc >= 2)
+	{
+
+		file = argv[1];
+
+	}
+
+  	Assimp::Importer importer;
+  	const aiScene* scene = importer.ReadFile( file, 
+	    aiProcess_CalcTangentSpace       | 
+	    aiProcess_Triangulate            |
+	    aiProcess_JoinIdenticalVertices  |
+	    aiProcess_SortByPType);
+
+  	if(!scene)
+  	{
+
+  		cout << "File does not exist or is corrupted : " << file << endl;
+
+  	}else
+  	{
+
+  		cout << "Let's load !" << endl;
+
+  	}
 
     //----------
 

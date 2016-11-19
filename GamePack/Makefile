@@ -11,14 +11,14 @@ OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-I /usr/include/ -I /usr/include/opencollada -I /usr/include/opencollada/COLLADABaseUtils -I /usr/local/include/bullet
+IDIR=-I /usr/include/ -I /usr/include/soil -I /usr/local/include/bullet
 
 LDIR=-L /usr/lib -L/usr/local/lib -L /usr/lib64 -L /usr/lib/x86_64-linux-gnu/ -L /usr/lib/opencollada
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lOpenCOLLADAFramework \
+	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lassimp \
 	   	-lBulletDynamics -lBulletCollision -lLinearMath
 
 CC=g++
