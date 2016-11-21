@@ -6,8 +6,6 @@
 #include <chrono>
 #include <thread>
 
-#include "ObjectManager.h"
-
 using namespace std;
 using namespace glm;
 
@@ -15,18 +13,12 @@ OpenGL_Window::OpenGL_Window(std::string tittle, int width, int height, int fps)
 																		m__title(tittle),
 																		m__width(width),
 																		m__height(height),
-																		m__frameRate(int(1000/fps))
+																		m__frameRate(int(1000/fps)),
+																		m__scene(),
+																		m__camera()
 {
 
-	m__scene = new Scene();
-	m__camera = new Camera(width, height, vec3(0, 0, 0), vec3(0, 0, 1), vec3(0.0, 1.0, 0.0));
 
-    m__camera->setScene(m__scene);
-
-    m__camera->disablePhysics();
-    m__camera->setBackgroundColor(vec3(0.2, 0.0, 0.2));
-    m__camera->setProjection(ortho(0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f));
-    //m__camera->setProjection(ortho((float)width / -2, (float)width / 2, 0.0f, (float)height, 0.001f, 10000.0f));
 
 }
 
@@ -46,17 +38,6 @@ OpenGL_Window::~OpenGL_Window()
 void OpenGL_Window::error_callback(int error, const char* description)
 {
 	cout << "[Window] error_callback() :" << description << "\n";
-}
-
-
-void OpenGL_Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-
-	cout << "[Window] key_callback" << endl;
-
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-
 }
 
 
@@ -96,17 +77,10 @@ void OpenGL_Window::mouse_move_callback(GLFWwindow* window, double x, double y)
 }
 
 
-int OpenGL_Window::init()
+void OpenGL_Window::load()
 {
 
-	glfwSetErrorCallback(error_callback);
-
-	if (!glfwInit()) {
-
-		std::cout << "Failed to initialize GLFW\n";
-		return -1;
-
-	}
+    cout << this << " [OpenGL_Window] load" << endl;
 
 	// Création de la fenêtre
 	m__window = glfwCreateWindow(m__width, m__height, m__title.c_str(), NULL, NULL);
@@ -118,12 +92,10 @@ int OpenGL_Window::init()
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 
-		return false;
-
 	}
 
 
-	glfwSetKeyCallback(m__window, OpenGL_Window::key_callback);
+	//glfwSetKeyCallback(m__window, OpenGL_Window::key_callback);
 
 	glfwMakeContextCurrent(m__window);
 
@@ -135,33 +107,6 @@ int OpenGL_Window::init()
 	glfwSetWindowCloseCallback(m__window, window_close_callback);
 	glfwSetCursorPosCallback(m__window, mouse_move_callback);
 
-	//=====================
-
-
-	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); //OpenGL 4.3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-
-
-	// On initialise GLEW
-	GLenum initialisationGLEW(glewInit());
-
-	// Si l'initialisation a échoué :
-	if (initialisationGLEW != GLEW_OK)
-	{
-
-		// On affiche l'erreur grâce à la fonction : glewGetErrorString(GLenum code)
-		std::cout << "Erreur d'initialisation de GLEW : " << glewGetErrorString(initialisationGLEW) << std::endl;
-
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-
-		return false;
-	}
-
-	return true;
 }
 
 
@@ -212,19 +157,8 @@ void OpenGL_Window::render()
 {
 
 	glfwMakeContextCurrent(m__window);
-	m__camera->render();
-
-}
-
-
-void OpenGL_Window::load()
-{
-
-    cout << this << " [OpenGL_Window] load" << endl;
-
-    m__scene->load();
-    m__camera->load();
-
-    //m__scene->addObject(m__camera);
+	
+	if(m__camera)
+		m__camera->render();
 
 }

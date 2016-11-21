@@ -36,7 +36,6 @@ class OpenGL_Window
 		OpenGL_Window(std::string tittle = "First window", int width = 512, int height = 512, int fps = 60);
 		virtual ~OpenGL_Window();
 
-		int init();
 		void close();
 
 		int shouldClose();
@@ -71,7 +70,6 @@ class OpenGL_Window
 
 		static void error_callback(int error, const char* description);
 
-		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void window_size_callback(GLFWwindow* window, int width, int height);
 		static void window_focus_callback(GLFWwindow* window, int state);
 		static void window_close_callback(GLFWwindow* window);

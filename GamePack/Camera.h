@@ -14,7 +14,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Object.h"
-#include "Loadable.h"
 
 #include "Scene.h"
 #include "Texture.h"

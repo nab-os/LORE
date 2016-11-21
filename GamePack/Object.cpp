@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "ObjectManager.h"
-
 using namespace std;
 using namespace glm;
 
@@ -66,7 +64,7 @@ void Object::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmen
     mat4 save = model;
 
 	glm::vec3 pos = m__positionProxy;
-	glm::vec3 scale = m__scaleProxy;
+	//glm::vec3 scale = m__scaleProxy;
 	//glm::vec3 rot = vec3(0, 0, 0);
 
 	if (m__bulletModel && m__physicsEnabled)
@@ -112,12 +110,12 @@ void Object::setBulletModel(Model* model)
 Object* Object::addObject(std::string path)
 {
 
-	Object* obj = ObjectManager::get(path);
+	/*Object* obj = ObjectManager::get(path);
 
 	m__childs.push_back(obj);
 
-	return obj;
-
+	return obj;*/
+	return nullptr;
 }
 
 
