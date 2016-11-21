@@ -11,7 +11,7 @@ OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-I /usr/include/ -I /usr/include/soil -I /usr/local/include/bullet
+IDIR=-I /usr/include/ -I /usr/include/SOIL -I /usr/local/include/bullet
 
 LDIR=-L /usr/lib -L/usr/local/lib -L /usr/lib64 -L /usr/lib/x86_64-linux-gnu/ -L /usr/lib/opencollada
 

@@ -18,7 +18,7 @@ Library<Shader>* GamePack::m__shaderLibrary = new Library<Shader>();
 GamePack::GamePack()
 {
 
-	
+
 }
 
 
@@ -210,3 +210,10 @@ Shader* GamePack::createShader(string id, string name)
 
 }
 
+
+void GamePack::load(string path)
+{
+
+    Loader::load(path, m__windowLibrary, m__sceneLibrary, m__cameraLibrary, m__objectLibrary, m__modelRenderLibrary, m__modelbulletLibrary, m__materialLibrary, m__textureLibrary, m__shaderLibrary);
+
+}

@@ -7,7 +7,7 @@ OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-I /usr/include/ -I /usr/local/include/bullet -I /usr/include/soil -I ../GamePack
+IDIR=-I /usr/include/ -I /usr/local/include/bullet -I /usr/include/SOIL -I ../GamePack
 
 LDIR=-L /usr/lib -L /usr/local/lib -L /usr/lib64 -L /usr/lib/x86_64-linux-gnu -L ../GamePack/bin
 
