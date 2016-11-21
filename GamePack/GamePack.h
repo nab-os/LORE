@@ -24,7 +24,7 @@ class GamePack
 
 	public:
 
-        static OpenGL_Window* init();
+		static int init();
 		static void unload();
 
 		static OpenGL_Window* createWindow(std::string id, std::string name);
