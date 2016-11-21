@@ -112,12 +112,12 @@ void Object::setBulletModel(Model* model)
 Object* Object::addObject(std::string path)
 {
 
-	Object* obj = ObjectManager::get(path);
+//	Object* obj = ObjectManager::get(path);
 
-	m__childs.push_back(obj);
+//	m__childs.push_back(obj);
 
-	return obj;
-
+//	return obj;
+return nullptr;
 }
 
 
