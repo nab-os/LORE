@@ -18,7 +18,7 @@ Library<Shader>* GamePack::m__shaderLibrary = new Library<Shader>();
 GamePack::GamePack()
 {
 
-
+	
 }
 
 
@@ -36,7 +36,7 @@ void GamePack::error_callback(int error, const char* description)
 }
 
 
-OpenGL_Window* GamePack::init()
+int GamePack::init()
 {
 
 	glfwSetErrorCallback(GamePack::error_callback);
@@ -44,18 +44,9 @@ OpenGL_Window* GamePack::init()
 	if (!glfwInit()) {
 
 		std::cout << "Failed to initialize GLFW\n";
-		return nullptr;
+		return -1;
 
 	}
-
-    OpenGL_Window* w = new OpenGL_Window();
-    w->load();
-
-    glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 	// On initialise GLEW
 	GLenum initialisationGLEW(glewInit());
@@ -70,9 +61,10 @@ OpenGL_Window* GamePack::init()
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 
+		return false;
 	}
 
-	return w;
+	return true;
 }
 
 
