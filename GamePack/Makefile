@@ -18,7 +18,7 @@ LDIR=-L /usr/lib -L/usr/local/lib -L /usr/lib64 -L /usr/lib/x86_64-linux-gnu/ -L
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lassimp -lcollada_parser \
+	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lassimp -lOpenCOLLADAFramework \
 	   	-lBulletDynamics -lBulletCollision -lLinearMath
 
 CC=g++

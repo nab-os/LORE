@@ -86,9 +86,10 @@ You will need to install multiple libraries :
 * -glfw3: Window and context handler
 * -soil: Texture loading library
 * -bullet physics: Physics library
+* -open collada: collada document importer
 
 ```bash
-apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev libbullet-dev
+apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev libbullet-dev libopencollada-dev
 ```
 
 ## Licence
