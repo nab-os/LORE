@@ -4,21 +4,21 @@ SOURCES=OpenGL_Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Material.cpp \
 		ModelBullet.cpp Model.cpp ModelRender.cpp Object.cpp \
 		Shader.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
-		GamePack.cpp Library.cpp
+		GamePack.cpp Library.cpp Loader.cpp
 
 EXEC_DIR=bin
 OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-I /usr/include/ -I /usr/include/SOIL -I /usr/local/include/bullet
+IDIR=-I /usr/include/ -I /usr/include/SOIL -I /usr/local/include/bullet -I /usr/include/opencollada
 
 LDIR=-L /usr/lib -L/usr/local/lib -L /usr/lib64 -L /usr/lib/x86_64-linux-gnu/ -L /usr/lib/opencollada
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lassimp \
+	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lassimp -lcollada_parser \
 	   	-lBulletDynamics -lBulletCollision -lLinearMath
 
 CC=g++

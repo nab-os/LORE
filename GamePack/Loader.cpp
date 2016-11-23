@@ -23,6 +23,7 @@ bool Loader::load(string path, Library<OpenGL_Window>* windowLibrary, Library<Sc
 {
 
 
+/*
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile( path,
             aiProcess_CalcTangentSpace       |
@@ -33,29 +34,30 @@ bool Loader::load(string path, Library<OpenGL_Window>* windowLibrary, Library<Sc
     if(!scene)
     {
 
-        cout << "File does not exist or is corrupted : " << file << endl;
+        cout << "File does not exist or is corrupted : " << path << endl;
+
+        return false;
 
     }else
     {
 
         cout << "Let's load !" << endl;
 
-        for(int i = 0; i < scene->mNumMeshes; i++ )
+        for(unsigned int i = 0; i < scene->mNumMeshes; i++ )
         {
 
             aiMesh* mesh = scene->mMeshes[i];
-            int numFaces = mesh->mNumFaces;
-            for(int j = 0; j < numFaces; j++)
+            unsigned int numFaces = mesh->mNumFaces;
+            for(unsigned int j = 0; j < numFaces; j++)
             {
 
                 const aiFace& face = mesh->mFaces[j];
-                for(int k = 0; k < 3; i++)
+                for(unsigned int k = 0; k < 3; k++)
                 {
 
                     aiVector3D pos = mesh->mVertices[face.mIndices[k]];
                     aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[k]];
                     aiVector3D normal = mesh->mNormals[face.mIndices[k]];
-
 
                 }
 
@@ -63,9 +65,9 @@ bool Loader::load(string path, Library<OpenGL_Window>* windowLibrary, Library<Sc
 
         }
 
-        int numMaterials = scene->mNumMaterials;
+        unsigned int numMaterials = scene->mNumMaterials;
 
-        for(int i = 0; i < numMaterials; i++)
+        for(unsigned int i = 0; i < numMaterials; i++)
         {
 
             const aiMaterial* material = scene->mMaterials[i];
@@ -73,5 +75,14 @@ bool Loader::load(string path, Library<OpenGL_Window>* windowLibrary, Library<Sc
             if(material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
             {
 
+
+
+            }
+
+        }
+
+    }*/
+
+    return true;
 
 }

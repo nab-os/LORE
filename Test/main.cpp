@@ -3,10 +3,6 @@
 
 #include <GamePack.h>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 using namespace std;
 int main(int argc, char** argv)
 {
@@ -38,9 +34,9 @@ int main(int argc, char** argv)
 
     controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
 
-            window->close();
+        window->close();
 
-            });
+    });
 
     //===================================
     cout << "===== RENDER =====" << endl;
