@@ -23,7 +23,7 @@ class Loader
 
 	public:
 
-        bool load(std::string path, Library<OpenGL_Window> windowLibrary, Library<Scene> sceneLibrary, Library<Camera> cameraLibrary, Library<Object> objectLibrary, Library<ModelRender> modelRenderlibrary, Library<ModelBullet> modelBulletLibrary, Library<Material> materialLibrary, Library<Texture> textureLibrary, Library<Shader> shaderLibrary);
+        static bool load(std::string path, Library<OpenGL_Window>* windowLibrary, Library<Scene>* sceneLibrary, Library<Camera>* cameraLibrary, Library<Object>* objectLibrary, Library<ModelRender>* modelRenderlibrary, Library<ModelBullet>* modelBulletLibrary, Library<Material>* materialLibrary, Library<Texture>* textureLibrary, Library<Shader>* shaderLibrary);
 
 	private:
 

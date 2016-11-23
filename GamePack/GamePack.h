@@ -38,7 +38,7 @@ class GamePack
         static Texture* createTexture(std::string id, std::string name);
         static Shader* createShader(std::string id, std::string name);
 
-        static void load();
+        static void load(std::string path);
 
     private:
 

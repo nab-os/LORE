@@ -214,6 +214,6 @@ Shader* GamePack::createShader(string id, string name)
 void GamePack::load(string path)
 {
 
-    Loader::load(path, m__windowLibrary, m__sceneLibrary, m__cameraLibrary, m__objectLibrary, m__modelRenderLibrary, m__modelbulletLibrary, m__materialLibrary, m__textureLibrary, m__shaderLibrary);
+    Loader::load(path, GamePack::m__windowLibrary, GamePack::m__sceneLibrary, GamePack::m__cameraLibrary, GamePack::m__objectLibrary, GamePack::m__modelRenderLibrary, GamePack::m__modelBulletLibrary, GamePack::m__materialLibrary, GamePack::m__textureLibrary, GamePack::m__shaderLibrary);
 
 }
