@@ -20,7 +20,7 @@
 
 
 
-class Loader
+class Loader: public COLLADAFW::IWriter
 {
 
 	public:

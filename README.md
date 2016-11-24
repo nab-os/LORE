@@ -89,7 +89,7 @@ You will need to install multiple libraries :
 * -open collada: collada document importer
 
 ```bash
-apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev libbullet-dev libopencollada-dev
+apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev libbullet-dev opencollada-dev
 ```
 
 ## Licence
