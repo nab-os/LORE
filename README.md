@@ -1,4 +1,4 @@
-# GamePack | STILL IN DEVELOPMENT /!\
+# Lore | STILL IN DEVELOPMENT /!\
 
 Light 3D library based on OpenGL that allows you to create/import 3D environment.
 You can create games, use it to visualize raw data, etc...
@@ -9,7 +9,7 @@ A simple window that closes when ESCAPE key is pressed
 
 ```C++
 #include <iostream>
-#include <GamePack.h>
+#include <Lore.h>
 
 using namespace std;
 int main(int argc, char** argv)
@@ -17,11 +17,11 @@ int main(int argc, char** argv)
 
 	cout << "===== INIT =====" << endl;
 
-	OpenGL_Window* window = GamePack::init(); // Initializes OpenGL context and creates a Window
+	OpenGL_Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
 	if(!window)
 	{
 		cout << "Error during OpenGL context initialization." << endl;
-		GamePack::unload();
+		Lore::unload();
 		return -1;
 	}
 
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 	//================================
 	cout << "===== END =====" << endl;
 
-	GamePack::unload(); // Unload all dictionnaries, and unload OpenGL context
+	Lore::unload(); // Unload all dictionnaries, and unload OpenGL context
 
     return 0;
 
@@ -69,7 +69,7 @@ Another aim of this project is to stay cross-platform and open.
 
 Clone the project
 ```bash
-git clone https://github.com/gnikwo/GamePack
+git clone https://github.com/gnikwo/Lore
 ```
 
 and install gcc if it's not done yet
