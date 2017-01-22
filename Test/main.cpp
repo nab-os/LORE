@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include <GamePack.h>
+#include <Lore.h>
 
 using namespace std;
 int main(int argc, char** argv)
@@ -9,11 +9,11 @@ int main(int argc, char** argv)
 
     cout << "===== INIT =====" << endl;
 
-    OpenGL_Window* window = GamePack::init(); // Initializes OpenGL context and creates a Window
+    OpenGL_Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
     if(!window)
     {
         cout << "Error during OpenGL context initialization." << endl;
-        GamePack::unload();
+        Lore::unload();
         return -1;
     }
 
@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 
     }
 
-    GamePack::load(file);
+    Lore::load(file);
 
     //----------
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
     //================================
     cout << "===== END =====" << endl;
 
-    GamePack::unload(); // Unload all dictionnaries, and unload OpenGL context
+    Lore::unload(); // Unload all dictionnaries, and unload OpenGL context
 
     return 0;
 

@@ -20,7 +20,7 @@
 #include "Camera.h"
 #include "Shader.h"
 
-class GamePack
+class Lore
 {
 
     public:
@@ -42,8 +42,8 @@ class GamePack
 
     private:
 
-        GamePack();
-        virtual ~GamePack();
+        Lore();
+        virtual ~Lore();
 
         static void error_callback(int error, const char* description);
 

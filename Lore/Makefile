@@ -1,10 +1,10 @@
-EXEC=libGamePack.a
+EXEC=libLore.a
 
 SOURCES=OpenGL_Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Material.cpp \
 		ModelBullet.cpp Model.cpp ModelRender.cpp Object.cpp \
 		Shader.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
-		GamePack.cpp Library.cpp Loader.cpp
+		Lore.cpp Library.cpp Loader.cpp
 
 EXEC_DIR=bin
 OBJ_DIR=obj
