@@ -1,6 +1,6 @@
 # Lore | STILL IN DEVELOPMENT /!\
 
-Light 3D library based on OpenGL that allows you to create/import 3D environment.
+Lore, Light OpenGL Rendering Engine, allows you to create/import 3D environment.
 You can create games, use it to visualize raw data, etc...
 
 ##Exemple
@@ -69,7 +69,7 @@ Another aim of this project is to stay cross-platform and open.
 
 Clone the project
 ```bash
-git clone https://github.com/gnikwo/Lore
+git clone https://github.com/gnikwo/LORE
 ```
 
 and install gcc if it's not done yet
@@ -85,11 +85,10 @@ You will need to install multiple libraries :
 * -glm: Math objects for OpenGL
 * -glfw3: Window and context handler
 * -soil: Texture loading library
-* -bullet physics: Physics library
 * -open collada: collada document importer
 
 ```bash
-apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev libbullet-dev opencollada-dev
+apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev opencollada-dev
 ```
 
 ## Licence

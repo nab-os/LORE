@@ -10,7 +10,7 @@ Library<Scene>* Lore::m__sceneLibrary = new Library<Scene>();
 Library<Camera>* Lore::m__cameraLibrary = new Library<Camera>();
 Library<Object>* Lore::m__objectLibrary = new Library<Object>();
 Library<ModelRender>* Lore::m__modelRenderLibrary = new Library<ModelRender>();
-Library<ModelBullet>* Lore::m__modelBulletLibrary = new Library<ModelBullet>();
+//Library<ModelBullet>* Lore::m__modelBulletLibrary = new Library<ModelBullet>();
 Library<Material>* Lore::m__materialLibrary = new Library<Material>();
 Library<Texture>* Lore::m__textureLibrary = new Library<Texture>();
 Library<Shader>* Lore::m__shaderLibrary = new Library<Shader>();
@@ -93,7 +93,7 @@ void Lore::unload()
 	Lore::m__cameraLibrary->flush();
 	Lore::m__objectLibrary->flush();
 	Lore::m__modelRenderLibrary->flush();
-	Lore::m__modelBulletLibrary->flush();
+//	Lore::m__modelBulletLibrary->flush();
 	Lore::m__materialLibrary->flush();
 	Lore::m__textureLibrary->flush();
 	Lore::m__shaderLibrary->flush();
@@ -162,17 +162,17 @@ ModelRender* Lore::createModelRender(string id, string name)
 
 }
 
-
+/*
 ModelBullet* Lore::createModelBullet(string id, string name)
 {
 
-	ModelBullet* m = new ModelBullet(/*name*/);
+	ModelBullet* m = new ModelBullet(name);
 
 	Lore::m__modelBulletLibrary->add(id, m);
 
 	return m;
 
-}
+}*/
 
 
 Material* Lore::createMaterial(string id, string name)
@@ -214,6 +214,6 @@ Shader* Lore::createShader(string id, string name)
 void Lore::load(string path)
 {
 
-    Loader::load(path, Lore::m__windowLibrary, Lore::m__sceneLibrary, Lore::m__cameraLibrary, Lore::m__objectLibrary, Lore::m__modelRenderLibrary, Lore::m__modelBulletLibrary, Lore::m__materialLibrary, Lore::m__textureLibrary, Lore::m__shaderLibrary);
+    Loader::load(path, Lore::m__windowLibrary, Lore::m__sceneLibrary, Lore::m__cameraLibrary, Lore::m__objectLibrary, Lore::m__modelRenderLibrary, /*Lore::m__modelBulletLibrary,*/ Lore::m__materialLibrary, Lore::m__textureLibrary, Lore::m__shaderLibrary);
 
 }

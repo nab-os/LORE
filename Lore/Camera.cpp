@@ -5,15 +5,15 @@
 using namespace std;
 using namespace glm;
 
-Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse): Object(), 
-m__scene(), 
-m_pointCible(pointCible), 
-m_axeVertical(axeVertical), 
+Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse): Object(),
+m__scene(),
+m_pointCible(pointCible),
+m_axeVertical(axeVertical),
 m_phi(0),
 m_theta(0),
 m_orientation(vec3(0)),
-m_sensibilite(sensibilite), 
-m_vitesse(vitesse), 
+m_sensibilite(sensibilite),
+m_vitesse(vitesse),
 m__model(mat4(1.0)),
 m__width(width),
 m__height(height),
@@ -23,7 +23,7 @@ m__backgroundColor(vec3(0.2, 0.2, 0.2))
     cout << this << " [Camera] constructor" << endl;
 
     m__projection = perspective(90.0, (double)m__width / m__height, 0.1, 500.0);
-	
+
     Object::setPosition(position);
 
 }
@@ -42,16 +42,16 @@ void Camera::load()
 
     cout << this << " [Camera] load" << endl;
 
-    ModelBullet* m = new ModelBullet();
+    //ModelBullet* m = new ModelBullet();
 
-    setBulletModel(m);
+    //setBulletModel(m);
 
-    Object::load(m__scene->getWorld());
+    Object::load(/*m__scene->getWorld()*/);
 
-    m__scene->addRigidBody(m);
+    //m__scene->addRigidBody(m);
 
     //Object::forcePhysics();
-    Object::disablePhysics();
+    //Object::disablePhysics();
 
 }
 

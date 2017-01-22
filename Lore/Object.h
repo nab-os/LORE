@@ -10,9 +10,9 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <bullet/btBulletDynamicsCommon.h>
+//#include <bullet/btBulletDynamicsCommon.h>
 
-#include "ModelBullet.h"
+//#include "ModelBullet.h"
 #include "ModelRender.h"
 #include "Material.h"
 
@@ -24,33 +24,33 @@ class Object
 		Object();
 		~Object();
 
-		void load(btDiscreteDynamicsWorld* world = nullptr);
+		void load(/*btDiscreteDynamicsWorld* world = nullptr*/);
 		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
 		void setRenderModel(Model* model);
-		void setBulletModel(Model* model);
+		//void setBulletModel(Model* model);
 
 		Object* addObject(std::string path = "default");
 		void addObject(Object* obj);
 		std::vector<Object*> getObjects();
 
-        void applyForce(glm::vec3 pos);
-        void setLinearVelocity(glm::vec3 vec);
+        //void applyForce(glm::vec3 pos);
+        //void setLinearVelocity(glm::vec3 vec);
         void move(glm::vec3 pos);
         void setPosition(glm::vec3 pos);
         glm::vec3 getPosition();
         void setScale(glm::vec3 scale);
 
-		void forcePhysics();		
-		void disablePhysics();
+		//void forcePhysics();
+		//void disablePhysics();
 
-		ModelBullet* getModelBullet() { return m__bulletModel; };
+		//ModelBullet* getModelBullet() { return m__bulletModel; };
 		ModelRender* getModelRender() { return m__renderModel; };
 
 	private:
 
 		ModelRender* m__renderModel;
-		ModelBullet* m__bulletModel;
+		//ModelBullet* m__bulletModel;
 
 		std::vector<Object*> m__childs;
 

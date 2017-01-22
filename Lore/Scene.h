@@ -5,7 +5,7 @@
 
 #include <GL/glew.h>
 
-#include <btBulletDynamicsCommon.h>
+//#include <btBulletDynamicsCommon.h>
 
 // Includes GLM
 #include <glm/glm.hpp>
@@ -15,7 +15,7 @@
 #include "Object.h"
 
 #include "Light.h"
-#include "ModelBullet.h"
+//#include "ModelBullet.h"
 #include "CubeMap.h"
 
 class Scene: public Object
@@ -28,27 +28,27 @@ class Scene: public Object
 
 		void load();
 
-		void step(int fps = 60);
+//		void step(int fps = 60);
 		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
 
         bool getPaused(){ return m__paused; };
-        btDiscreteDynamicsWorld* getWorld(){ return m__dynamicsWorld; };
+//        btDiscreteDynamicsWorld* getWorld(){ return m__dynamicsWorld; };
 
-        void addRigidBody(ModelBullet* model);
+//        void addRigidBody(ModelBullet* model);
 
 	private:
 
 		bool m__paused;
 
-		btBroadphaseInterface* m__broadphase;
-		btDefaultCollisionConfiguration* m__collisionConfiguration;
-		btCollisionDispatcher* m__dispatcher;
-		btSequentialImpulseConstraintSolver* m__solver;
-		btDiscreteDynamicsWorld* m__dynamicsWorld;
+//		btBroadphaseInterface* m__broadphase;
+//		btDefaultCollisionConfiguration* m__collisionConfiguration;
+//		btCollisionDispatcher* m__dispatcher;
+//		btSequentialImpulseConstraintSolver* m__solver;
+//		btDiscreteDynamicsWorld* m__dynamicsWorld;
 
-		btCollisionShape* m__groundShape;
-		btDefaultMotionState* m__groundMotionState;
-		btRigidBody* m__groundRigidBody;
+//		btCollisionShape* m__groundShape;
+//		btDefaultMotionState* m__groundMotionState;
+//		btRigidBody* m__groundRigidBody;
 
 		CubeMap* m__environmentMap;
 		std::vector<Light*> m__lights;

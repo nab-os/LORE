@@ -9,11 +9,11 @@ using namespace glm;
 
 Scene::Scene(int width, int height):	Object(),
 										m__paused(false),
-										m__broadphase(),
-										m__collisionConfiguration(),
-										m__dispatcher(),
-                                        m__solver(),
-										m__dynamicsWorld(),
+//										m__broadphase(),
+//										m__collisionConfiguration(),
+//										m__dispatcher(),
+//                                      m__solver(),
+//										m__dynamicsWorld(),
 										m__environmentMap(),
 										m__lights()
 {
@@ -28,7 +28,7 @@ Scene::~Scene()
 
 	cout << this << " [ModelRender] destructor" << endl;
 
-	if(m__dynamicsWorld)
+/*	if(m__dynamicsWorld)
 		delete m__dynamicsWorld;
 	if(m__solver)
 		delete m__solver;
@@ -44,7 +44,7 @@ Scene::~Scene()
 		delete m__groundMotionState;
 	if(m__groundMotionState)
 		delete m__groundMotionState;
-	if(m__environmentMap)
+*/	if(m__environmentMap)
 		delete m__environmentMap;
 
 }
@@ -52,10 +52,10 @@ Scene::~Scene()
 
 void Scene::load()
 {
-	
+
 	cout << this << " [Scene] load" << endl;
 
-	m__broadphase = new btDbvtBroadphase();
+/*	m__broadphase = new btDbvtBroadphase();
 	m__collisionConfiguration = new btDefaultCollisionConfiguration();
 	m__dispatcher = new btCollisionDispatcher(m__collisionConfiguration);
 	m__solver = new btSequentialImpulseConstraintSolver;
@@ -68,26 +68,26 @@ void Scene::load()
 	m__groundRigidBody = new btRigidBody(groundRigidBodyCI);
 
 	m__dynamicsWorld->addRigidBody(m__groundRigidBody);
-
+*/
 	m__environmentMap = new CubeMap();
 	m__environmentMap->load();
 
-    Object::load(m__dynamicsWorld);
+    Object::load(/*m__dynamicsWorld*/);
 
 }
 
-
+/*
 void Scene::step(int fps)
 {
 
     m__dynamicsWorld->stepSimulation(1 / float(fps), 10);
 
-}
+}*/
 
 
 void Scene::render(mat4 &projection, mat4 &view, mat4 &model)
 {
-		
+
 	this->renderObjects(projection, view, model);
 
 }
@@ -112,12 +112,12 @@ void Scene::renderLights()
 
 }
 
-
+/*
 void Scene::addRigidBody(ModelBullet* model)
 {
 
     m__dynamicsWorld->addRigidBody(model->getRigidBody());
 
-}
+}*/
 
 
