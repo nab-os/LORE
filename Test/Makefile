@@ -13,7 +13,7 @@ IDIR=-I /usr/include/ \
 	 -I /usr/include/opencollada/COLLADAFramework \
 	 -I /usr/include/opencollada/COLLADASaxFramework \
 	 -I /usr/include/opencollada/COLLADABaseUtils \
-	 -I ../Lore
+	 -I ../Lore/include
 
 LDIR=-L /usr/lib \
 	 -L /usr/local/lib \
@@ -23,7 +23,7 @@ LDIR=-L /usr/lib \
 	 -L /usr/lib/opencollada/COLLADAFramework \
 	 -L /usr/lib/opencollada/COLLADASaxFrameworkLoader \
 	 -L /usr/lib/opencollada/COLLADABaseUtils \
-	 -L ../Lore/bin
+	 -L ../Lore/lib
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \

@@ -44,11 +44,11 @@ CC=g++
 
 all: init $(OUT_DIR)/$(EXEC)
 
-$(EXEC_DIR)/$(EXEC): $(OBJECTS)
+$(OUT_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
 	ar rcs $@ $^
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: src/%.cpp
 	@echo "\n=======COMPILING $@======="
 	$(CC) $(IDIR) $(CFLAGS) -c $< -o $@
 
