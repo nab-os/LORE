@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 ModelRender::ModelRender():	Model(),
 							m__VAO(),
@@ -290,7 +291,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint envir
 	s->envoyer1I("displacement", 5);
 	s->envoyer1I("reflection", 6);
 	s->envoyer1I("refraction", 7);
-	
+
 	//s->envoyerFloat("spreadFactor", Light::getInstance()->spread);
 
 

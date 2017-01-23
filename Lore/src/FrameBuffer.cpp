@@ -2,6 +2,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 FrameBuffer::FrameBuffer(int width, int height):
 m__width(width),
@@ -10,7 +11,7 @@ m__renderTexture()
 {
 
 	cout << this << " [FrameBuffer] constructor" << endl;
-	
+
 }
 
 
@@ -64,9 +65,9 @@ void FrameBuffer::load()
 
 void FrameBuffer::render()
 {
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, m__bufferID);
-		
+
 	m__camera->render();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

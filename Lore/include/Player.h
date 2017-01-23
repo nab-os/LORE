@@ -1,14 +1,20 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
 
-
-class Player
+namespace LORE
 {
 
-	public:
+    class Player
+    {
 
-		Player();
-		virtual ~Player();
+        public:
 
-};
+            Player();
+            virtual ~Player();
 
+    };
+
+}
+
+#endif

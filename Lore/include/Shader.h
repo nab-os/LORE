@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADER_H
+#define SHADER_H
 
 #include <string>
 
@@ -9,59 +10,65 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class Shader
+namespace LORE
 {
 
-	public:
+    class Shader
+    {
 
-		Shader(std::string shaderName = "default");
-		virtual ~Shader();
+        public:
 
-		bool load();
+            Shader(std::string shaderName = "default");
+            virtual ~Shader();
 
-		GLuint getProgramID();
+            bool load();
 
-
-		void envoyerMat4(std::string nom, glm::mat4 matrice);
-		void envoyerMat3(std::string nom, glm::mat3 matrice);
-		void envoyerVec4(std::string nom, glm::vec4 vecteur);
-		void envoyerVec3(std::string nom, glm::vec3 vecteur);
-		void envoyer1I(std::string nom, GLuint id);
-		void envoyerFloat(std::string nom, float val);
+            GLuint getProgramID();
 
 
-		std::string getVertexShaderFile();
-		void setVertexShaderFile(std::string val);
+            void envoyerMat4(std::string nom, glm::mat4 matrice);
+            void envoyerMat3(std::string nom, glm::mat3 matrice);
+            void envoyerVec4(std::string nom, glm::vec4 vecteur);
+            void envoyerVec3(std::string nom, glm::vec3 vecteur);
+            void envoyer1I(std::string nom, GLuint id);
+            void envoyerFloat(std::string nom, float val);
 
-		std::string getTessControlShaderFile();
-		void setTessControlShaderFile(std::string val);
 
-		std::string getTessEvaluationShaderFile();
-		void setTessEvaluationShaderFile(std::string val);
+            std::string getVertexShaderFile();
+            void setVertexShaderFile(std::string val);
 
-		std::string getGeometryShaderFile();
-		void setGeometryShaderFile(std::string val);
+            std::string getTessControlShaderFile();
+            void setTessControlShaderFile(std::string val);
 
-		std::string getFragmentShaderFile();
-		void setFragmentShaderFile(std::string val);
+            std::string getTessEvaluationShaderFile();
+            void setTessEvaluationShaderFile(std::string val);
 
-	private:
+            std::string getGeometryShaderFile();
+            void setGeometryShaderFile(std::string val);
 
-		GLuint m__programID;
+            std::string getFragmentShaderFile();
+            void setFragmentShaderFile(std::string val);
 
-		GLuint m__vertexID;
-		GLuint m__tessControlID;
-		GLuint m__tessEvaluationID;
-		GLuint m__geometryID;
-		GLuint m__fragmentID;
+        private:
 
-		std::string m__vertexShaderFile;
-		std::string m__tessControlShaderFile;
-		std::string m__tessEvaluationShaderFile;
-		std::string m__geometryShaderFile;
-		std::string m__fragmentShaderFile;
+            GLuint m__programID;
 
-		bool compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource);
+            GLuint m__vertexID;
+            GLuint m__tessControlID;
+            GLuint m__tessEvaluationID;
+            GLuint m__geometryID;
+            GLuint m__fragmentID;
 
-};
+            std::string m__vertexShaderFile;
+            std::string m__tessControlShaderFile;
+            std::string m__tessEvaluationShaderFile;
+            std::string m__geometryShaderFile;
+            std::string m__fragmentShaderFile;
 
+            bool compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource);
+
+    };
+
+}
+
+#endif

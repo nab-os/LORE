@@ -1,14 +1,19 @@
-#pragma once
+#ifndef LIGHT_H
+#define LIGHT_H
 
-
-
-class Light
+namespace LORE
 {
 
-	public:
+    class Light
+    {
 
-		Light();
-		virtual ~Light();
+        public:
 
-};
+            Light();
+            virtual ~Light();
 
+    };
+
+}
+
+#endif

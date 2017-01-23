@@ -1,6 +1,7 @@
 #include "Texture.h"
 
 using namespace std;
+using namespace LORE;
 
 Texture::Texture(std::string name): m__id(), m__nom(name), m__emplacementFichier("Textures/" + name)
 {
@@ -42,8 +43,8 @@ void Texture::load()
 
 	}
 
-	
-	
+
+
 	if( 0 == m__id )
 	{
 		printf( "SOIL loading error: '%s'\n", SOIL_last_result() );

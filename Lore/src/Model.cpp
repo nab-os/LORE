@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 Model::Model(): m__material(), m__vertices()
 {

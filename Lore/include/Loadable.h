@@ -1,21 +1,29 @@
-#pragma once
+#ifndef LOADABLE_H
+#define LOADABLE_H
 
-class Loadable
+namespace LORE
 {
 
-	public:
+    class Loadable
+    {
 
-        Loadable();
-        virtual ~Loadable();
+        public:
 
-        virtual void load() { m__loaded = true; };
-        virtual void unload() { m__loaded = false; };
-        virtual void reload() { unload(); load(); };
+            Loadable();
+            virtual ~Loadable();
 
-        bool loaded() { return m__loaded; };
+            virtual void load() { m__loaded = true; };
+            virtual void unload() { m__loaded = false; };
+            virtual void reload() { unload(); load(); };
 
-	private:
+            bool loaded() { return m__loaded; };
 
-        bool m__loaded;
+        private:
 
-};
+            bool m__loaded;
+
+    };
+
+}
+
+#endif

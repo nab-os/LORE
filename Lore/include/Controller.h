@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 #include <string>
 #include <map>
@@ -8,35 +9,41 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "OpenGL_Window.h"
+#include "Window.h"
 
-class Controller
+namespace LORE
 {
 
-	public:
+    class Controller
+    {
 
-		Controller();
-		virtual ~Controller();
+        public:
 
-		void bind(const int key, std::function<void(double x, double y)> action);
-		void unbind(const int key);
-		void unbind();
+            Controller();
+            virtual ~Controller();
 
-		void check(OpenGL_Window* w);
+            void bind(const int key, std::function<void(double x, double y)> action);
+            void unbind(const int key);
+            void unbind();
 
-		void setMouseEvent(std::function<void(double x, double y, double dx, double dy)> event) { m__mouseEvent = event; };
+            void check(Window* w);
 
-		void toggleVisibleCursor() { m__visibleCursor = !m__visibleCursor; };
-		void toggleCaptureCursor() { m__captureCursor = !m__captureCursor; };
+            void setMouseEvent(std::function<void(double x, double y, double dx, double dy)> event) { m__mouseEvent = event; };
 
-	private:
+            void toggleVisibleCursor() { m__visibleCursor = !m__visibleCursor; };
+            void toggleCaptureCursor() { m__captureCursor = !m__captureCursor; };
 
-		std::map<const int, std::function<void(double x, double y)>> m__keyBindings;
+        private:
 
-		std::function<void(double x, double y, double dx, double dy)> m__mouseEvent;
+            std::map<const int, std::function<void(double x, double y)>> m__keyBindings;
 
-		bool m__visibleCursor;
-		bool m__captureCursor;
+            std::function<void(double x, double y, double dx, double dy)> m__mouseEvent;
 
-};
+            bool m__visibleCursor;
+            bool m__captureCursor;
 
+    };
+
+}
+
+#endif

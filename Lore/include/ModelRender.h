@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MODELRENDER_H
+#define MODELRENDER_H
 
 #include <vector>
 
@@ -7,54 +8,60 @@
 
 #ifndef BUFFER_OFFSET
 
-	#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
+#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
 
 #endif
 
-class ModelRender :	public Model
+namespace LORE
 {
 
-	public:
+    class ModelRender :	public Model
+    {
 
-		explicit ModelRender();
-		explicit ModelRender(const ModelRender*);
-		~ModelRender();
+        public:
 
-		void computeTangentBasis(
-			// inputs
-			std::vector<glm::vec3> & vertices,
-			std::vector<glm::vec2> & uvs,
-			std::vector<glm::vec3> & normals,
+            explicit ModelRender();
+            explicit ModelRender(const ModelRender*);
+            ~ModelRender();
 
-			// outputs
-			std::vector<glm::vec3> & tangents,
-			std::vector<glm::vec3> & bitangents);
+            void computeTangentBasis(
+                    // inputs
+                    std::vector<glm::vec3> & vertices,
+                    std::vector<glm::vec2> & uvs,
+                    std::vector<glm::vec3> & normals,
 
-		void load();
-		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
+                    // outputs
+                    std::vector<glm::vec3> & tangents,
+                    std::vector<glm::vec3> & bitangents);
 
-		GLuint& getVAO();
-		GLuint& getVBO();
+            void load();
+            void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
-		void setUVs(std::vector<glm::vec2> uvs) { m__UVs = uvs; };
-		int getUVCount();
-		int getUVsSize();
-		std::vector<glm::vec2> getUVs();
-		float* getUVsFloat();
+            GLuint& getVAO();
+            GLuint& getVBO();
 
-		void setNormals(std::vector<glm::vec3> normals) { m__normals = normals; };
-		int getNormalCount();
-		int getNormalsSize();
-		std::vector<glm::vec3> getNormals();
-		float* getNormalsFloat();
+            void setUVs(std::vector<glm::vec2> uvs) { m__UVs = uvs; };
+            int getUVCount();
+            int getUVsSize();
+            std::vector<glm::vec2> getUVs();
+            float* getUVsFloat();
 
-	private :
+            void setNormals(std::vector<glm::vec3> normals) { m__normals = normals; };
+            int getNormalCount();
+            int getNormalsSize();
+            std::vector<glm::vec3> getNormals();
+            float* getNormalsFloat();
 
-		GLuint m__VAO;
-		GLuint m__VBO;
+        private :
 
-		std::vector<glm::vec2> m__UVs;
-		std::vector<glm::vec3> m__normals;
+            GLuint m__VAO;
+            GLuint m__VBO;
 
-};
+            std::vector<glm::vec2> m__UVs;
+            std::vector<glm::vec3> m__normals;
 
+    };
+
+}
+
+#endif

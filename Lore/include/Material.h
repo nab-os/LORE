@@ -1,42 +1,49 @@
-#pragma once
+#ifndef MATERIAL_H
+#define MATERIAL_H
 
 #include "Shader.h"
 #include "Texture.h"
 
-class Material
+namespace LORE
 {
 
-public:
+    class Material
+    {
 
-	Material();
-	virtual ~Material();
+        public:
 
-	void load();
+            Material();
+            virtual ~Material();
 
-	Shader* getShader() { return m__shader; };
-	void setShader(Shader* shader) { m__shader = shader; };
+            void load();
 
-	glm::vec3 getDiffuseColor() { return m__diffuseColor; };
-	void setDiffuseColor(glm::vec3 color) { m__diffuseColor = color; };
+            Shader* getShader() { return m__shader; };
+            void setShader(Shader* shader) { m__shader = shader; };
 
-	glm::vec3 getSpecularColor() { return m__specularColor; };
-	void setSpecularColor(glm::vec3 color) { m__specularColor = color; };
+            glm::vec3 getDiffuseColor() { return m__diffuseColor; };
+            void setDiffuseColor(glm::vec3 color) { m__diffuseColor = color; };
 
-	Texture* getDiffuseTexture() { return m__diffuseTexture; };
-	void setDiffuseTexture(Texture* texture) { m__diffuseTexture = texture; };
+            glm::vec3 getSpecularColor() { return m__specularColor; };
+            void setSpecularColor(glm::vec3 color) { m__specularColor = color; };
 
-	Texture* getSpecularTexture() { return m__diffuseSpecular; };
-	void setSpecularTexture(Texture* texture) { m__diffuseSpecular = texture; };
+            Texture* getDiffuseTexture() { return m__diffuseTexture; };
+            void setDiffuseTexture(Texture* texture) { m__diffuseTexture = texture; };
 
-	private:
+            Texture* getSpecularTexture() { return m__diffuseSpecular; };
+            void setSpecularTexture(Texture* texture) { m__diffuseSpecular = texture; };
 
-		Shader* m__shader;
+        private:
 
-		glm::vec3 m__diffuseColor;
-		glm::vec3 m__specularColor;
+            Shader* m__shader;
 
-		Texture* m__diffuseTexture;
-		Texture* m__diffuseSpecular;
+            glm::vec3 m__diffuseColor;
+            glm::vec3 m__specularColor;
 
-};
+            Texture* m__diffuseTexture;
+            Texture* m__diffuseSpecular;
 
+    };
+
+}
+
+#endif

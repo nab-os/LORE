@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <string>
 #include <vector>
@@ -16,47 +17,53 @@
 #include "ModelRender.h"
 #include "Material.h"
 
-class Object
+namespace LORE
 {
 
-	public:
+    class Object
+    {
 
-		Object();
-		~Object();
+        public:
 
-		void load(/*btDiscreteDynamicsWorld* world = nullptr*/);
-		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
+            Object();
+            ~Object();
 
-		void setRenderModel(Model* model);
-		//void setBulletModel(Model* model);
+            void load(/*btDiscreteDynamicsWorld* world = nullptr*/);
+            void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
-		Object* addObject(std::string path = "default");
-		void addObject(Object* obj);
-		std::vector<Object*> getObjects();
+            void setRenderModel(Model* model);
+            //void setBulletModel(Model* model);
 
-        //void applyForce(glm::vec3 pos);
-        //void setLinearVelocity(glm::vec3 vec);
-        void move(glm::vec3 pos);
-        void setPosition(glm::vec3 pos);
-        glm::vec3 getPosition();
-        void setScale(glm::vec3 scale);
+            Object* addObject(std::string path = "default");
+            void addObject(Object* obj);
+            std::vector<Object*> getObjects();
 
-		//void forcePhysics();
-		//void disablePhysics();
+            //void applyForce(glm::vec3 pos);
+            //void setLinearVelocity(glm::vec3 vec);
+            void move(glm::vec3 pos);
+            void setPosition(glm::vec3 pos);
+            glm::vec3 getPosition();
+            void setScale(glm::vec3 scale);
 
-		//ModelBullet* getModelBullet() { return m__bulletModel; };
-		ModelRender* getModelRender() { return m__renderModel; };
+            //void forcePhysics();
+            //void disablePhysics();
 
-	private:
+            //ModelBullet* getModelBullet() { return m__bulletModel; };
+            ModelRender* getModelRender() { return m__renderModel; };
 
-		ModelRender* m__renderModel;
-		//ModelBullet* m__bulletModel;
+        private:
 
-		std::vector<Object*> m__childs;
+            ModelRender* m__renderModel;
+            //ModelBullet* m__bulletModel;
 
-		glm::vec3 m__positionProxy;
-		glm::vec3 m__scaleProxy;
-		bool m__physicsEnabled;
+            std::vector<Object*> m__childs;
 
-};
+            glm::vec3 m__positionProxy;
+            glm::vec3 m__scaleProxy;
+            bool m__physicsEnabled;
 
+    };
+
+}
+
+#endif

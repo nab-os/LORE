@@ -4,6 +4,7 @@
 #include <string.h>
 
 using namespace std;
+using namespace LORE;
 
 CubeMap::CubeMap(std::string name): Texture(name)
 {
@@ -53,7 +54,7 @@ void CubeMap::load()
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS
 	);
-	
+
 	if( 0 == m__id )
 	{
 		printf( "SOIL loading error: '%s'\n", SOIL_last_result() );

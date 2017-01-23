@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 Material::Material(): m__shader(), m__diffuseColor(vec3(0.5, 0, 0))
 {

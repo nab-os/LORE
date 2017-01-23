@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MODELBULLET_H
+#define MODELBULLET_H
 
 #include <vector>
 
@@ -9,39 +10,45 @@
 
 #ifndef BUFFER_OFFSET
 
-	#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
+#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
 
 #endif
 
-class ModelBullet : public Model
+namespace LORE
 {
 
-	public:
+    class ModelBullet : public Model
+    {
 
-		ModelBullet();
-		~ModelBullet();
+        public:
 
-		void load(btDiscreteDynamicsWorld* world);
+            ModelBullet();
+            ~ModelBullet();
 
-		void applyForce(glm::vec3 pos);
-		void setLinearVelocity(glm::vec3 vec);
-        void move(glm::vec3 pos);
-        void setPosition(glm::vec3 pos);
-		glm::vec3 getPosition();
+            void load(btDiscreteDynamicsWorld* world);
 
-		void forcePhysics();		
-		void disablePhysics();		
+            void applyForce(glm::vec3 pos);
+            void setLinearVelocity(glm::vec3 vec);
+            void move(glm::vec3 pos);
+            void setPosition(glm::vec3 pos);
+            glm::vec3 getPosition();
 
-        btRigidBody* getRigidBody(){ return m__fallRigidBody; };
+            void forcePhysics();
+            void disablePhysics();
+
+            btRigidBody* getRigidBody(){ return m__fallRigidBody; };
 
 
-	private:
+        private:
 
-		btCollisionShape* m__fallShape;
-		btDefaultMotionState* m__fallMotionState;
-		btRigidBody* m__fallRigidBody;
+            btCollisionShape* m__fallShape;
+            btDefaultMotionState* m__fallMotionState;
+            btRigidBody* m__fallRigidBody;
 
-		bool m__active;
+            bool m__active;
 
-};
+    };
 
+}
+
+#endif

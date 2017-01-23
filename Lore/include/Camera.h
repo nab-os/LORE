@@ -1,7 +1,8 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #ifndef PI
-	#define PI 3.14159265359
+#define PI 3.14159265359
 #endif
 
 
@@ -18,63 +19,69 @@
 #include "Scene.h"
 #include "Texture.h"
 
-class Camera: public Object
+namespace LORE
 {
 
-	public:
+    class Camera: public Object
+    {
 
-		Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(0, 0, -1), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.1, float vitesse = 0.5);
-		virtual ~Camera();
+        public:
 
-		void deplacer(glm::vec3 direction = glm::vec3(0, 0, 0));
-		void orienter(double xRel, double yRel);
+            Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(0, 0, -1), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.1, float vitesse = 0.5);
+            virtual ~Camera();
 
-        void load();
-        void render();
+            void deplacer(glm::vec3 direction = glm::vec3(0, 0, 0));
+            void orienter(double xRel, double yRel);
 
-        Scene* getScene(){ return m__scene; };
-        void setScene(Scene* scene){ m__scene = scene; };
+            void load();
+            void render();
 
-		float getSensibilite() const;
-		float getVitesse() const;
+            Scene* getScene(){ return m__scene; };
+            void setScene(Scene* scene){ m__scene = scene; };
 
-		bool getFly() const;
+            float getSensibilite() const;
+            float getVitesse() const;
 
-		void setSensibilite(float sensibilite);
-		void setVitesse(float vitesse);
+            bool getFly() const;
 
-		void setPointcible(glm::vec3 pointCible);
+            void setSensibilite(float sensibilite);
+            void setVitesse(float vitesse);
 
-		void setProjection(glm::mat4 projection) { m__projection = projection; };
-		void setBackgroundColor(glm::vec3 color) { m__backgroundColor = color; };
+            void setPointcible(glm::vec3 pointCible);
 
-	private:
+            void setProjection(glm::mat4 projection) { m__projection = projection; };
+            void setBackgroundColor(glm::vec3 color) { m__backgroundColor = color; };
 
-        glm::mat4 getView();
+        private:
 
-        Scene* m__scene;
+            glm::mat4 getView();
 
-		glm::vec3 m_pointCible;
+            Scene* m__scene;
 
-		glm::vec3 m_axeVertical;
-		glm::vec3 m_deplacementLateral;
-		glm::vec3 m_deplacement;
+            glm::vec3 m_pointCible;
 
-		double m_phi;
-		double m_theta;
-		glm::vec3 m_orientation;
+            glm::vec3 m_axeVertical;
+            glm::vec3 m_deplacementLateral;
+            glm::vec3 m_deplacement;
 
-		float m_sensibilite;
-		float m_vitesse;
+            double m_phi;
+            double m_theta;
+            glm::vec3 m_orientation;
 
-		bool m_fly;
+            float m_sensibilite;
+            float m_vitesse;
 
-		glm::mat4 m__projection;
-		glm::mat4 m__model;
+            bool m_fly;
 
-		int m__width;
-		int m__height;
+            glm::mat4 m__projection;
+            glm::mat4 m__model;
 
-		glm::vec3 m__backgroundColor;
-};
+            int m__width;
+            int m__height;
 
+            glm::vec3 m__backgroundColor;
+    };
+
+}
+
+#endif

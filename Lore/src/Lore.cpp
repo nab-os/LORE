@@ -4,8 +4,9 @@
 #include <iostream>
 
 using namespace std;
+using namespace LORE;
 
-Library<OpenGL_Window>* Lore::m__windowLibrary = new Library<OpenGL_Window>();
+Library<LORE::Window>* Lore::m__windowLibrary = new Library<Window>();
 Library<Scene>* Lore::m__sceneLibrary = new Library<Scene>();
 Library<Camera>* Lore::m__cameraLibrary = new Library<Camera>();
 Library<Object>* Lore::m__objectLibrary = new Library<Object>();
@@ -36,10 +37,10 @@ void Lore::error_callback(int error, const char* description)
 }
 
 /**
- * Initialize Glfw and Glew and returns an OpenGL_Window
+ * Initialize Glfw and Glew and returns an Window
  * @return returns a window
  **/
-OpenGL_Window* Lore::init()
+LORE::Window* Lore::init()
 {
 
 	cout << "[Lore] init" << endl;
@@ -55,7 +56,7 @@ OpenGL_Window* Lore::init()
 
 	//=====================
 
-	OpenGL_Window* w = Lore::createWindow("Window_1", "Test");
+    LORE::Window* w = Lore::createWindow("Window_1", "Test");
 	w->load();
 
 	//=====================
@@ -103,10 +104,10 @@ void Lore::unload()
 }
 
 
-OpenGL_Window* Lore::createWindow(string id, string name)
+LORE::Window* Lore::createWindow(string id, string name)
 {
 
-	OpenGL_Window* w = new OpenGL_Window(name);
+    LORE::Window* w = new Window(name);
 
 	Lore::m__windowLibrary->add(id, w);
 

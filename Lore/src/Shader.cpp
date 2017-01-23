@@ -5,6 +5,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 Shader::Shader(std::string shaderName): m__programID(),
 										m__vertexID(),

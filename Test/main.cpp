@@ -4,13 +4,14 @@
 #include <Lore.h>
 
 using namespace std;
+using namespace LORE;
 int main(int argc, char** argv)
 {
 
     cout << "===== INIT =====" << endl;
 
-    OpenGL_Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
-    if(!window)
+    LORE::Window* window = LORE::Lore::init(); // Initializes OpenGL context and creates a Window
+    /*if(!window)
     {
         cout << "Error during OpenGL context initialization." << endl;
         Lore::unload();
@@ -58,7 +59,7 @@ int main(int argc, char** argv)
     cout << "===== END =====" << endl;
 
     Lore::unload(); // Unload all dictionnaries, and unload OpenGL context
-
+*/
     return 0;
 
 }

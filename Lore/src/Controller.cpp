@@ -1,6 +1,7 @@
 #include "Controller.h"
 
 using namespace std;
+using namespace LORE;
 
 Controller::Controller(): m__keyBindings(), m__visibleCursor(false), m__captureCursor(true)
 {
@@ -42,7 +43,7 @@ void Controller::unbind()
 }
 
 
-void Controller::check(OpenGL_Window* w)
+void Controller::check(Window* w)
 {
 
 	double x, y;

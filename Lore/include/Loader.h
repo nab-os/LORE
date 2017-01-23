@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LOADER_H
+#define LOADER_H
 
 #include <string>
 
@@ -6,7 +7,7 @@
 
 #include "Library.h"
 
-#include "OpenGL_Window.h"
+#include "Window.h"
 #include "Scene.h"
 #include "Controller.h"
 #include "ModelRender.h"
@@ -18,18 +19,23 @@
 #include "Camera.h"
 #include "Shader.h"
 
-
-
-class Loader: public COLLADAFW::IWriter
+namespace LORE
 {
 
-	public:
+    class Loader: public COLLADAFW::IWriter
+    {
 
-        static bool load(std::string path, Library<OpenGL_Window>* windowLibrary, Library<Scene>* sceneLibrary, Library<Camera>* cameraLibrary, Library<Object>* objectLibrary, Library<ModelRender>* modelRenderlibrary, /*Library<ModelBullet>* modelBulletLibrary,*/ Library<Material>* materialLibrary, Library<Texture>* textureLibrary, Library<Shader>* shaderLibrary);
+        public:
 
-	private:
+            static bool load(std::string path, Library<Window>* windowLibrary, Library<Scene>* sceneLibrary, Library<Camera>* cameraLibrary, Library<Object>* objectLibrary, Library<ModelRender>* modelRenderlibrary, /*Library<ModelBullet>* modelBulletLibrary,*/ Library<Material>* materialLibrary, Library<Texture>* textureLibrary, Library<Shader>* shaderLibrary);
 
-        Loader();
-        virtual ~Loader();
+        private:
 
-};
+            Loader();
+            virtual ~Loader();
+
+    };
+
+}
+
+#endif

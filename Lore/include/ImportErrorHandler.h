@@ -1,33 +1,43 @@
+#ifndef IMPORTERERRORHANDLER_H
+#define IMPORTERERRORHANDLER_H
+
 #include <COLLADASaxFrameworkLoader/COLLADASaxFWLIErrorHandler.h>
 
-class ImportErrorHandler: public COLLADASaxFWL::IErrorHandler
+namespace LORE
 {
 
-    private:
-        bool mHasCriticalError;
+    class ImportErrorHandler: public COLLADASaxFWL::IErrorHandler
+    {
 
-    public:
+        private:
+            bool mHasCriticalError;
 
-        /** Constructor. */
-        ImportErrorHandler();
+        public:
 
-        /** Destructor. */
-        virtual ~ImportErrorHandler();
+            /** Constructor. */
+            ImportErrorHandler();
 
-        /** If this method returns true, the loader stops parsing immediately. If
-         * severity is nor CRITICAL
-         *      and this method returns true, the loader continues loading.*/
-        bool virtual handleError(const COLLADASaxFWL::IError* error);
+            /** Destructor. */
+            virtual ~ImportErrorHandler();
 
-        bool hasCriticalError();
+            /** If this method returns true, the loader stops parsing immediately. If
+             * severity is nor CRITICAL
+             *      and this method returns true, the loader continues loading.*/
+            bool virtual handleError(const COLLADASaxFWL::IError* error);
 
-    private:
+            bool hasCriticalError();
 
-        /** Disable default copy ctor. */
-        ImportErrorHandler( const ImportErrorHandler& pre  );
+        private:
 
-        /** Disable default assignment operator. */
-        const ImportErrorHandler& operator= ( const ImportErrorHandler& pre  );
+            /** Disable default copy ctor. */
+            ImportErrorHandler( const ImportErrorHandler& pre  );
+
+            /** Disable default assignment operator. */
+            const ImportErrorHandler& operator= ( const ImportErrorHandler& pre  );
 
 
-};
+    };
+
+}
+
+#endif

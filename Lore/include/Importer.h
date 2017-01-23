@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IMPORTER_H
+#define IMPORTER_H
 
 #include <string>
 
@@ -8,20 +9,27 @@
 #include "Library.h"
 #include "GeometryImporter.h"
 
-class Importer: public COLLADAFW::IWriter
+namespace LORE
 {
 
-	public:
+    class Importer: public COLLADAFW::IWriter
+    {
 
-        Importer(string colladaFile);
-        ~Importer();
+        public:
 
-        bool import();
+            Importer(string colladaFile);
+            ~Importer();
 
-	private:
+            bool import();
 
-        string m__filePath;
+        private:
 
-        bool importGeometry();
+            string m__filePath;
 
-};
+            bool importGeometry();
+
+    };
+
+}
+
+#endif

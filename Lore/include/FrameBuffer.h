@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FRAMEBUFFER_H
+#define FRAMEBUFFER_H
 
 #include <iostream>
 #include <string>
@@ -9,33 +10,39 @@
 #include "Texture.h"
 #include "Camera.h"
 
-class FrameBuffer
+namespace LORE
 {
 
-	public:
+    class FrameBuffer
+    {
 
-		FrameBuffer(int width = 768, int height = 768);
-		virtual ~FrameBuffer();
+        public:
 
-		void load();
-		void render();
+            FrameBuffer(int width = 768, int height = 768);
+            virtual ~FrameBuffer();
 
-		Camera* getCamera() { return m__camera; };
-		void setCamera(Camera* camera) { m__camera = camera; };
+            void load();
+            void render();
 
-		Texture* getRenderTexture() { return m__renderTexture; };
+            Camera* getCamera() { return m__camera; };
+            void setCamera(Camera* camera) { m__camera = camera; };
 
-	protected:
+            Texture* getRenderTexture() { return m__renderTexture; };
 
-		int m__width;
-		int m__height;
+        protected:
 
-		GLuint m__bufferID;
+            int m__width;
+            int m__height;
 
-		Camera* m__camera;
-		Texture* m__renderTexture;
+            GLuint m__bufferID;
 
-		GLuint* m__depthBuffer;
+            Camera* m__camera;
+            Texture* m__renderTexture;
 
-};
+            GLuint* m__depthBuffer;
 
+    };
+
+}
+
+#endif

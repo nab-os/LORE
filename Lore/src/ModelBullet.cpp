@@ -3,6 +3,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace LORE;
 
 ModelBullet::ModelBullet(): m__active(true)
 {
@@ -67,7 +68,7 @@ void ModelBullet::setPosition(glm::vec3 pos)
 	initialTransform.setOrigin(a);
 	initialTransform.setRotation(b);
 
-	m__fallRigidBody->getMotionState()->setWorldTransform(initialTransform);    
+	m__fallRigidBody->getMotionState()->setWorldTransform(initialTransform);
 
 }
 
@@ -98,7 +99,7 @@ void ModelBullet::move(glm::vec3 pos)
 	initialTransform.setOrigin(a);
 	initialTransform.setRotation(b);
 
-	m__fallRigidBody->getMotionState()->setWorldTransform(initialTransform);    
+	m__fallRigidBody->getMotionState()->setWorldTransform(initialTransform);
 
 }
 
@@ -117,7 +118,7 @@ glm::vec3 ModelBullet::getPosition()
 void ModelBullet::forcePhysics()
 {
 
-	m__fallRigidBody->forceActivationState(DISABLE_DEACTIVATION); 
+	m__fallRigidBody->forceActivationState(DISABLE_DEACTIVATION);
 	m__fallRigidBody->activate();
 
 }

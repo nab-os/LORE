@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SCENE_H
+#define SCENE_H
 
 #include <string>
 #include <vector>
@@ -18,43 +19,49 @@
 //#include "ModelBullet.h"
 #include "CubeMap.h"
 
-class Scene: public Object
+namespace LORE
 {
 
-	public:
+    class Scene: public Object
+    {
 
-		Scene(int width = 1920, int height = 1080);
-		virtual ~Scene();
+        public:
 
-		void load();
+            Scene(int width = 1920, int height = 1080);
+            virtual ~Scene();
 
-//		void step(int fps = 60);
-		void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
+            void load();
 
-        bool getPaused(){ return m__paused; };
-//        btDiscreteDynamicsWorld* getWorld(){ return m__dynamicsWorld; };
+            //		void step(int fps = 60);
+            void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
 
-//        void addRigidBody(ModelBullet* model);
+            bool getPaused(){ return m__paused; };
+            //        btDiscreteDynamicsWorld* getWorld(){ return m__dynamicsWorld; };
 
-	private:
+            //        void addRigidBody(ModelBullet* model);
 
-		bool m__paused;
+        private:
 
-//		btBroadphaseInterface* m__broadphase;
-//		btDefaultCollisionConfiguration* m__collisionConfiguration;
-//		btCollisionDispatcher* m__dispatcher;
-//		btSequentialImpulseConstraintSolver* m__solver;
-//		btDiscreteDynamicsWorld* m__dynamicsWorld;
+            bool m__paused;
 
-//		btCollisionShape* m__groundShape;
-//		btDefaultMotionState* m__groundMotionState;
-//		btRigidBody* m__groundRigidBody;
+            //		btBroadphaseInterface* m__broadphase;
+            //		btDefaultCollisionConfiguration* m__collisionConfiguration;
+            //		btCollisionDispatcher* m__dispatcher;
+            //		btSequentialImpulseConstraintSolver* m__solver;
+            //		btDiscreteDynamicsWorld* m__dynamicsWorld;
 
-		CubeMap* m__environmentMap;
-		std::vector<Light*> m__lights;
+            //		btCollisionShape* m__groundShape;
+            //		btDefaultMotionState* m__groundMotionState;
+            //		btRigidBody* m__groundRigidBody;
 
-		void renderObjects(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
-		void renderLights();
+            CubeMap* m__environmentMap;
+            std::vector<Light*> m__lights;
 
-};
+            void renderObjects(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
+            void renderLights();
 
+    };
+
+}
+
+#endif

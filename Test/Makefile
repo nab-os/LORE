@@ -28,7 +28,7 @@ LDIR=-L /usr/lib \
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL \
+	   	-lGL -lGLU -lGLEW -lglfw -lSOIL \
 		-lOpenCOLLADAFramework -lOpenCOLLADASaxFrameworkLoader -lOpenCOLLADABaseUtils \
 		-lLore
 

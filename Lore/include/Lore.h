@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LORE_H
+#define LORE_H
 
 #include <string>
 
@@ -8,7 +9,7 @@
 #include "Library.h"
 #include "Loader.h"
 
-#include "OpenGL_Window.h"
+#include "Window.h"
 #include "Scene.h"
 #include "Controller.h"
 #include "ModelRender.h"
@@ -20,41 +21,48 @@
 #include "Camera.h"
 #include "Shader.h"
 
-class Lore
+namespace LORE
 {
 
-    public:
+    class Lore
+    {
 
-        static OpenGL_Window* init();
-        static void unload();
+        public:
 
-        static OpenGL_Window* createWindow(std::string id, std::string name);
-        static Scene* createScene(std::string id, std::string name);
-        static Camera* createCamera(std::string id, std::string name);
-        static Object* createObject(std::string id, std::string name);
-        static ModelRender* createModelRender(std::string id, std::string name);
-//        static ModelBullet* createModelBullet(std::string id, std::string name);
-        static Material* createMaterial(std::string id, std::string name);
-        static Texture* createTexture(std::string id, std::string name);
-        static Shader* createShader(std::string id, std::string name);
+            static LORE::Window* init();
+            static void unload();
 
-        static void load(std::string path);
+            static Window* createWindow(std::string id, std::string name);
+            static Scene* createScene(std::string id, std::string name);
+            static Camera* createCamera(std::string id, std::string name);
+            static Object* createObject(std::string id, std::string name);
+            static ModelRender* createModelRender(std::string id, std::string name);
+            //        static ModelBullet* createModelBullet(std::string id, std::string name);
+            static Material* createMaterial(std::string id, std::string name);
+            static Texture* createTexture(std::string id, std::string name);
+            static Shader* createShader(std::string id, std::string name);
 
-    private:
+            static void load(std::string path);
 
-        Lore();
-        virtual ~Lore();
+        private:
 
-        static void error_callback(int error, const char* description);
+            Lore();
+            virtual ~Lore();
 
-        static Library<OpenGL_Window>* m__windowLibrary;
-        static Library<Scene>* m__sceneLibrary;
-        static Library<Camera>*	m__cameraLibrary;
-        static Library<Object>*	m__objectLibrary;
-        static Library<ModelRender>* m__modelRenderLibrary;
-//      static Library<ModelBullet>* m__modelBulletLibrary;
-        static Library<Material>* m__materialLibrary;
-        static Library<Texture>* m__textureLibrary;
-        static Library<Shader>* m__shaderLibrary;
+            static void error_callback(int error, const char* description);
 
-};
+            static Library<Window>* m__windowLibrary;
+            static Library<Scene>* m__sceneLibrary;
+            static Library<Camera>*	m__cameraLibrary;
+            static Library<Object>*	m__objectLibrary;
+            static Library<ModelRender>* m__modelRenderLibrary;
+            //      static Library<ModelBullet>* m__modelBulletLibrary;
+            static Library<Material>* m__materialLibrary;
+            static Library<Texture>* m__textureLibrary;
+            static Library<Shader>* m__shaderLibrary;
+
+    };
+
+}
+
+#endif

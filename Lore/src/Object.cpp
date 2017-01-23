@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 Object::Object():   m__renderModel(),
 //					m__bulletModel(),

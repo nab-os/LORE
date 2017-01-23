@@ -6,6 +6,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 Scene::Scene(int width, int height):	Object(),
 										m__paused(false),

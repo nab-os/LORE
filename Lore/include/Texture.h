@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
 #include <iostream>
 #include <string>
@@ -6,24 +7,30 @@
 #include <GL/glew.h>
 #include <SOIL.h>
 
-class Texture
+namespace LORE
 {
 
-	public:
+    class Texture
+    {
 
-		Texture(std::string name = "");
-		virtual ~Texture();
+        public:
 
-		void load();
+            Texture(std::string name = "");
+            virtual ~Texture();
 
-		GLuint getID() { return m__id; };
+            void load();
 
-	protected: 
+            GLuint getID() { return m__id; };
 
-		GLuint m__id;
+        protected:
 
-		std::string m__nom;
-		std::string m__emplacementFichier;
+            GLuint m__id;
 
-};
+            std::string m__nom;
+            std::string m__emplacementFichier;
 
+    };
+
+}
+
+#endif

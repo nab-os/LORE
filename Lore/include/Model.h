@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <vector>
 
@@ -13,39 +14,45 @@
 
 #ifndef BUFFER_OFFSET
 
-	#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
+#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
 
 #endif
 
-class Model
+namespace LORE
 {
 
-	public:
+    class Model
+    {
 
-		Model();
-		~Model();
+        public:
 
-		void load();
+            Model();
+            ~Model();
 
-		int getVertexCount();
-		int getVerticesSize();
-		void setVertices(std::vector<glm::vec3> vertices) { m__vertices = vertices; };
-		std::vector<glm::vec3> getVertices();
-		float* getVerticesFloat();
+            void load();
 
-		void setMaterial(Material* mat) { m__material = mat; };
-		Material* getMaterial() { return m__material;  };
+            int getVertexCount();
+            int getVerticesSize();
+            void setVertices(std::vector<glm::vec3> vertices) { m__vertices = vertices; };
+            std::vector<glm::vec3> getVertices();
+            float* getVerticesFloat();
 
-	private:
+            void setMaterial(Material* mat) { m__material = mat; };
+            Material* getMaterial() { return m__material;  };
+
+        private:
 
 
-		Material* m__material;
+            Material* m__material;
 
-	protected:
+        protected:
 
-		std::vector<glm::vec3> m__vertices;
+            std::vector<glm::vec3> m__vertices;
 
-		static float* vec3ToFloat(std::vector<glm::vec3>);
+            static float* vec3ToFloat(std::vector<glm::vec3>);
 
-};
+    };
 
+}
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LIBRARY_H
+#define LIBRARY_H
 
 #include <string>
 #include <map>
@@ -6,56 +7,63 @@
 
 using namespace std;
 
-template <class T>
-class Library
+namespace LORE
 {
 
-	public:
+    template <class T>
+        class Library
+        {
 
-		Library(): m__objects()
-		{
+            public:
 
-
-
-		}
-
-		~Library()
-		{
+                Library(): m__objects()
+            {
 
 
 
-		}
+            }
 
-		bool has(std::string path)
-		{
+                ~Library()
+                {
 
-			return m__objects.find(path) != m__objects.end();
 
-		}
 
-		void add(std::string path, T* object)
-		{
+                }
 
-			m__objects.insert(pair<string, T*>(path, object));
+                bool has(std::string path)
+                {
 
-		}
+                    return m__objects.find(path) != m__objects.end();
 
-		T* get(std::string path)
-		{
+                }
 
-			return m__objects.at(path);
+                void add(std::string path, T* object)
+                {
 
-		}
+                    m__objects.insert(pair<string, T*>(path, object));
 
-		void flush()
-		{
+                }
 
-			m__objects.clear();
+                T* get(std::string path)
+                {
 
-		}
+                    return m__objects.at(path);
 
-	private:
+                }
 
-		std::map<std::string, T*> m__objects;
+                void flush()
+                {
 
-};
+                    m__objects.clear();
+
+                }
+
+            private:
+
+                std::map<std::string, T*> m__objects;
+
+        };
+
+}
+
+#endif

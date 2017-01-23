@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
 Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse): Object(),
 m__scene(),

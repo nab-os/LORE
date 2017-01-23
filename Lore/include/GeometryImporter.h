@@ -1,19 +1,27 @@
-#pragma once
+#ifndef GEOMETRYIMPORTER_H
+#define GEOMETRYIMPORTER_H
 
 #include <string>
 
 #include "Library.h"
 
-class GeometryImporter
+namespace LORE
 {
 
-	public:
+    class GeometryImporter
+    {
 
-        GeometryImporter();
-        ~GeometryImporter();
+        public:
 
-        void import();
+            GeometryImporter();
+            ~GeometryImporter();
 
-	private:
+            void import();
 
-};
+        private:
+
+    };
+
+}
+
+#endif

@@ -1,5 +1,5 @@
 //#include "stdafx.h"
-#include "OpenGL_Window.h"
+#include "Window.h"
 
 #include <iostream>
 
@@ -8,8 +8,9 @@
 
 using namespace std;
 using namespace glm;
+using namespace LORE;
 
-OpenGL_Window::OpenGL_Window(std::string tittle, int width, int height, int fps): m__window(),
+Window::Window(std::string tittle, int width, int height, int fps): m__window(),
 																		m__title(tittle),
 																		m__width(width),
 																		m__height(height),
@@ -23,7 +24,7 @@ OpenGL_Window::OpenGL_Window(std::string tittle, int width, int height, int fps)
 }
 
 
-OpenGL_Window::~OpenGL_Window()
+Window::~Window()
 {
 
 	cout << this << " [Window] destructor" << endl;
@@ -35,13 +36,13 @@ OpenGL_Window::~OpenGL_Window()
 }
 
 
-void OpenGL_Window::error_callback(int error, const char* description)
+void Window::error_callback(int error, const char* description)
 {
 	cout << "[Window] error_callback() :" << description << "\n";
 }
 
 
-void OpenGL_Window::window_size_callback(GLFWwindow* window, int width, int height)
+void Window::window_size_callback(GLFWwindow* window, int width, int height)
 {
 
 	cout << "[Window] window_size_callback" << endl;
@@ -49,7 +50,7 @@ void OpenGL_Window::window_size_callback(GLFWwindow* window, int width, int heig
 }
 
 
-void OpenGL_Window::window_focus_callback(GLFWwindow* window, int state)
+void Window::window_focus_callback(GLFWwindow* window, int state)
 {
 
 	cout << "[Window] window_focus_callback" << endl;
@@ -58,18 +59,18 @@ void OpenGL_Window::window_focus_callback(GLFWwindow* window, int state)
 
 }
 
-void OpenGL_Window::window_close_callback(GLFWwindow* window)
+void Window::window_close_callback(GLFWwindow* window)
 {
 
 	cout << "[Window] window_close_callback" << endl;
 
-	OpenGL_Window* w = static_cast<OpenGL_Window*>(glfwGetWindowUserPointer(window));
+	Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
 	w->close();
 
 }
 
-void OpenGL_Window::mouse_move_callback(GLFWwindow* window, double x, double y)
+void Window::mouse_move_callback(GLFWwindow* window, double x, double y)
 {
 
 	//cout << "[Window] mouse_move_callback" << endl;
@@ -77,10 +78,10 @@ void OpenGL_Window::mouse_move_callback(GLFWwindow* window, double x, double y)
 }
 
 
-void OpenGL_Window::load()
+void Window::load()
 {
 
-    cout << this << " [OpenGL_Window] load" << endl;
+    cout << this << " [Window] load" << endl;
 
 	// Création de la fenêtre
 	m__window = glfwCreateWindow(m__width, m__height, m__title.c_str(), NULL, NULL);
@@ -95,7 +96,7 @@ void OpenGL_Window::load()
 	}
 
 
-	//glfwSetKeyCallback(m__window, OpenGL_Window::key_callback);
+	//glfwSetKeyCallback(m__window, Window::key_callback);
 
 	glfwMakeContextCurrent(m__window);
 
@@ -110,20 +111,20 @@ void OpenGL_Window::load()
 }
 
 
-void OpenGL_Window::close()
+void Window::close()
 {
 
 	glfwSetWindowShouldClose(m__window, GL_TRUE);
 
 }
 
-int OpenGL_Window::shouldClose()
+int Window::shouldClose()
 {
 	return glfwWindowShouldClose(m__window);
 }
 
 
-int OpenGL_Window::startFrame()
+int Window::startFrame()
 {
 
 	int startTime = int(glfwGetTime() * 1000);
@@ -135,7 +136,7 @@ int OpenGL_Window::startFrame()
 }
 
 
-void OpenGL_Window::endFrame(int startTime)
+void Window::endFrame(int startTime)
 {
 
 	glfwSwapBuffers(m__window);
@@ -153,11 +154,11 @@ void OpenGL_Window::endFrame(int startTime)
 }
 
 
-void OpenGL_Window::render()
+void Window::render()
 {
 
 	glfwMakeContextCurrent(m__window);
-	
+
 	if(m__camera)
 		m__camera->render();
 

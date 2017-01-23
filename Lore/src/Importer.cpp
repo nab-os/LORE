@@ -9,6 +9,7 @@
 #include "ImportErrorHandler.h"
 
 using namespace std;
+using namespace LORE;
 
 Importer::Importer(string colladaFile)
 {

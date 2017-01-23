@@ -1,5 +1,8 @@
 #include "ImportErrorHandler.h"
 
+
+using namespace LORE;
+
 ImportErrorHandler::ImportErrorHandler()
     : mHasCriticalError( false  )
 {

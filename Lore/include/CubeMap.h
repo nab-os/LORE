@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUBEMAP_H
+#define CUBEMAP_H
 
 #include <iostream>
 #include <string>
@@ -7,15 +8,21 @@
 
 #include "Texture.h"
 
-class CubeMap: public Texture
+namespace LORE
 {
 
-	public:
+    class CubeMap: public Texture
+    {
 
-		CubeMap(std::string name = "default_cube_map");
-		virtual ~CubeMap();
+        public:
 
-		void load();
+            CubeMap(std::string name = "default_cube_map");
+            virtual ~CubeMap();
 
-};
+            void load();
 
+    };
+
+}
+
+#endif
