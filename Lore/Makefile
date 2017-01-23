@@ -8,12 +8,13 @@ SOURCES=OpenGL_Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Importer.cpp GeometryImporter.cpp ImportErrorHandler.cpp \
 #		ModelBullet.cpp
 
-EXEC_DIR=bin
+OUT_DIR=lib
 OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-I /usr/include/ \
+IDIR=-I include \
+	 -I /usr/include \
 	 -I /usr/include/SOIL \
 	 -I /usr/include/opencollada \
 	 -I /usr/include/opencollada/COLLADAFramework \
@@ -21,7 +22,8 @@ IDIR=-I /usr/include/ \
 	 -I /usr/include/opencollada/COLLADABaseUtils \
 #	 -I /usr/local/include/bullet
 
-LDIR=-L /usr/lib \
+LDIR=-L src \
+	 -L /usr/lib \
 	 -L /usr/local/lib \
 	 -L /usr/lib64 \
 	 -L /usr/lib/x86_64-linux-gnu/ \
@@ -40,7 +42,7 @@ LFLAGS=-lstdc++ \
 
 CC=g++
 
-all: init $(EXEC_DIR)/$(EXEC)
+all: init $(OUT_DIR)/$(EXEC)
 
 $(EXEC_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
@@ -51,7 +53,7 @@ $(OBJ_DIR)/%.o: %.cpp
 	$(CC) $(IDIR) $(CFLAGS) -c $< -o $@
 
 init:
-	@mkdir -p "$(EXEC_DIR)"
+	@mkdir -p "$(OUT_DIR)"
 	@mkdir -p "$(OBJ_DIR)"
 
 clean:

@@ -10,6 +10,9 @@ OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 IDIR=-I /usr/include/ \
 	 -I /usr/include/SOIL \
 	 -I /usr/include/opencollada \
+	 -I /usr/include/opencollada/COLLADAFramework \
+	 -I /usr/include/opencollada/COLLADASaxFramework \
+	 -I /usr/include/opencollada/COLLADABaseUtils \
 	 -I ../Lore
 
 LDIR=-L /usr/lib \
@@ -25,7 +28,8 @@ LDIR=-L /usr/lib \
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lOpenCOLLADAFramework \
+	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL \
+		-lOpenCOLLADAFramework -lOpenCOLLADASaxFrameworkLoader -lOpenCOLLADABaseUtils \
 		-lLore
 
 CC=g++
@@ -34,11 +38,11 @@ all: clean init $(EXEC_DIR)/$(EXEC)
 
 $(EXEC_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
-	$(CC) -o $@ $^ $(LDIR) $(LFLAGS)
+	$(CC) $(LDIR) $(LFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: %.cpp
 	@echo "\n=======COMPILING $@======="
-	$(CC) -o $@ -c $< $(IDIR) $(CFLAGS)
+	$(CC) $(IDIR) $(CFLAGS) -o $@ -c $<
 
 init:
 	@mkdir -p "$(EXEC_DIR)"
