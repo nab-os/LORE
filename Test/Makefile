@@ -17,6 +17,9 @@ LDIR=-L /usr/lib \
 	 -L /usr/lib64 \
 	 -L /usr/lib/x86_64-linux-gnu/ \
 	 -L /usr/lib/opencollada \
+	 -L /usr/lib/opencollada/COLLADAFramework \
+	 -L /usr/lib/opencollada/COLLADASaxFrameworkLoader \
+	 -L /usr/lib/opencollada/COLLADABaseUtils \
 	 -L ../Lore/bin
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter

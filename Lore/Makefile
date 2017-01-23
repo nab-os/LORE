@@ -5,6 +5,7 @@ SOURCES=OpenGL_Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Model.cpp ModelRender.cpp Object.cpp \
 		Shader.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
 		Lore.cpp Library.cpp Loader.cpp \
+		Importer.cpp GeometryImporter.cpp ImportErrorHandler.cpp \
 #		ModelBullet.cpp
 
 EXEC_DIR=bin
@@ -15,19 +16,26 @@ OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 IDIR=-I /usr/include/ \
 	 -I /usr/include/SOIL \
 	 -I /usr/include/opencollada \
+	 -I /usr/include/opencollada/COLLADAFramework \
+	 -I /usr/include/opencollada/COLLADASaxFramework \
+	 -I /usr/include/opencollada/COLLADABaseUtils \
 #	 -I /usr/local/include/bullet
 
 LDIR=-L /usr/lib \
 	 -L /usr/local/lib \
 	 -L /usr/lib64 \
 	 -L /usr/lib/x86_64-linux-gnu/ \
-	 -L /usr/lib/opencollada
+	 -L /usr/lib/opencollada \
+	 -L /usr/lib/opencollada/COLLADAFramework \
+	 -L /usr/lib/opencollada/COLLADASaxFrameworkLoader \
+	 -L /usr/lib/opencollada/COLLADABaseUtils
 
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL -lOpenCOLLADAFramework \
+	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL \
+		-lOpenCOLLADAFramework -lOpenCOLLADASaxFrameworkLoader -lOpenCOLLADABaseUtils \
 #	   	-lBulletDynamics -lBulletCollision -lLinearMath
 
 CC=g++
