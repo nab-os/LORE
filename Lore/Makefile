@@ -1,12 +1,11 @@
 EXEC=libLore.a
 
-SOURCES=OpenGL_Window.cpp Scene.cpp Camera.cpp Controller.cpp \
+SOURCES=Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Material.cpp \
 		Model.cpp ModelRender.cpp Object.cpp \
 		Shader.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
 		Lore.cpp Library.cpp Loader.cpp \
-		Importer.cpp GeometryImporter.cpp ImportErrorHandler.cpp \
-#		ModelBullet.cpp
+		Importer.cpp GeometryImporter.cpp ImportErrorHandler.cpp
 
 OUT_DIR=lib
 OBJ_DIR=obj
@@ -16,14 +15,13 @@ OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 IDIR=-I include \
 	 -I /usr/include \
 	 -I /usr/include/SOIL \
+	 -I /usr/include/libdrm \
 	 -I /usr/include/opencollada \
 	 -I /usr/include/opencollada/COLLADAFramework \
 	 -I /usr/include/opencollada/COLLADASaxFramework \
-	 -I /usr/include/opencollada/COLLADABaseUtils \
-#	 -I /usr/local/include/bullet
+	 -I /usr/include/opencollada/COLLADABaseUtils
 
-LDIR=-L src \
-	 -L /usr/lib \
+LDIR=-L /usr/lib \
 	 -L /usr/local/lib \
 	 -L /usr/lib64 \
 	 -L /usr/lib/x86_64-linux-gnu/ \
@@ -33,12 +31,12 @@ LDIR=-L src \
 	 -L /usr/lib/opencollada/COLLADABaseUtils
 
 
-CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
+CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter# -fPIC
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw -lSOIL \
-		-lOpenCOLLADAFramework -lOpenCOLLADASaxFrameworkLoader -lOpenCOLLADABaseUtils \
-#	   	-lBulletDynamics -lBulletCollision -lLinearMath
+	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL \
+		-lOpenCOLLADAFramework -lOpenCOLLADASaxFrameworkLoader -lOpenCOLLADABaseUtils
+
 
 CC=g++
 
@@ -47,10 +45,11 @@ all: init $(OUT_DIR)/$(EXEC)
 $(OUT_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
 	ar rcs $@ $^
+	#$(CC) -o $@ $^ $(LDIR) $(LFLAGS) -shared
 
 $(OBJ_DIR)/%.o: src/%.cpp
 	@echo "\n=======COMPILING $@======="
-	$(CC) $(IDIR) $(CFLAGS) -c $< -o $@
+	$(CC) -o $@ -c $< $(IDIR) $(CFLAGS)
 
 init:
 	@mkdir -p "$(OUT_DIR)"

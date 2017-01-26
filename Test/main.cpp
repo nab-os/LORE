@@ -4,7 +4,8 @@
 #include <Lore.h>
 
 using namespace std;
-using namespace LORE;
+//using namespace LORE;
+
 int main(int argc, char** argv)
 {
 

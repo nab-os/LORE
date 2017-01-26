@@ -2,18 +2,19 @@ EXEC=test
 
 SOURCES=main.cpp
 
-EXEC_DIR=bin
+OUT_DIR=bin
 OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-I /usr/include/ \
+IDIR=-I ../Lore/include \
+	 -I /usr/include/ \
 	 -I /usr/include/SOIL \
+	 -I /usr/include/libdrm \
 	 -I /usr/include/opencollada \
 	 -I /usr/include/opencollada/COLLADAFramework \
 	 -I /usr/include/opencollada/COLLADASaxFramework \
-	 -I /usr/include/opencollada/COLLADABaseUtils \
-	 -I ../Lore/include
+	 -I /usr/include/opencollada/COLLADABaseUtils
 
 LDIR=-L /usr/lib \
 	 -L /usr/local/lib \
@@ -28,24 +29,24 @@ LDIR=-L /usr/lib \
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ \
 		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw -lSOIL \
+	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL \
 		-lOpenCOLLADAFramework -lOpenCOLLADASaxFrameworkLoader -lOpenCOLLADABaseUtils \
 		-lLore
 
 CC=g++
 
-all: clean init $(EXEC_DIR)/$(EXEC)
+all: clean init $(OUT_DIR)/$(EXEC)
 
-$(EXEC_DIR)/$(EXEC): $(OBJECTS)
+$(OUT_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
-	$(CC) $(LDIR) $(LFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDIR) $(LFLAGS)
 
 $(OBJ_DIR)/%.o: %.cpp
 	@echo "\n=======COMPILING $@======="
-	$(CC) $(IDIR) $(CFLAGS) -o $@ -c $<
+	$(CC) -o $@ -c $< $(IDIR) $(CFLAGS)
 
 init:
-	@mkdir -p "$(EXEC_DIR)"
+	@mkdir -p "$(OUT_DIR)"
 	@mkdir -p "$(OBJ_DIR)"
 
 clean:

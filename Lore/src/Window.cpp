@@ -10,7 +10,7 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-Window::Window(std::string tittle, int width, int height, int fps): m__window(),
+LORE::Window::Window(std::string tittle, int width, int height, int fps): m__window(),
 																		m__title(tittle),
 																		m__width(width),
 																		m__height(height),
@@ -24,7 +24,7 @@ Window::Window(std::string tittle, int width, int height, int fps): m__window(),
 }
 
 
-Window::~Window()
+LORE::Window::~Window()
 {
 
 	cout << this << " [Window] destructor" << endl;
@@ -36,13 +36,13 @@ Window::~Window()
 }
 
 
-void Window::error_callback(int error, const char* description)
+void LORE::Window::error_callback(int error, const char* description)
 {
 	cout << "[Window] error_callback() :" << description << "\n";
 }
 
 
-void Window::window_size_callback(GLFWwindow* window, int width, int height)
+void LORE::Window::window_size_callback(GLFWwindow* window, int width, int height)
 {
 
 	cout << "[Window] window_size_callback" << endl;
@@ -50,7 +50,7 @@ void Window::window_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
-void Window::window_focus_callback(GLFWwindow* window, int state)
+void LORE::Window::window_focus_callback(GLFWwindow* window, int state)
 {
 
 	cout << "[Window] window_focus_callback" << endl;
@@ -59,7 +59,7 @@ void Window::window_focus_callback(GLFWwindow* window, int state)
 
 }
 
-void Window::window_close_callback(GLFWwindow* window)
+void LORE::Window::window_close_callback(GLFWwindow* window)
 {
 
 	cout << "[Window] window_close_callback" << endl;
@@ -70,7 +70,7 @@ void Window::window_close_callback(GLFWwindow* window)
 
 }
 
-void Window::mouse_move_callback(GLFWwindow* window, double x, double y)
+void LORE::Window::mouse_move_callback(GLFWwindow* window, double x, double y)
 {
 
 	//cout << "[Window] mouse_move_callback" << endl;
@@ -78,7 +78,7 @@ void Window::mouse_move_callback(GLFWwindow* window, double x, double y)
 }
 
 
-void Window::load()
+void LORE::Window::load()
 {
 
     cout << this << " [Window] load" << endl;
@@ -96,7 +96,7 @@ void Window::load()
 	}
 
 
-	//glfwSetKeyCallback(m__window, Window::key_callback);
+	//glfwSetKeyCallback(m__window, LORE::Window::key_callback);
 
 	glfwMakeContextCurrent(m__window);
 
@@ -111,20 +111,20 @@ void Window::load()
 }
 
 
-void Window::close()
+void LORE::Window::close()
 {
 
 	glfwSetWindowShouldClose(m__window, GL_TRUE);
 
 }
 
-int Window::shouldClose()
+int LORE::Window::shouldClose()
 {
 	return glfwWindowShouldClose(m__window);
 }
 
 
-int Window::startFrame()
+int LORE::Window::startFrame()
 {
 
 	int startTime = int(glfwGetTime() * 1000);
@@ -136,7 +136,7 @@ int Window::startFrame()
 }
 
 
-void Window::endFrame(int startTime)
+void LORE::Window::endFrame(int startTime)
 {
 
 	glfwSwapBuffers(m__window);
@@ -154,7 +154,7 @@ void Window::endFrame(int startTime)
 }
 
 
-void Window::render()
+void LORE::Window::render()
 {
 
 	glfwMakeContextCurrent(m__window);

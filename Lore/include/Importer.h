@@ -3,16 +3,16 @@
 
 #include <string>
 
-#include <COLLADAFramework/COLLADAFWIWriter.h>
-#include <COLLADASaxFrameworkLoader/COLLADASaxFWLIError.h>
+//#include <COLLADAFramework/COLLADAFWIWriter.h>
+//#include <COLLADASaxFrameworkLoader/COLLADASaxFWLIError.h>
 
 #include "Library.h"
-#include "GeometryImporter.h"
+//#include "GeometryImporter.h"
 
 namespace LORE
 {
 
-    class Importer: public COLLADAFW::IWriter
+    class Importer//: public COLLADAFW::IWriter
     {
 
         public:

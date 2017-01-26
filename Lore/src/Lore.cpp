@@ -37,7 +37,7 @@ void Lore::error_callback(int error, const char* description)
 }
 
 /**
- * Initialize Glfw and Glew and returns an Window
+ * Initialize Glfw and Glew and returns a Window
  * @return returns a window
  **/
 LORE::Window* Lore::init()
