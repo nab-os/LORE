@@ -19,7 +19,7 @@ IDIR=-I ../Lore/include \
 LDIR=-L /usr/lib \
 	 -L /usr/local/lib \
 	 -L /usr/lib64 \
-	 -L /usr/lib/x86_64-linux-gnu/ \
+	 -L /usr/lib/x86_64-linux-gnu \
 	 -L /usr/lib/opencollada \
 	 -L /usr/lib/opencollada/COLLADAFramework \
 	 -L /usr/lib/opencollada/COLLADASaxFrameworkLoader \
@@ -27,11 +27,14 @@ LDIR=-L /usr/lib \
 	 -L ../Lore/lib
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
-LFLAGS=-lstdc++ \
-		-lm -lXrandr -ldl -lXi -lX11 -ldl -lXxf86vm -lXinerama -lXcursor -lrt -pthread \
-	   	-lGL -lGLU -lGLEW -lglfw3 -lSOIL \
-		-lOpenCOLLADAFramework -lOpenCOLLADASaxFrameworkLoader -lOpenCOLLADABaseUtils \
-		-lLore
+LFLAGS=-lstdc++ -lLore \
+	   -lXi -lGLEW -lGLU -lm -lGL -lm -lpthread -ldl -ldrm \
+	   -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm \
+	   -lglfw -lrt -lm -ldl -lXrandr -lXinerama -lXext -lXcursor -lXrender -lXfixes -lX11 \
+	   -lpthread -lxcb -lXau -lXdmcp \
+	   -lSOIL \
+	   -lOpenCOLLADAFramework -lOpenCOLLADABaseUtils -lOpenCOLLADAStreamWriter -lOpenCOLLADASaxFrameworkLoader \
+	   -lGeneratedSaxParser -lMathMLSolver -lOpenCOLLADABaseUtils -lpcre -lxml2 -lLLVM-3.8
 
 CC=g++
 
@@ -50,4 +53,5 @@ init:
 	@mkdir -p "$(OBJ_DIR)"
 
 clean:
+	@rm -rf "$(OUT_DIR)"
 	@rm -rf "$(OBJ_DIR)"
