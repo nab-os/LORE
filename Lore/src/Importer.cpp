@@ -11,7 +11,7 @@
 using namespace std;
 using namespace LORE;
 
-Importer::Importer(string colladaFile): m__filePath(colladaFile)
+Importer::Importer(string colladaFile): m__filePath(colladaFile), mCurrentParsingPass(GENERAL_PASS)
 {
 
 
@@ -25,6 +25,13 @@ Importer::~Importer()
 
 }
 
+
+float Importer::convertSpaceUnit( float originalValue  )
+{
+    return originalValue * mFileInfo.unitScale;
+}
+
+
 bool Importer::import()
 {
 
@@ -37,36 +44,23 @@ bool Importer::import()
     if ( !root.loadDocument(m__filePath))
         return false;
 
+    mCurrentParsingPass = CONTROLLER_DATA_PASS;
+
+
+
 }
 
 
 bool Importer::writeGlobalAsset( const COLLADAFW::FileInfo* asset )
 {
     cout << "GlobalAsset" << endl;
-    /*
+
     mFileInfo.absoluteFileUri = asset->getAbsoluteFileUri();
 
     const COLLADAFW::FileInfo::ValuePairPointerArray& valuePairs = asset->getValuePairArray();
 
-    for ( size_t i = 0, count = valuePairs.getCount(); i < count; ++i)
-    {
-        const COLLADAFW::FileInfo::ValuePair* valuePair = valuePairs[i];
-        const String& key = valuePair->first;
-        const String& value = valuePair->second;
-        if ( key == AUTORING_TOOL )
-        {
-            int googleSketchUpResult6 = value.compare(0, sizeof(GOOGLE_SKETCHUP6)-1, GOOGLE_SKETCHUP6);
-            int googleSketchUpResult70 = value.compare(0, sizeof(GOOGLE_SKETCHUP70)-1, GOOGLE_SKETCHUP70);
-            int microstationResult = value.compare(0, sizeof(MICROSTATION)-1, MICROSTATION);
-            if ( (googleSketchUpResult6 == 0) || (microstationResult == 0) || (googleSketchUpResult70 == 0))
-            {
-                mInvertTransparency = true;
-            }
-        }
-    }
-
     float systemUnitScale = 1.0f;
-
+/*
     // Retrieve the system unit information
     int systemUnitType = UNITS_CENTIMETERS;
     GetMasterUnitInfo(&systemUnitType, &systemUnitScale);
@@ -94,31 +88,31 @@ bool Importer::writeGlobalAsset( const COLLADAFW::FileInfo* asset )
             systemUnitScale *= 1000.0f;
             break;
         default: break;
-    }
+    }*/
     mFileInfo.unitScale = (float)asset->getUnit().getLinearUnitMeter() / systemUnitScale;
-    delete mUnitConversionFunctors.lengthConversion;
+    /*delete mUnitConversionFunctors.lengthConversion;
     mUnitConversionFunctors.lengthConversion = new ScaleConversionFunctor(mFileInfo.unitScale);
     if ( mFileInfo.unitScale != 0)
     {
         mUnitConversionFunctors.inverseLengthConversion = new ScaleConversionFunctor(1/mFileInfo.unitScale);
-    }
+    }*/
 
-    COLLADAFW::FileInfo::Unit::AngularUnit angularUnit = asset->getUnit().getAngularUnit();
+    /*COLLADAFW::FileInfo::Unit::AngularUnit angularUnit = asset->getUnit().getAngularUnit();
     if ( angularUnit == COLLADAFW::FileInfo::Unit::DEGREES )
     {
         delete mUnitConversionFunctors.angleConversion;
         mUnitConversionFunctors.angleConversion = ConversionFunctors::degToRad.clone();
-    }
+    }*/
 
     mFileInfo.upAxis = asset->getUpAxisType();
-*/
+
     return true;
 }
 
 //---------------------------------------------------------------
 bool Importer::writeVisualScene( const COLLADAFW::VisualScene* visualScene )
 {
-    cout << "Geometry" << endl;
+    cout << "VisualScene" << endl;
     /*
     if ( mCurrentParsingPass != GENERAL_PASS )
         return true;
@@ -151,14 +145,12 @@ bool Importer::writeGeometry( const COLLADAFW::Geometry* geometry )
 
     cout << "Geometry" << endl;
 
-    /*
     if ( mCurrentParsingPass != GENERAL_PASS )
         return true;
 
     GeometryImporter geometryImporter(this, geometry);
     return geometryImporter.import();
-*/
-    return true;
+
 }
 
 //---------------------------------------------------------------
@@ -301,13 +293,14 @@ bool Importer::writeScene( const COLLADAFW::Scene* scene  )
 {
 
     cout << "Scene" << endl;
-/*    if( scene == 0  )
+    if( scene == 0  )
         return true;
-
+/*
     const COLLADAFW::InstanceVisualScene* instanceVisualScene = scene->getInstanceVisualScene();
     COLLADAFW::UniqueId id = instanceVisualScene->getInstanciatedObjectId();
     if(id.getFileId() == 0)
         mVisualSceneUniqueId = id;
-   */ return true;
+*/
+    return true;
 
 }

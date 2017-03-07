@@ -7,7 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Library.h"
-#include "Loader.h"
+#include "Importer.h"
 
 #include "Window.h"
 #include "Scene.h"
@@ -42,7 +42,7 @@ namespace LORE
             static Texture* createTexture(std::string id, std::string name);
             static Shader* createShader(std::string id, std::string name);
 
-            static void load(std::string path);
+            static Camera* load(std::string path);
 
         private:
 

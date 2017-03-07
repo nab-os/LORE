@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Model.h"
+#include "Mesh.h"
 
 
 #ifndef BUFFER_OFFSET
@@ -15,7 +15,7 @@
 namespace LORE
 {
 
-    class ModelRender :	public Model
+    class ModelRender :	public Mesh
     {
 
         public:

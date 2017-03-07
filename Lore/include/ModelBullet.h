@@ -5,7 +5,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include "Model.h"
+#include "Mesh.h"
 
 
 #ifndef BUFFER_OFFSET
@@ -17,7 +17,7 @@
 namespace LORE
 {
 
-    class ModelBullet : public Model
+    class ModelBullet : public Mesh
     {
 
         public:

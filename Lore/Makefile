@@ -2,9 +2,9 @@ EXEC=libLore.so
 
 SOURCES=Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Material.cpp \
-		Model.cpp ModelRender.cpp Object.cpp \
+		Mesh.cpp ModelRender.cpp Object.cpp \
 		Shader.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
-		Lore.cpp Library.cpp Loader.cpp \
+		Lore.cpp Library.cpp \
 		Importer.cpp GeometryImporter.cpp ImportErrorHandler.cpp
 
 OUT_DIR=lib

@@ -6,7 +6,7 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-ModelRender::ModelRender():	Model(),
+ModelRender::ModelRender():	Mesh(),
 							m__VAO(),
 							m__VBO(),
 							m__UVs(),
@@ -18,7 +18,7 @@ ModelRender::ModelRender():	Model(),
 }
 
 
-ModelRender::ModelRender(const ModelRender*) : Model(),
+ModelRender::ModelRender(const ModelRender*) : Mesh(),
 												m__VAO(),
 												m__VBO(),
 												m__UVs(),
@@ -106,7 +106,7 @@ void ModelRender::computeTangentBasis(   // inputs
 void ModelRender::load()
 {
 
-	Model::load();
+	Mesh::load();
 
 	cout << this << " [ModelRender] load" << endl;
 

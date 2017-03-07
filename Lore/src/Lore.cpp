@@ -212,9 +212,13 @@ Shader* Lore::createShader(string id, string name)
 }
 
 
-void Lore::load(string path)
+Camera* Lore::load(string path)
 {
 
-    Loader::load(path, Lore::m__windowLibrary, Lore::m__sceneLibrary, Lore::m__cameraLibrary, Lore::m__objectLibrary, Lore::m__modelRenderLibrary, /*Lore::m__modelBulletLibrary,*/ Lore::m__materialLibrary, Lore::m__textureLibrary, Lore::m__shaderLibrary);
+    Importer importer(path);
+
+    importer.import();
+
+    return NULL;
 
 }

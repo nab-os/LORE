@@ -92,10 +92,10 @@ void Object::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmen
 }
 
 
-void Object::setRenderModel(Model* model)
+void Object::setRenderModel(Mesh* mesh)
 {
 
-	m__renderModel = (ModelRender*)model;
+	m__renderModel = (ModelRender*)mesh;
 
 }
 

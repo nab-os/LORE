@@ -31,8 +31,8 @@ namespace LORE
             void load(/*btDiscreteDynamicsWorld* world = nullptr*/);
             void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
-            void setRenderModel(Model* model);
-            //void setBulletModel(Model* model);
+            void setRenderModel(Mesh* mesh);
+            //void setBulletModel(Mesh* mesh);
 
             Object* addObject(std::string path = "default");
             void addObject(Object* obj);

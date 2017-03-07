@@ -52,7 +52,7 @@ namespace LORE
 
             GLFWwindow* getWindow() { return m__window; };
             Scene* getScene() { return m__scene; };
-            Camera* getCamera() { return m__camera; };
+//            Camera* getCamera() { return m__camera; };
 
             int getWidth() { return m__width; };
             int getHeight() { return m__height; };
@@ -69,7 +69,6 @@ namespace LORE
             int m__frameRate;
 
             Scene* m__scene;
-            Camera* m__camera;
 
             static void error_callback(int error, const char* description);
 

@@ -19,7 +19,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    string file = "/home/guy/Bureau/simple.dae";
+    string file = "/home/nabos/test.dae";
 
     if(argc >= 2)
     {
@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
     }
 
-    Lore::load(file);
+    Camera* camera = Lore::load(file);
 
     //----------
 

@@ -14,9 +14,8 @@ LORE::Window::Window(std::string tittle, int width, int height, int fps): m__win
 																		m__title(tittle),
 																		m__width(width),
 																		m__height(height),
-																		m__frameRate(int(1000/fps)),
-																		m__scene(),
-																		m__camera()
+																		m__frameRate(int(1000/fps))//,
+																	//	m__camera()
 {
 
 
@@ -28,10 +27,6 @@ LORE::Window::~Window()
 {
 
 	cout << this << " [Window] destructor" << endl;
-	if(m__scene)
-		delete m__scene;
-	if(m__camera)
-		delete m__camera;
 
 }
 
@@ -53,7 +48,7 @@ void LORE::Window::window_size_callback(GLFWwindow* window, int width, int heigh
 void LORE::Window::window_focus_callback(GLFWwindow* window, int state)
 {
 
-	cout << "[Window] window_focus_callback" << endl;
+	cout << "[Window] window_focus_callback: " << state << endl;
 
 	//static_cast<Window*>(glfwGetWindowUserPointer(window))->m__paused = !state;
 
@@ -159,7 +154,7 @@ void LORE::Window::render()
 
 	glfwMakeContextCurrent(m__window);
 
-	if(m__camera)
-		m__camera->render();
+//	if(m__camera)
+//		m__camera->render();
 
 }

@@ -28,8 +28,26 @@ namespace LORE
 
         public:
 
+            enum ParsingPasses
+            {
+                GENERAL_PASS,   //!< The first pass to gather all data except controller data
+                CONTROLLER_DATA_PASS    //!< The second pass to gather controller data
+
+            };
+
+            struct FileInfo
+            {
+                COLLADABU::URI absoluteFileUri;
+                float unitScale;
+                COLLADAFW::FileInfo::UpAxisType upAxis;
+
+            };
+
             Importer(string colladaFile);
             ~Importer();
+
+            /** Converts @a originalValue in units provided by file info to units currently set in max.*/
+            float convertSpaceUnit(float originalValue);
 
             bool import();
 
@@ -80,6 +98,12 @@ namespace LORE
         private:
 
             string m__filePath;
+
+            /** The current pass we are performing.*/
+            ParsingPasses mCurrentParsingPass;
+
+            /** Holds informations about the entire file being loaded.*/
+            FileInfo mFileInfo;
 
     };
 
