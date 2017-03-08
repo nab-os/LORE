@@ -55,11 +55,18 @@ namespace LORE
              *      @return True on success, false otherwise.*/
             bool importTriangleMesh();
 
+            /** Performs the import of the mesh.
+             *      @return True on success, false otherwise.*/
+            bool importPolygonMesh();
+
 
             /** Performs the import of the mesh positions of a mesh that contains only triangles.
              *      @return True on success, false otherwise.*/
             bool importTriangleMeshPositions(Mesh* triangleMesh);
 
+            /** Performs the import of the mesh positions of a mesh that contains only triangles.
+             *      @return True on success, false otherwise.*/
+            bool importPolygonMeshPositions(Mesh* triangleMesh);
     };
 
 }

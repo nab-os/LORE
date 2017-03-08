@@ -43,9 +43,7 @@ bool GeometryImporter::import()
 {
     if ( mGeometry->getType() == COLLADAFW::Geometry::GEO_TYPE_MESH  )
     {
-        cout << "TODO: importing mesh" << endl;
         importMesh();
-
     }
     return true;
 
@@ -63,7 +61,7 @@ bool GeometryImporter::importMesh()
     if ( mesh->getPolygonsPolygonCount() > 0 || mesh->getPolylistPolygonCount() > 0  )
     {
         cout << "polygon" << endl;
-        //success = importPolygonMesh();
+        success = importPolygonMesh();
 
     }
     else if ( mTotalTrianglesCount > 0  )
@@ -78,7 +76,6 @@ bool GeometryImporter::importMesh()
         //addVertexColorObjects( mGeometry->getUniqueId()  );
 
     }
-
 
     return success;
 
@@ -165,6 +162,7 @@ bool GeometryImporter::importTriangleMeshPositions( Mesh* triangleMesh )
 
             case COLLADAFW::MeshPrimitive::TRIANGLES:
                 {
+                    cout << "[GeometryImporter] Triangles" << endl;
                     const COLLADAFW::Triangles* triangles = (const COLLADAFW::Triangles*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  triangles->getPositionIndices();
                     for ( size_t j = 0, count = positionIndices.getCount() ; j < count; j++ )
@@ -176,6 +174,7 @@ bool GeometryImporter::importTriangleMeshPositions( Mesh* triangleMesh )
                 }
             case COLLADAFW::MeshPrimitive::TRIANGLE_STRIPS:
                 {
+                    cout << "[GeometryImporter] Triangle strips " << endl;
                     const COLLADAFW::Tristrips* tristrips = (const COLLADAFW::Tristrips*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  tristrips->getPositionIndices();
                     const COLLADAFW::UIntValuesArray& faceVertexCountArray = tristrips->getGroupedVerticesVertexCountArray();
@@ -187,7 +186,7 @@ bool GeometryImporter::importTriangleMeshPositions( Mesh* triangleMesh )
                       for ( size_t j = nextTristripStartIndex + 2, lastVertex = nextTristripStartIndex +  faceVertexCount; j < lastVertex; ++j )
                       {
                       Face& face = triangleMesh.faces[faceIndex];
-                    //   						face.setMatID(fWMaterialIdMaxMtlIdMap[meshPrimitive->getMaterialId()]);
+                   //   						face.setMatID(fWMaterialIdMaxMtlIdMap[meshPrimitive->getMaterialId()]);
                     face.setEdgeVisFlags(1, 1, 1);
                     if ( maxMaterialId != 0 )
                     face.setMatID(maxMaterialId);
@@ -209,6 +208,7 @@ bool GeometryImporter::importTriangleMeshPositions( Mesh* triangleMesh )
                 }
             case COLLADAFW::MeshPrimitive::TRIANGLE_FANS:
                 {
+                    cout << "[GeometryImporter] Triangle fans" << endl;
                     const COLLADAFW::Trifans* trifans = (const COLLADAFW::Trifans*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  trifans->getPositionIndices();
                     const COLLADAFW::UIntValuesArray& faceVertexCountArray = trifans->getGroupedVerticesVertexCountArray();
@@ -256,200 +256,224 @@ bool GeometryImporter::importPolygonMesh(  )
 
     COLLADAFW::Mesh* mesh = (COLLADAFW::Mesh*) mGeometry;
 
+    Mesh* triangleMesh = new Mesh();
+
     //PolyObject* polygonObject = CreateEditablePolyObject();
     //MNMesh& polygonMesh = polygonObject->GetMesh();
 
-
-    //if ( !importPolygonMeshPositions(polygonObject)  )
-        //return false;
+    if ( !importPolygonMeshPositions(triangleMesh)  )
+        return false;
 
     //if ( !importPolygonMeshNormals(polygonObject)  )
-      //  return false;
+    //  return false;
 
     //if ( !importPolygonMeshUVCoords(polygonObject)  )
-       // return false;
+    // return false;
 
 
     //polygonMesh.InvalidateGeomCache();
 
-    h//andleObjectReferences(mesh, polygonObject);
+    //handleObjectReferences(mesh, polygonObject);
 
     return true;
 
 }
 
 
-bool GeometryImporter::importPolygonMeshPositions( PolyObject* polygonObject )
-	{
-		COLLADAFW::Mesh* mesh = (COLLADAFW::Mesh*) mGeometry;
+bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
+{
+    COLLADAFW::Mesh* mesh = (COLLADAFW::Mesh*) mGeometry;
 
-		MNMesh& polgonMesh = polygonObject->GetMesh();
+    const COLLADAFW::MeshVertexData& meshPositions = mesh->getPositions();
+    int positionsCount = (int)meshPositions.getValuesCount() / 3;
 
-		const COLLADAFW::MeshVertexData& meshPositions = mesh->getPositions();
+    vector<vec3> positions(positionsCount);
+    cout << "test : " << positionsCount << endl;
+    if ( meshPositions.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
+    {
+        const COLLADAFW::DoubleArray* positionsArray = meshPositions.getDoubleValues();
+        for ( int i = 0; i < positionsCount; ++i)
+        {
+            positions[i] = vec3(
+                    convertSpaceUnit((float)(*positionsArray)[3*i]),
+                    convertSpaceUnit((float)(*positionsArray)[3*i + 1]),
+                    convertSpaceUnit((float)(*positionsArray)[3*i + 2])
+                    );
+            cout << positions[i].x << " ; " << positions[i].y << " ; " << positions[i].z << endl;
+        }
+    }
+    else
+    {
+        const COLLADAFW::FloatArray* positionsArray = meshPositions.getFloatValues();
+        for ( int i = 0; i < positionsCount; ++i)
+        {
+            positions[i] = vec3(
+                    convertSpaceUnit((*positionsArray)[3*i]),
+                    convertSpaceUnit((*positionsArray)[3*i + 1]),
+                    convertSpaceUnit((*positionsArray)[3*i + 2])
+                    );
+            cout << positions[i].x << " ; " << positions[i].y << " ; " << positions[i].z << endl;
+        }
+    }
 
-		int positionsCount = (int)meshPositions.getValuesCount() / 3;
+    size_t polygonsCount = mTotalTrianglesCount + mesh->getPolygonsPolygonCount() + mesh->getPolylistPolygonCount();
+    vector<vec3> finalPositions((int)mTotalTrianglesCount);
+    COLLADAFW::MeshPrimitiveArray& meshPrimitiveArray =  mesh->getMeshPrimitives();
+    size_t faceIndex = 0;
+    for ( size_t i = 0, count = meshPrimitiveArray.getCount(); i < count; ++i)
+    {
 
-		polgonMesh.setNumVerts(positionsCount);
+        const COLLADAFW::MeshPrimitive* meshPrimitive = meshPrimitiveArray[i];
+        if ( ! meshPrimitive )
+            continue;
 
-		if ( meshPositions.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
-		{
-			const COLLADAFW::DoubleArray* positionsArray = meshPositions.getDoubleValues();
-			for ( int i = 0; i < positionsCount; ++i)
-			{
-				MNVert* vertex = polgonMesh.V(i);
-				vertex->p = Point3( convertSpaceUnit((float)(*positionsArray)[3*i]), 
-					                convertSpaceUnit((float)(*positionsArray)[3*i + 1]), 
-									convertSpaceUnit((float)(*positionsArray)[3*i + 2]));
-			}
-		}
-		else
-		{
-			const COLLADAFW::FloatArray* positionsArray = meshPositions.getFloatValues();
-			for ( int i = 0; i < positionsCount; ++i)
-			{
-				MNVert* vertex = polgonMesh.V(i);
-				vertex->p = Point3( convertSpaceUnit((*positionsArray)[3*i]),
-					                convertSpaceUnit((*positionsArray)[3*i + 1]), 
-									convertSpaceUnit((*positionsArray)[3*i + 2]));
-			}
-		}
+        switch (meshPrimitive->getPrimitiveType())
+        {
 
-		size_t polygonsCount = mTotalTrianglesCount + mesh->getPolygonsPolygonCount() + mesh->getPolylistPolygonCount();
-		polgonMesh.setNumFaces((int)polygonsCount);
-		COLLADAFW::MeshPrimitiveArray& meshPrimitiveArray =  mesh->getMeshPrimitives();
-		size_t faceIndex = 0;
-		for ( size_t i = 0, count = meshPrimitiveArray.getCount(); i < count; ++i)
-		{
-			const COLLADAFW::MeshPrimitive* meshPrimitive = meshPrimitiveArray[i];
-			if ( ! meshPrimitive )
-				continue;
-			MtlID maxMaterialId = (MtlID)meshPrimitive->getMaterialId();
-			switch ( meshPrimitive->getPrimitiveType() )
-			{
-			case COLLADAFW::MeshPrimitive::TRIANGLES:
-				{
-					const COLLADAFW::Triangles* triangles = (const COLLADAFW::Triangles*) meshPrimitive;
-					const COLLADAFW::UIntValuesArray& positionIndices =  triangles->getPositionIndices();
-					for ( size_t j = 0, count = positionIndices.getCount() ; j < count; j+=3 )
-					{
-						MNFace* face = polgonMesh.F((int)faceIndex);
-						face->MakePoly(3, (int*) (&positionIndices[j]));
-						if ( maxMaterialId != 0 )
-							face->material = maxMaterialId;
+            case COLLADAFW::MeshPrimitive::TRIANGLES:
+                {
+                    cout << "[GeometryImporter] Triangles" << endl;
+                    const COLLADAFW::Triangles* triangles = (const COLLADAFW::Triangles*) meshPrimitive;
+                    const COLLADAFW::UIntValuesArray& positionIndices =  triangles->getPositionIndices();
+                    for ( size_t j = 0, count = positionIndices.getCount() ; j < count; j++ )
+                    {
+                        finalPositions[faceIndex+j] =  positions[positionIndices[j]];
+                    }
+                    ++faceIndex;
+                    break;
+                }
 
-						++faceIndex;
-					}
-					break;
-				}
-			case COLLADAFW::MeshPrimitive::TRIANGLE_STRIPS:
-				{
-					const COLLADAFW::Tristrips* tristrips = (const COLLADAFW::Tristrips*) meshPrimitive;
-					const COLLADAFW::UIntValuesArray& positionIndices =  tristrips->getPositionIndices();
-					const COLLADAFW::UIntValuesArray& faceVertexCountArray = tristrips->getGroupedVerticesVertexCountArray();
-					size_t nextTristripStartIndex = 0;
-					for ( size_t k = 0, count = faceVertexCountArray.getCount(); k < count; ++k)
-					{
-						unsigned int faceVertexCount = faceVertexCountArray[k];
-						bool switchOrientation = false;
-						for ( size_t j = nextTristripStartIndex + 2, lastVertex = nextTristripStartIndex +  faceVertexCount; j < lastVertex; ++j )
-						{
-							MNFace* face = polgonMesh.F((int)faceIndex);
-							if ( switchOrientation )
-							{
-								int indices[3];
-								indices[0] = (int)positionIndices[j - 1];
-								indices[1] = (int)positionIndices[j - 2];
-								indices[2] = (int)positionIndices[j ];
-								face->MakePoly(3, indices);
-								if ( maxMaterialId != 0 )
-									face->material = maxMaterialId;
-								switchOrientation = false;
-							}
-							else
-							{
-								face->MakePoly(3, (int*) (&positionIndices[j - 2]));
-								if ( maxMaterialId != 0 )
-									face->material = maxMaterialId;
-								switchOrientation = true;
-							}
+            case COLLADAFW::MeshPrimitive::TRIANGLE_STRIPS:
+                {
+                    cout << "[GeometryImporter] Triangle strips" << endl;
+                    /*
+                    const COLLADAFW::Tristrips* tristrips = (const COLLADAFW::Tristrips*) meshPrimitive;
+                    const COLLADAFW::UIntValuesArray& positionIndices =  tristrips->getPositionIndices();
+                    const COLLADAFW::UIntValuesArray& faceVertexCountArray = tristrips->getGroupedVerticesVertexCountArray();
+                    size_t nextTristripStartIndex = 0;
+                    for ( size_t k = 0, count = faceVertexCountArray.getCount(); k < count; ++k)
+                    {
+                    unsigned int faceVertexCount = faceVertexCountArray[k];
+                    bool switchOrientation = false;
+                    for ( size_t j = nextTristripStartIndex + 2, lastVertex = nextTristripStartIndex +  faceVertexCount; j < lastVertex; ++j )
+                    {
+                    MNFace* face = polgonmesh.F((int)faceIndex);
+                    if ( switchOrientation )
+                    {
+                    int indices[3];
+                    indices[0] = (int)positionIndices[j - 1];
+                    indices[1] = (int)positionIndices[j - 2];
+                    indices[2] = (int)positionIndices[j ];
+                    face->MakePoly(3, indices);
+                    if ( maxMaterialId != 0 )
+                    face->material = maxMaterialId;
+                    switchOrientation = false;
+                    }
+                    else
+                    {
+                    face->MakePoly(3, (int*) (&positionIndices[j - 2]));
+                    if ( maxMaterialId != 0 )
+                    face->material = maxMaterialId;
+                    switchOrientation = true;
+                    }
 
-							++faceIndex;
-						}
-						nextTristripStartIndex += faceVertexCount;
-					}
-					break;
-				}
-			case COLLADAFW::MeshPrimitive::TRIANGLE_FANS:
-				{
-					const COLLADAFW::Trifans* trifans = (const COLLADAFW::Trifans*) meshPrimitive;
-					const COLLADAFW::UIntValuesArray& positionIndices =  trifans->getPositionIndices();
-					const COLLADAFW::UIntValuesArray& faceVertexCountArray = trifans->getGroupedVerticesVertexCountArray();
-					size_t nextTrifanStartIndex = 0;
-					for ( size_t k = 0, count = faceVertexCountArray.getCount(); k < count; ++k)
-					{
-						unsigned int faceVertexCount = faceVertexCountArray[k];
-						int trianglePositionsIndices[3];
-						//the first vertex is the same for all fans
-						trianglePositionsIndices[0] = (int)positionIndices[nextTrifanStartIndex];
-						for ( size_t j = nextTrifanStartIndex + 2, lastVertex = nextTrifanStartIndex +  faceVertexCount; j < lastVertex; ++j )
-						{
-							trianglePositionsIndices[1] = (int)positionIndices[j - 1];
-							trianglePositionsIndices[2] = (int)positionIndices[j];
-							MNFace* face = polgonMesh.F((int)faceIndex);
-							face->MakePoly(3, trianglePositionsIndices);
-							if ( maxMaterialId != 0 )
-								face->material = maxMaterialId;
+                    ++faceIndex;
+                    }
+                    nextTristripStartIndex += faceVertexCount;
+                    }*/
+                    break;
+                }
+            case COLLADAFW::MeshPrimitive::TRIANGLE_FANS:
+                {
+                    cout << "[GeometryImporter] Triangle fans" << endl;
+                    /*
+                    const COLLADAFW::Trifans* trifans = (const COLLADAFW::Trifans*) meshPrimitive;
+                    const COLLADAFW::UIntValuesArray& positionIndices =  trifans->getPositionIndices();
+                    const COLLADAFW::UIntValuesArray& faceVertexCountArray = trifans->getGroupedVerticesVertexCountArray();
+                    size_t nextTrifanStartIndex = 0;
+                    for ( size_t k = 0, count = faceVertexCountArray.getCount(); k < count; ++k)
+                    {
+                    unsigned int faceVertexCount = faceVertexCountArray[k];
+                    int trianglePositionsIndices[3];
+                    //the first vertex is the same for all fans
+                    trianglePositionsIndices[0] = (int)positionIndices[nextTrifanStartIndex];
+                    for ( size_t j = nextTrifanStartIndex + 2, lastVertex = nextTrifanStartIndex +  faceVertexCount; j < lastVertex; ++j )
+                    {
+                    trianglePositionsIndices[1] = (int)positionIndices[j - 1];
+                    trianglePositionsIndices[2] = (int)positionIndices[j];
+                    MNFace* face = polgonmesh.F((int)faceIndex);
+                    face->MakePoly(3, trianglePositionsIndices);
+                    if ( maxMaterialId != 0 )
+                    face->material = maxMaterialId;
 
-							++faceIndex;
-						}
-						nextTrifanStartIndex += faceVertexCount;
-					}
-					break;
-				}
-			case COLLADAFW::MeshPrimitive::POLYGONS:
-				{
-					const COLLADAFW::Polygons* polygons = (const COLLADAFW::Polygons*) meshPrimitive;
-					const COLLADAFW::UIntValuesArray& positionIndices =  polygons->getPositionIndices();
-					const COLLADAFW::IntValuesArray& faceVertexCountArray = polygons->getGroupedVerticesVertexCountArray();
-					size_t currentIndex = 0;
-					for ( size_t j = 0, count = faceVertexCountArray.getCount() ; j < count; ++j )
-					{
-						int faceVertexCount = faceVertexCountArray[j];
-						// TODO for now, we ignore holes in polygons
-						if ( faceVertexCount <= 0 )
-							continue;
-						MNFace* face = polgonMesh.F((int)faceIndex);
-						face->MakePoly(faceVertexCount, (int*) (&positionIndices[currentIndex]));
-						if ( maxMaterialId != 0 )
-							face->material = maxMaterialId;
-						currentIndex += faceVertexCount;
-						++faceIndex;
-					}
-					break;
-				}
-			case COLLADAFW::MeshPrimitive::POLYLIST:
-				{
-					const COLLADAFW::Polylist* polylist = (const COLLADAFW::Polylist*) meshPrimitive;
-					const COLLADAFW::UIntValuesArray& positionIndices =  polylist->getPositionIndices();
-					const COLLADAFW::IntValuesArray& faceVertexCountArray = polylist->getGroupedVerticesVertexCountArray();
-					size_t currentIndex = 0;
-					for ( size_t j = 0, count = faceVertexCountArray.getCount() ; j < count; ++j )
-					{
-						int faceVertexCount = faceVertexCountArray[j];
-						// polylist does not support holes!
-						if ( faceVertexCount <= 0 )
-							continue;
-						MNFace* face = polgonMesh.F((int)faceIndex);
-						face->MakePoly(faceVertexCount, (int*) (&positionIndices[currentIndex]));
-						if ( maxMaterialId != 0 )
-							face->material = maxMaterialId;
-						currentIndex += faceVertexCount;
-						++faceIndex;
-					}
-					break;
-				}
-			}
+                    ++faceIndex;
+                    }
+                    nextTrifanStartIndex += faceVertexCount;
+                    }*/
+                    break;
+                }
+            case COLLADAFW::MeshPrimitive::POLYGONS:
+                {
+                    cout << "[GeometryImporter] Polygons" << endl;
+                    /*
+                    const COLLADAFW::Polygons* polygons = (const COLLADAFW::Polygons*) meshPrimitive;
+                    const COLLADAFW::UIntValuesArray& positionIndices =  polygons->getPositionIndices();
+                    const COLLADAFW::IntValuesArray& faceVertexCountArray = polygons->getGroupedVerticesVertexCountArray();
+                    size_t currentIndex = 0;
+                    for ( size_t j = 0, count = faceVertexCountArray.getCount() ; j < count; ++j )
+                    {
+                    int faceVertexCount = faceVertexCountArray[j];
+                    // TODO for now, we ignore holes in polygons
+                    if ( faceVertexCount <= 0 )
+                    continue;
+                    MNFace* face = polgonmesh.F((int)faceIndex);
+                    face->MakePoly(faceVertexCount, (int*) (&positionIndices[currentIndex]));
+                    if ( maxMaterialId != 0 )
+                    face->material = maxMaterialId;
+                    currentIndex += faceVertexCount;
+                    ++faceIndex;
+                    }*/
+                    break;
+                }
+            case COLLADAFW::MeshPrimitive::POLYLIST:
+                {
+                    cout << "[GeometryImporter] Polylist" << endl;
+                    /*
+                    const COLLADAFW::Polylist* polylist = (const COLLADAFW::Polylist*) meshPrimitive;
+                    const COLLADAFW::UIntValuesArray& positionIndices =  polylist->getPositionIndices();
+                    const COLLADAFW::IntValuesArray& faceVertexCountArray = polylist->getGroupedVerticesVertexCountArray();
+                    size_t currentIndex = 0;
+                    for ( size_t j = 0, count = faceVertexCountArray.getCount() ; j < count; ++j )
+                    {
+                    int faceVertexCount = faceVertexCountArray[j];
+                    // polylist does not support holes!
+                    if ( faceVertexCount <= 0 )
+                    continue;
+                    MNFace* face = polgonmesh.F((int)faceIndex);
+                    face->MakePoly(faceVertexCount, (int*) (&positionIndices[currentIndex]));
+                    if ( maxMaterialId != 0 )
+                    face->material = maxMaterialId;
+                    currentIndex += faceVertexCount;
+                    ++faceIndex;
+                    }*/
+                    break;
+                }
 
-		}
-		return true;
+            default:
+                continue;
+
+        }
+
+        for(int i=0; i< finalPositions.size(); i++)
+        {
+
+            cout << finalPositions[i].x << " ; " << finalPositions[i].y << " ; " << finalPositions[i].z << endl;
+
+        }
+
+    }
+
+    triangleMesh->setVertices(finalPositions);
+
+    return true;
 }

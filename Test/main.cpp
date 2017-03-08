@@ -19,7 +19,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    string file = "/home/nabos/test.dae";
+    string file = "/home/nabos/untitled.dae";
 
     if(argc >= 2)
     {
