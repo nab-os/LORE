@@ -15,14 +15,14 @@
 namespace LORE
 {
 
-    class ModelRender :	public Mesh
+    class MeshRender :	public Mesh
     {
 
         public:
 
-            explicit ModelRender();
-            explicit ModelRender(const ModelRender*);
-            ~ModelRender();
+            explicit MeshRender();
+            explicit MeshRender(const MeshRender*);
+            ~MeshRender();
 
             void computeTangentBasis(
                     // inputs

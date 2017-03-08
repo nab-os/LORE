@@ -6,12 +6,10 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-Object::Object():   m__renderModel(),
-//					m__bulletModel(),
+Object::Object():   m__mesh(),
 					m__childs(),
 					m__positionProxy(),
-					m__scaleProxy(vec3(1.0)),
-					m__physicsEnabled(true)
+					m__scaleProxy(vec3(1.0))
 {
 
 	cout << this << " [Object] constructor" << endl;
@@ -24,13 +22,10 @@ Object::~Object()
 
 	cout << this << " [Object] destructor" << endl;
 
-	if (m__renderModel)
-		delete m__renderModel;
+	if (m__mesh)
+		delete m__mesh;
 
-//	if (m__bulletModel)
-//		delete m__bulletModel;
-
-	for (auto const &child : m__childs) {
+    for (auto const &child : m__childs) {
 
 		delete child;
 
@@ -39,20 +34,17 @@ Object::~Object()
 }
 
 
-void Object::load(/*btDiscreteDynamicsWorld* world*/)
+void Object::load()
 {
 
     cout << this << " [Object] load" << endl;
 
-	if (m__renderModel)
-		m__renderModel->load();
-
-//	if (world && m__bulletModel)
-//		m__bulletModel->load(world);
+	if (m__mesh)
+		m__mesh->load();
 
 	for (auto const &child : m__childs) {
 
-		child->load(/*world*/);
+		child->load();
 
 	}
 
@@ -65,21 +57,15 @@ void Object::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmen
     mat4 save = model;
 
 	glm::vec3 pos = m__positionProxy;
-	//glm::vec3 scale = m__scaleProxy;
+	glm::vec3 scale = m__scaleProxy;
 	//glm::vec3 rot = vec3(0, 0, 0);
 
-//	if (m__bulletModel && m__physicsEnabled)
-//    {
-//		pos = m__bulletModel->getPosition();
-		//rot = m__bulletModel->getRotation();
-//    }
-
 	//model = glm::scale(model, scale);
-	model = glm::translate(model, pos);
+	//model = glm::translate(model, pos);
 	//model = glm::rotate(model, );
 
-	if(m__renderModel)
-		m__renderModel->render(projection, view, model, environmentMapID);
+	if(m__mesh)
+		m__mesh->render(projection, view, model, environmentMapID);
 
 	for (auto const &child : m__childs) {
 
@@ -92,31 +78,11 @@ void Object::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmen
 }
 
 
-void Object::setRenderModel(Mesh* mesh)
+void Object::setMesh(Mesh* mesh)
 {
 
-	m__renderModel = (ModelRender*)mesh;
+	m__mesh = mesh;
 
-}
-
-
-//void Object::setBulletModel(Model* model)
-//{
-
-//	m__bulletModel = (ModelBullet*)model;
-
-//}
-
-
-Object* Object::addObject(std::string path)
-{
-
-	/*Object* obj = ObjectManager::get(path);
-
-	m__childs.push_back(obj);
-
-	return obj;*/
-	return nullptr;
 }
 
 
@@ -135,38 +101,17 @@ vector<Object*> Object::getObjects()
 
 }
 
-//void Object::applyForce(glm::vec3 pos)
-//{
-
-//    if(m__bulletModel)
-//        m__bulletModel->applyForce(pos);
-
-//}
-
-
-//void Object::setLinearVelocity(glm::vec3 vec)
-//{
-
-//    if(m__bulletModel)
-//        m__bulletModel->setLinearVelocity(vec);
-
-//}
-
 
 void Object::move(glm::vec3 pos)
 {
 
-//    if(m__bulletModel)
-//        m__bulletModel->move(pos);
+    m__positionProxy += pos;
 
 }
 
 
 void Object::setPosition(glm::vec3 pos)
 {
-
-//  if(m__bulletModel)
-//        m__bulletModel->setPosition(pos);
 
     m__positionProxy = pos;
 
@@ -175,11 +120,6 @@ void Object::setPosition(glm::vec3 pos)
 
 glm::vec3 Object::getPosition()
 {
-
-//    if(m__bulletModel && m__physicsEnabled)
-//    {
-//        m__positionProxy = m__bulletModel->getPosition();
-//    }
 
     return m__positionProxy;
 
@@ -192,39 +132,4 @@ void Object::setScale(glm::vec3 scale)
     m__scaleProxy = scale;
 
 }
-
-
-//void Object::forcePhysics()
-//{
-
-//	if(m__bulletModel)
-//        m__bulletModel->forcePhysics();
-
-//    m__physicsEnabled = true;
-
-//    for (auto const &child : m__childs) {
-
-//		child->forcePhysics();
-
-//	}
-
-//}
-
-
-//void Object::disablePhysics()
-//{
-
-//	if(m__bulletModel)
-//        m__bulletModel->disablePhysics();
-
-//    m__physicsEnabled = false;
-
-//    for (auto const &child : m__childs) {
-
-//		child->disablePhysics();
-
-//	}
-
-//}
-
 

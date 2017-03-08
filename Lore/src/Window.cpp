@@ -1,4 +1,3 @@
-//#include "stdafx.h"
 #include "Window.h"
 
 #include <iostream>
@@ -14,11 +13,10 @@ LORE::Window::Window(std::string tittle, int width, int height, int fps): m__win
 																		m__title(tittle),
 																		m__width(width),
 																		m__height(height),
-																		m__frameRate(int(1000/fps))//,
-																	//	m__camera()
+																		m__frameRate(int(1000/fps)),
+																	    m__camera(),
+                                                                        m__scene()
 {
-
-
 
 }
 
@@ -90,7 +88,6 @@ void LORE::Window::load()
 
 	}
 
-
 	//glfwSetKeyCallback(m__window, LORE::Window::key_callback);
 
 	glfwMakeContextCurrent(m__window);
@@ -102,6 +99,22 @@ void LORE::Window::load()
 	glfwSetWindowFocusCallback(m__window, window_focus_callback);
 	glfwSetWindowCloseCallback(m__window, window_close_callback);
 	glfwSetCursorPosCallback(m__window, mouse_move_callback);
+
+    m__camera = new Camera();
+    m__scene = new Scene();
+
+    m__camera->load();
+    m__scene->load();
+
+    m__camera->setScene(m__scene);
+
+    /*Object* obj = new Object();
+    obj->setMesh(Lore::m__meshLibrary->get("Cube"));
+
+    obj->load();
+
+    m__scene->addObject(obj);
+    */
 
 }
 
@@ -154,7 +167,7 @@ void LORE::Window::render()
 
 	glfwMakeContextCurrent(m__window);
 
-//	if(m__camera)
-//		m__camera->render();
+	if(m__camera)
+		m__camera->render();
 
 }

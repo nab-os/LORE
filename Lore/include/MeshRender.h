@@ -1,17 +1,10 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef MODELRENDER_H
+#define MODELRENDER_H
 
 #include <vector>
 
-#include <GL/glew.h>
-
-// Includes GLM
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include "Material.h"
 #include "Mesh.h"
+
 
 #ifndef BUFFER_OFFSET
 
@@ -22,24 +15,14 @@
 namespace LORE
 {
 
-    class Mesh
+    class ModelRender :	public Mesh
     {
 
         public:
 
-            Mesh();
-            ~Mesh();
-
-            void load();
-
-            int getVertexCount();
-            int getVerticesSize();
-            void setVertices(std::vector<glm::vec3> vertices) { m__vertices = vertices; };
-            std::vector<glm::vec3> getVertices();
-            float* getVerticesFloat();
-
-            void setMaterial(Material* mat) { m__material = mat; };
-            Material* getMaterial() { return m__material;  };
+            explicit ModelRender();
+            explicit ModelRender(const ModelRender*);
+            ~ModelRender();
 
             void computeTangentBasis(
                     // inputs
@@ -51,6 +34,7 @@ namespace LORE
                     std::vector<glm::vec3> & tangents,
                     std::vector<glm::vec3> & bitangents);
 
+            void load();
             void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
             GLuint& getVAO();
@@ -75,12 +59,6 @@ namespace LORE
 
             std::vector<glm::vec2> m__UVs;
             std::vector<glm::vec3> m__normals;
-
-            Material* m__material;
-
-            std::vector<glm::vec3> m__vertices;
-
-            static float* vec3ToFloat(std::vector<glm::vec3>);
 
     };
 

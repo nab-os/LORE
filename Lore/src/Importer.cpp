@@ -6,6 +6,10 @@
 #include <COLLADASaxFrameworkLoader/COLLADASaxFWLLoader.h>
 #include <COLLADAFramework/COLLADAFWRoot.h>
 
+#include "Camera.h"
+#include "Scene.h"
+#include "Lore.h"
+
 #include "ImportErrorHandler.h"
 
 using namespace std;
@@ -113,6 +117,7 @@ bool Importer::writeGlobalAsset( const COLLADAFW::FileInfo* asset )
 bool Importer::writeVisualScene( const COLLADAFW::VisualScene* visualScene )
 {
     cout << "VisualScene" << endl;
+
     /*
     if ( mCurrentParsingPass != GENERAL_PASS )
         return true;
@@ -189,6 +194,11 @@ bool Importer::writeCamera( const COLLADAFW::Camera* camera )
 {
 
     cout << "Camera" << endl;
+
+    Camera* cam = new Camera();
+
+    Lore::importCamera("Camera temp", cam);
+
     /*
     if ( mCurrentParsingPass != GENERAL_PASS )
         return true;
@@ -295,6 +305,11 @@ bool Importer::writeScene( const COLLADAFW::Scene* scene  )
     cout << "Scene" << endl;
     if( scene == 0  )
         return true;
+
+    Scene* lscene = new Scene();
+
+    Lore::importScene("Scene temp", lscene);
+
 /*
     const COLLADAFW::InstanceVisualScene* instanceVisualScene = scene->getInstanceVisualScene();
     COLLADAFW::UniqueId id = instanceVisualScene->getInstanciatedObjectId();

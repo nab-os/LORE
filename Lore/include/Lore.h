@@ -13,7 +13,6 @@
 #include "Scene.h"
 #include "Controller.h"
 #include "ModelRender.h"
-//#include "ModelBullet.h"
 #include "Material.h"
 //#include "Effect.h"
 #include "Texture.h"
@@ -33,16 +32,17 @@ namespace LORE
             static void unload();
 
             static Window* createWindow(std::string id, std::string name);
-            static Scene* createScene(std::string id, std::string name);
-            static Camera* createCamera(std::string id, std::string name);
-            static Object* createObject(std::string id, std::string name);
-            static ModelRender* createModelRender(std::string id, std::string name);
-            //        static ModelBullet* createModelBullet(std::string id, std::string name);
+            static bool importScene(std::string id, Scene* scene);
+            static bool importCamera(std::string id, Camera* cam);
+            static bool importObject(std::string id, Object* obj);
+            static bool importMesh(std::string id, Mesh* mesh);
             static Material* createMaterial(std::string id, std::string name);
             static Texture* createTexture(std::string id, std::string name);
             static Shader* createShader(std::string id, std::string name);
 
             static Camera* load(std::string path);
+
+            static Mesh* getMesh(std::string id);
 
         private:
 
@@ -55,8 +55,7 @@ namespace LORE
             static Library<Scene>* m__sceneLibrary;
             static Library<Camera>*	m__cameraLibrary;
             static Library<Object>*	m__objectLibrary;
-            static Library<ModelRender>* m__modelRenderLibrary;
-            //      static Library<ModelBullet>* m__modelBulletLibrary;
+            static Library<Mesh>* m__meshLibrary;
             static Library<Material>* m__materialLibrary;
             static Library<Texture>* m__textureLibrary;
             static Library<Shader>* m__shaderLibrary;

@@ -1,4 +1,4 @@
-#include "ModelRender.h"
+#include "MeshRender.h"
 
 #include <iostream>
 
@@ -6,26 +6,26 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-ModelRender::ModelRender():	Mesh(),
+MeshRender::MeshRender():	Mesh(),
 							m__VAO(),
 							m__VBO(),
 							m__UVs(),
 							m__normals()
 {
 
-	cout << this << " [ModelRender] constructor" << endl;
+	cout << this << " [MeshRender] constructor" << endl;
 
 }
 
 
-ModelRender::ModelRender(const ModelRender*) : Mesh(),
+MeshRender::MeshRender(const MeshRender*) : Mesh(),
 												m__VAO(),
 												m__VBO(),
 												m__UVs(),
 												m__normals()
 {
 
-	cout << this << " [ModelRender] copy-constructor" << endl;
+	cout << this << " [MeshRender] copy-constructor" << endl;
 
 	m__UVs.push_back(vec2(1, 0));
 	m__UVs.push_back(vec2(0, 1));
@@ -38,15 +38,15 @@ ModelRender::ModelRender(const ModelRender*) : Mesh(),
 }
 
 
-ModelRender::~ModelRender()
+MeshRender::~MeshRender()
 {
 
-	cout << this << " [ModelRender] destructor" << endl;
+	cout << this << " [MeshRender] destructor" << endl;
 
 }
 
 
-void ModelRender::computeTangentBasis(   // inputs
+void MeshRender::computeTangentBasis(   // inputs
 	std::vector<glm::vec3> & vertices,
 	std::vector<glm::vec2> & uvs,
 	std::vector<glm::vec3> & normals,
@@ -103,12 +103,12 @@ void ModelRender::computeTangentBasis(   // inputs
 }
 
 
-void ModelRender::load()
+void MeshRender::load()
 {
 
 	Mesh::load();
 
-	cout << this << " [ModelRender] load" << endl;
+	cout << this << " [MeshRender] load" << endl;
 
 	int sizeVerticesBytes = this->getVerticesSize();
 	int sizeUVsBytes = this->getUVsSize();
@@ -212,7 +212,7 @@ void ModelRender::load()
 	glBindVertexArray(0);
 
 	/*
-	cout << "[ModelRender] load() : Vertices : \n";
+	cout << "[MeshRender] load() : Vertices : \n";
 	vector<vec3> vecVertices = this->getVertices();
 	for (int i = 0; i < this->getVertexCount(); i++)
 	{
@@ -221,7 +221,7 @@ void ModelRender::load()
 
 	}
 
-	cout << "[ModelRender] load() : UVs : \n";
+	cout << "[MeshRender] load() : UVs : \n";
 	for (int i = 0; i < this->getUVCount(); i++)
 	{
 
@@ -229,7 +229,7 @@ void ModelRender::load()
 
 	}
 
-	cout << "[ModelRender] load() : Normals : \n";
+	cout << "[MeshRender] load() : Normals : \n";
 	for (int i = 0; i < this->getNormalCount(); i++)
 	{
 
@@ -245,7 +245,7 @@ void ModelRender::load()
 }
 
 
-void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
+void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
 {
 
 	glEnable(GL_DEPTH_TEST);
@@ -404,7 +404,7 @@ void ModelRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint envir
 
 
 //=====VAO/VBO=====
-GLuint& ModelRender::getVAO()
+GLuint& MeshRender::getVAO()
 {
 
 	return m__VAO;
@@ -412,7 +412,7 @@ GLuint& ModelRender::getVAO()
 }
 
 
-GLuint& ModelRender::getVBO()
+GLuint& MeshRender::getVBO()
 {
 
 	return m__VBO;
@@ -422,7 +422,7 @@ GLuint& ModelRender::getVBO()
 
 
 //=====UVs=====
-int ModelRender::getUVCount()
+int MeshRender::getUVCount()
 {
 
 	return m__UVs.size();
@@ -430,7 +430,7 @@ int ModelRender::getUVCount()
 }
 
 
-int ModelRender::getUVsSize()
+int MeshRender::getUVsSize()
 {
 
 	return m__UVs.size() * 2 * sizeof(float);
@@ -438,7 +438,7 @@ int ModelRender::getUVsSize()
 }
 
 
-vector<vec2> ModelRender::getUVs()
+vector<vec2> MeshRender::getUVs()
 {
 
 	return m__UVs;
@@ -446,7 +446,7 @@ vector<vec2> ModelRender::getUVs()
 }
 
 
-float* ModelRender::getUVsFloat()
+float* MeshRender::getUVsFloat()
 {
 
 	float* res = (float*)malloc(sizeof(float) * m__UVs.size() * 2);
@@ -464,7 +464,7 @@ float* ModelRender::getUVsFloat()
 }
 
 //=====Normals=====
-int ModelRender::getNormalCount()
+int MeshRender::getNormalCount()
 {
 
 	return m__normals.size();
@@ -472,7 +472,7 @@ int ModelRender::getNormalCount()
 }
 
 
-int ModelRender::getNormalsSize()
+int MeshRender::getNormalsSize()
 {
 
 	return m__normals.size() * 3 * sizeof(float);
@@ -480,7 +480,7 @@ int ModelRender::getNormalsSize()
 }
 
 
-vector<vec3> ModelRender::getNormals()
+vector<vec3> MeshRender::getNormals()
 {
 
 	return m__normals;
@@ -488,7 +488,7 @@ vector<vec3> ModelRender::getNormals()
 }
 
 
-float* ModelRender::getNormalsFloat()
+float* MeshRender::getNormalsFloat()
 {
 
 	float* res = (float*)malloc(sizeof(float) * m__normals.size() * 3);

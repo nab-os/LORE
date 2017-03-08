@@ -40,6 +40,16 @@ int main(int argc, char** argv)
 
     });
 
+    Object* obj = new Object();
+    obj->setMesh(Lore::getMesh("Cube"));
+    obj->load();
+
+    Lore::importObject("Cube", obj);
+
+    Scene* scene = window->getScene();
+    scene->addObject(obj);
+
+
     //===================================
     cout << "===== RENDER =====" << endl;
 

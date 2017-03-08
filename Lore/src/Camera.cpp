@@ -43,16 +43,7 @@ void Camera::load()
 
     cout << this << " [Camera] load" << endl;
 
-    //ModelBullet* m = new ModelBullet();
-
-    //setBulletModel(m);
-
     Object::load(/*m__scene->getWorld()*/);
-
-    //m__scene->addRigidBody(m);
-
-    //Object::forcePhysics();
-    //Object::disablePhysics();
 
 }
 

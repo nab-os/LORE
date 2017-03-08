@@ -1,4 +1,3 @@
-//#include "stdafx.h"
 #include "Lore.h"
 
 #include <iostream>
@@ -10,8 +9,7 @@ Library<LORE::Window>* Lore::m__windowLibrary = new Library<Window>();
 Library<Scene>* Lore::m__sceneLibrary = new Library<Scene>();
 Library<Camera>* Lore::m__cameraLibrary = new Library<Camera>();
 Library<Object>* Lore::m__objectLibrary = new Library<Object>();
-Library<ModelRender>* Lore::m__modelRenderLibrary = new Library<ModelRender>();
-//Library<ModelBullet>* Lore::m__modelBulletLibrary = new Library<ModelBullet>();
+Library<Mesh>* Lore::m__meshLibrary = new Library<Mesh>();
 Library<Material>* Lore::m__materialLibrary = new Library<Material>();
 Library<Texture>* Lore::m__textureLibrary = new Library<Texture>();
 Library<Shader>* Lore::m__shaderLibrary = new Library<Shader>();
@@ -93,8 +91,7 @@ void Lore::unload()
 	Lore::m__sceneLibrary->flush();
 	Lore::m__cameraLibrary->flush();
 	Lore::m__objectLibrary->flush();
-	Lore::m__modelRenderLibrary->flush();
-//	Lore::m__modelBulletLibrary->flush();
+	Lore::m__meshLibrary->flush();
 	Lore::m__materialLibrary->flush();
 	Lore::m__textureLibrary->flush();
 	Lore::m__shaderLibrary->flush();
@@ -116,64 +113,44 @@ LORE::Window* Lore::createWindow(string id, string name)
 }
 
 
-Scene* Lore::createScene(string id, string name)
+bool Lore::importScene(string id, Scene* scene)
 {
 
-	Scene* s = new Scene(/*name*/);
+	Lore::m__sceneLibrary->add(id, scene);
 
-	Lore::m__sceneLibrary->add(id, s);
-
-	return s;
+	return true;
 
 }
 
 
-Camera* Lore::createCamera(string id, string name)
+bool Lore::importCamera(string id, Camera* cam)
 {
 
-	Camera* c = new Camera(/*name*/);
+	Lore::m__cameraLibrary->add(id, cam);
 
-	Lore::m__cameraLibrary->add(id, c);
-
-	return c;
+	return true;
 
 }
 
 
-Object* Lore::createObject(string id, string name)
+bool Lore::importObject(string id, Object* obj)
 {
 
-	Object* o = new Object(/*name*/);
+    Lore::m__objectLibrary->add(id, obj);
 
-	Lore::m__objectLibrary->add(id, o);
-
-	return o;
+	return true;
 
 }
 
 
-ModelRender* Lore::createModelRender(string id, string name)
+bool Lore::importMesh(string id, Mesh* mesh)
 {
 
-	ModelRender* m = new ModelRender(/*name*/);
+	Lore::m__meshLibrary->add(id, mesh);
 
-	Lore::m__modelRenderLibrary->add(id, m);
-
-	return m;
+    return true;
 
 }
-
-/*
-ModelBullet* Lore::createModelBullet(string id, string name)
-{
-
-	ModelBullet* m = new ModelBullet(name);
-
-	Lore::m__modelBulletLibrary->add(id, m);
-
-	return m;
-
-}*/
 
 
 Material* Lore::createMaterial(string id, string name)
@@ -220,5 +197,13 @@ Camera* Lore::load(string path)
     importer.import();
 
     return NULL;
+
+}
+
+
+Mesh* Lore::getMesh(string id)
+{
+
+    return m__meshLibrary->get(id);
 
 }
