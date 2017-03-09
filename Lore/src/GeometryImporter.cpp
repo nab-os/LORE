@@ -7,6 +7,8 @@
 #include <COLLADAFramework/COLLADAFWTriangles.h>
 #include <COLLADAFramework/COLLADAFWTristrips.h>
 #include <COLLADAFramework/COLLADAFWTrifans.h>
+#include <COLLADAFramework/COLLADAFWPolygons.h>
+#include <COLLADAFramework/COLLADAFWPolylist.h>
 
 #include "Importer.h"
 #include "ModelRender.h"
@@ -275,6 +277,8 @@ bool GeometryImporter::importPolygonMesh(  )
 
     //handleObjectReferences(mesh, polygonObject);
 
+    cout << "[GeometryImporter] importPolygonMesh: " << triangleMesh->getVertexCount() << endl;
+
     return Lore::importMesh(mesh->getName(), triangleMesh);
 
 }
@@ -332,9 +336,12 @@ bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
 
             case COLLADAFW::MeshPrimitive::TRIANGLES:
                 {
-                    //cout << "[GeometryImporter] Triangles" << endl;
+                    cout << "[GeometryImporter] Triangles" << endl;
                     const COLLADAFW::Triangles* triangles = (const COLLADAFW::Triangles*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  triangles->getPositionIndices();
+
+                    //cout << positions[i].x << " ; " << positions[i].y << " ; " << positions[i].z << endl;
+
                     for ( size_t j = 0, count = positionIndices.getCount() ; j < count; j++ )
                     {
                         finalPositions[faceIndex+j] =  positions[positionIndices[j]];
@@ -345,7 +352,7 @@ bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
 
             case COLLADAFW::MeshPrimitive::TRIANGLE_STRIPS:
                 {
-                    //cout << "[GeometryImporter] Triangle strips" << endl;
+                    cout << "[GeometryImporter] Triangle strips" << endl;
                     /*
                     const COLLADAFW::Tristrips* tristrips = (const COLLADAFW::Tristrips*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  tristrips->getPositionIndices();
@@ -385,7 +392,7 @@ bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
                 }
             case COLLADAFW::MeshPrimitive::TRIANGLE_FANS:
                 {
-                    //cout << "[GeometryImporter] Triangle fans" << endl;
+                    cout << "[GeometryImporter] Triangle fans" << endl;
                     /*
                     const COLLADAFW::Trifans* trifans = (const COLLADAFW::Trifans*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  trifans->getPositionIndices();
@@ -414,7 +421,7 @@ bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
                 }
             case COLLADAFW::MeshPrimitive::POLYGONS:
                 {
-                    //cout << "[GeometryImporter] Polygons" << endl;
+                    cout << "[GeometryImporter] Polygons b" << endl;
                     /*
                     const COLLADAFW::Polygons* polygons = (const COLLADAFW::Polygons*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  polygons->getPositionIndices();
@@ -437,25 +444,32 @@ bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
                 }
             case COLLADAFW::MeshPrimitive::POLYLIST:
                 {
-                    //cout << "[GeometryImporter] Polylist" << endl;
-                    /*
+                    cout << "[GeometryImporter] Polylist" << endl;
+
                     const COLLADAFW::Polylist* polylist = (const COLLADAFW::Polylist*) meshPrimitive;
                     const COLLADAFW::UIntValuesArray& positionIndices =  polylist->getPositionIndices();
                     const COLLADAFW::IntValuesArray& faceVertexCountArray = polylist->getGroupedVerticesVertexCountArray();
                     size_t currentIndex = 0;
+
                     for ( size_t j = 0, count = faceVertexCountArray.getCount() ; j < count; ++j )
                     {
-                    int faceVertexCount = faceVertexCountArray[j];
-                    // polylist does not support holes!
-                    if ( faceVertexCount <= 0 )
-                    continue;
-                    MNFace* face = polgonmesh.F((int)faceIndex);
-                    face->MakePoly(faceVertexCount, (int*) (&positionIndices[currentIndex]));
-                    if ( maxMaterialId != 0 )
-                    face->material = maxMaterialId;
-                    currentIndex += faceVertexCount;
-                    ++faceIndex;
-                    }*/
+                        int faceVertexCount = faceVertexCountArray[j];
+                        // polylist does not support holes!
+
+                        if(faceVertexCount != 3)
+                            cout << "[GeometryImporter]: ONLY SUPPORT TRIANGLE FACES FOR NOW /!\\" << endl;
+
+                        for(int k = 0; k < faceVertexCount; k++)
+                        {
+
+                            finalPositions.push_back(positions[positionIndices[currentIndex + k]]);
+
+                        }
+
+                        currentIndex += faceVertexCount;
+                        ++faceIndex;
+
+                    }
                     break;
                 }
 
@@ -473,9 +487,11 @@ bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
         }
         */
 
+
     }
 
     triangleMesh->setVertices(finalPositions);
+    //cout << "[GeometryImporter] importPositions: " << triangleMesh->getVertexCount() << endl;
 
     return true;
 }

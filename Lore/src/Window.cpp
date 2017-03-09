@@ -108,13 +108,7 @@ void LORE::Window::load()
 
     m__camera->setScene(m__scene);
 
-    /*Object* obj = new Object();
-    obj->setMesh(Lore::m__meshLibrary->get("Cube"));
-
-    obj->load();
-
-    m__scene->addObject(obj);
-    */
+    m__camera->setPosition(vec3(5, 5, 5));
 
 }
 

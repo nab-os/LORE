@@ -7,18 +7,18 @@ using namespace glm;
 using namespace LORE;
 
 Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse): Object(),
-m__scene(),
-m_pointCible(pointCible),
-m_axeVertical(axeVertical),
-m_phi(0),
-m_theta(0),
-m_orientation(vec3(0)),
-m_sensibilite(sensibilite),
-m_vitesse(vitesse),
-m__model(mat4(1.0)),
-m__width(width),
-m__height(height),
-m__backgroundColor(vec3(0.2, 0.2, 0.2))
+    m__scene(),
+    m_pointCible(pointCible),
+    m_axeVertical(axeVertical),
+    m_phi(0),
+    m_theta(0),
+    m_orientation(vec3(0)),
+    m_sensibilite(sensibilite),
+    m_vitesse(vitesse),
+    m__model(mat4(1.0)),
+    m__width(width),
+    m__height(height),
+    m__backgroundColor(vec3(0.2, 0.2, 0.2))
 {
 
     cout << this << " [Camera] constructor" << endl;
@@ -33,7 +33,7 @@ m__backgroundColor(vec3(0.2, 0.2, 0.2))
 Camera::~Camera()
 {
 
-	cout << this << " [Camera] destructor" << endl;
+    cout << this << " [Camera] destructor" << endl;
 
 }
 
@@ -51,12 +51,12 @@ void Camera::load()
 void Camera::render()
 {
 
-	glViewport(0, 0, m__width, m__height);
+    glViewport(0, 0, m__width, m__height);
 
-	glClearColor(m__backgroundColor.x, m__backgroundColor.y, m__backgroundColor.z, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(m__backgroundColor.x, m__backgroundColor.y, m__backgroundColor.z, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glm::mat4 view = mat4(1.0);
 
@@ -74,91 +74,91 @@ void Camera::render()
 // Méthodes
 void Camera::orienter(double xRel, double yRel)
 {
-	// Récupération des angles
+    // Récupération des angles
 
-	m_phi += -yRel * m_sensibilite;
-	m_theta += -xRel * m_sensibilite;
-
-
-	// Limitation de l'angle phi
-
-	if (m_phi > 89.0)
-		m_phi = 89.0;
-
-	else if (m_phi < -89.0)
-		m_phi = -89.0;
+    m_phi += -yRel * m_sensibilite;
+    m_theta += -xRel * m_sensibilite;
 
 
-	// Conversion des angles en radian
+    // Limitation de l'angle phi
 
-	double phiRadian = m_phi * PI / 180;
-	double thetaRadian = m_theta * PI / 180;
+    if (m_phi > 89.0)
+        m_phi = 89.0;
 
-
-	// Si l'axe vertical est l'axe X
-
-	if (m_axeVertical.x == 1.0)
-	{
-		// Calcul des coordonnées sphériques
-
-		m_orientation.x = sin(phiRadian);
-		m_orientation.y = cos(phiRadian) * cos(thetaRadian);
-		m_orientation.z = cos(phiRadian) * sin(thetaRadian);
-	}
+    else if (m_phi < -89.0)
+        m_phi = -89.0;
 
 
-	// Si c'est l'axe Y
+    // Conversion des angles en radian
 
-	else if (m_axeVertical.y == 1.0)
-	{
-		// Calcul des coordonnées sphériques
-
-		m_orientation.x = cos(phiRadian) * sin(thetaRadian);
-		m_orientation.y = sin(phiRadian);
-		m_orientation.z = cos(phiRadian) * cos(thetaRadian);
-	}
+    double phiRadian = m_phi * PI / 180;
+    double thetaRadian = m_theta * PI / 180;
 
 
-	// Sinon c'est l'axe Z
+    // Si l'axe vertical est l'axe X
 
-	else
-	{
-		// Calcul des coordonnées sphériques
+    if (m_axeVertical.x == 1.0)
+    {
+        // Calcul des coordonnées sphériques
 
-		m_orientation.x = cos(phiRadian) * cos(thetaRadian);
-		m_orientation.y = cos(phiRadian) * sin(thetaRadian);
-		m_orientation.z = sin(phiRadian);
-	}
-
-
-	// Calcul de la normale
-
-	m_deplacementLateral = cross(m_axeVertical, m_orientation);
-	m_deplacementLateral = normalize(m_deplacementLateral);
-	m_deplacement = cross(m_axeVertical, m_deplacementLateral);
-	m_deplacement = -normalize(m_deplacement);
+        m_orientation.x = sin(phiRadian);
+        m_orientation.y = cos(phiRadian) * cos(thetaRadian);
+        m_orientation.z = cos(phiRadian) * sin(thetaRadian);
+    }
 
 
-	// Calcul du point ciblé pour OpenGL
+    // Si c'est l'axe Y
 
-	m_pointCible = Object::getPosition() + m_orientation;
+    else if (m_axeVertical.y == 1.0)
+    {
+        // Calcul des coordonnées sphériques
+
+        m_orientation.x = cos(phiRadian) * sin(thetaRadian);
+        m_orientation.y = sin(phiRadian);
+        m_orientation.z = cos(phiRadian) * cos(thetaRadian);
+    }
+
+
+    // Sinon c'est l'axe Z
+
+    else
+    {
+        // Calcul des coordonnées sphériques
+
+        m_orientation.x = cos(phiRadian) * cos(thetaRadian);
+        m_orientation.y = cos(phiRadian) * sin(thetaRadian);
+        m_orientation.z = sin(phiRadian);
+    }
+
+
+    // Calcul de la normale
+
+    m_deplacementLateral = cross(m_axeVertical, m_orientation);
+    m_deplacementLateral = normalize(m_deplacementLateral);
+    m_deplacement = cross(m_axeVertical, m_deplacementLateral);
+    m_deplacement = -normalize(m_deplacement);
+
+
+    // Calcul du point ciblé pour OpenGL
+
+    m_pointCible = Object::getPosition() + m_orientation;
 }
 
 
 void Camera::deplacer(glm::vec3 direction)
 {
 
-	//glm::vec3 position = Object::getPosition();
+    //glm::vec3 position = Object::getPosition();
 
-	Object::move(direction * m_orientation * m_vitesse);
+    Object::move(direction * m_orientation * m_vitesse);
 
-	//glm::vec3 deplacement = normalize(m_orientation + direction);
+    //glm::vec3 deplacement = normalize(m_orientation + direction);
 
-	/*position = position + deplacement * m_vitesse;
+    /*position = position + deplacement * m_vitesse;
 
-	m_pointCible = position + m_orientation;
+      m_pointCible = position + m_orientation;
 
-	Object::setPosition(position);*/
+      Object::setPosition(position);*/
 
 }
 
@@ -175,90 +175,90 @@ glm::mat4 Camera::getView()
 // Getters et Setters
 void Camera::setPointcible(glm::vec3 pointCible)
 {
-	// Calcul du vecteur orientation
+    // Calcul du vecteur orientation
 
-	glm::vec3 position = Object::getPosition();
+    glm::vec3 position = Object::getPosition();
 
-	m_orientation = m_pointCible - position;
-	m_orientation = normalize(m_orientation);
-
-
-	// Si l'axe vertical est l'axe X
-
-	if (m_axeVertical.x == 1.0)
-	{
-		// Calcul des angles
-
-		m_phi = asin(m_orientation.x);
-		m_theta = acos(m_orientation.y / cos(m_phi));
-
-		if (m_orientation.y < 0)
-			m_theta *= -1;
-	}
+    m_orientation = m_pointCible - position;
+    m_orientation = normalize(m_orientation);
 
 
-	// Si c'est l'axe Y
+    // Si l'axe vertical est l'axe X
 
-	else if (m_axeVertical.y == 1.0)
-	{
-		// Calcul des angles
+    if (m_axeVertical.x == 1.0)
+    {
+        // Calcul des angles
 
-		m_phi = asin(m_orientation.y);
-		m_theta = acos(m_orientation.z / cos(m_phi));
+        m_phi = asin(m_orientation.x);
+        m_theta = acos(m_orientation.y / cos(m_phi));
 
-		if (m_orientation.z < 0)
-			m_theta *= -1;
-	}
-
-
-	// Sinon c'est l'axe Z
-
-	else
-	{
-		// Calcul des angles
-
-		m_phi = asin(m_orientation.x);
-		m_theta = acos(m_orientation.z / cos(m_phi));
-
-		if (m_orientation.z < 0)
-			m_theta *= -1;
-	}
+        if (m_orientation.y < 0)
+            m_theta *= -1;
+    }
 
 
-	// Conversion en degrés
+    // Si c'est l'axe Y
 
-	m_phi = m_phi * 180 / PI;
-	m_theta = m_theta * 180 / PI;
+    else if (m_axeVertical.y == 1.0)
+    {
+        // Calcul des angles
+
+        m_phi = asin(m_orientation.y);
+        m_theta = acos(m_orientation.z / cos(m_phi));
+
+        if (m_orientation.z < 0)
+            m_theta *= -1;
+    }
+
+
+    // Sinon c'est l'axe Z
+
+    else
+    {
+        // Calcul des angles
+
+        m_phi = asin(m_orientation.x);
+        m_theta = acos(m_orientation.z / cos(m_phi));
+
+        if (m_orientation.z < 0)
+            m_theta *= -1;
+    }
+
+
+    // Conversion en degrés
+
+    m_phi = m_phi * 180 / PI;
+    m_theta = m_theta * 180 / PI;
 }
 
 
 float Camera::getSensibilite() const
 {
-	return m_vitesse;
+    return m_vitesse;
 }
 
 
 float Camera::getVitesse() const
 {
-	return m_vitesse;
+    return m_vitesse;
 }
 
 
 void Camera::setSensibilite(float sensibilite)
 {
-	m_sensibilite = sensibilite;
+    m_sensibilite = sensibilite;
 }
 
 
 void Camera::setVitesse(float vitesse)
 {
-	m_vitesse = vitesse;
+    m_vitesse = vitesse;
 }
 
 
 bool Camera::getFly() const
 {
 
-	return m_fly;
+    return m_fly;
 
 }

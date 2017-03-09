@@ -28,9 +28,8 @@ Mesh::~Mesh()
 void Mesh::load()
 {
 
-	//cout << this << " [Mesh] load" << endl;
+	//cout << "[Mesh] load : " << getVerticesSize() << endl;
 
-    cout << "A?" << endl;
 	if(m__material)
 		m__material->load();
 
@@ -42,7 +41,6 @@ void Mesh::load()
 	//float* UVs = this->getUVsFloat();
 	//float* normals = this->getNormalsFloat();
 
-    cout << "B?" << endl;
 	//Tangent compute
 	//vector<vec3> vecTangents = this->getNormals();
 	//vector<vec3> vecBytangents = this->getNormals();
@@ -64,7 +62,6 @@ void Mesh::load()
 		glDeleteBuffers(1, &idVBO);
 
 
-    cout << "C?" << endl;
 	// Génération de l'ID
 	glGenBuffers(1, &idVBO);
 
@@ -73,12 +70,10 @@ void Mesh::load()
 	glBindBuffer(GL_ARRAY_BUFFER, idVBO);
 
 
-        cout << "D?" << endl;
 		// Allocation de la mémoire vidéo
 		glBufferData(GL_ARRAY_BUFFER, sizeVerticesBytes/* + sizeUVsBytes + sizeNormalsBytes*3*/, 0, GL_STATIC_DRAW); // * 3 for Tangent and Bytangent
 
 
-        cout << "E?" << endl;
 		// Transfert des données
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeVerticesBytes, vertices);
 		//glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes,  sizeUVsBytes,  UVs);
@@ -102,7 +97,6 @@ void Mesh::load()
 	// Génération de l'identifiant du VAO
 	glGenVertexArrays(1, &idVAO);
 
-    cout << "F?" << endl;
 
 	// Verrouillage du VAO
 	glBindVertexArray(idVAO);
@@ -114,7 +108,6 @@ void Mesh::load()
 
 			// Accès aux vertices dans la mémoire vidéo
 
-    cout << "A?" << endl;
 			//Vertices
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 			glEnableVertexAttribArray(0);
@@ -175,115 +168,8 @@ void Mesh::load()
 }
 
 
-//=====Vertices=====
-int Mesh::getVertexCount()
-{
-
-	return m__vertices.size();
-
-}
 
 
-int Mesh::getVerticesSize()
-{
-
-	int size = m__vertices.size();
-
-	return size * 3 * sizeof(float);
-
-}
-
-
-vector<vec3> Mesh::getVertices()
-{
-
-	return m__vertices;
-
-}
-
-
-float* Mesh::getVerticesFloat()
-{
-
-	return this->vec3ToFloat(m__vertices);
-
-}
-
-
-float* Mesh::vec3ToFloat(vector<vec3> tab)
-{
-
-	float* res = (float*)malloc(sizeof(float) * tab.size() * 3);
-
-	for (unsigned int i = 0; i < tab.size(); i++)
-	{
-
-		res[i*3] = tab[i].x;
-		res[i*3 + 1] = tab[i].y;
-		res[i*3 + 2] = tab[i].z;
-
-	}
-
-	return res;
-
-}
-
-
-void Mesh::computeTangentBasis(   // inputs
-	std::vector<glm::vec3> & vertices,
-	std::vector<glm::vec2> & uvs,
-	std::vector<glm::vec3> & normals,
-
-	// outputs
-	std::vector<glm::vec3> & tangents,
-	std::vector<glm::vec3> & bitangents)
-{
-
-	for (unsigned int i = 0; i<vertices.size(); i += 3) {
-
-
-		// Shortcuts for vertices
-		glm::vec3 & v0 = vertices[i + 0];
-		glm::vec3 & v1 = vertices[i + 1];
-		glm::vec3 & v2 = vertices[i + 2];
-
-
-		// Shortcuts for UVs
-		glm::vec2 & uv0 = uvs[i + 0];
-		glm::vec2 & uv1 = uvs[i + 1];
-		glm::vec2 & uv2 = uvs[i + 2];
-
-
-		// Edges of the triangle : postion delta
-		glm::vec3 deltaPos1 = v1 - v0;
-		glm::vec3 deltaPos2 = v2 - v0;
-
-
-		// UV delta
-		glm::vec2 deltaUV1 = uv1 - uv0;
-		glm::vec2 deltaUV2 = uv2 - uv0;
-
-
-		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-		glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
-		glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
-
-
-		// Set the same tangent for all three vertices of the triangle.
-
-		// They will be merged later, in vboindexer.cpp
-		tangents.push_back(tangent);
-		tangents.push_back(tangent);
-		tangents.push_back(tangent);
-
-		// Same thing for binormals
-		bitangents.push_back(bitangent);
-		bitangents.push_back(bitangent);
-		bitangents.push_back(bitangent);
-
-	}
-
-}
 
 
 void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
@@ -315,7 +201,7 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 
 	/*s->envoyerVec3("lightPositionWorldspace", Light::getInstance()->getLightPos());*/
 
-	s->envoyerVec3("colorDiffuse", getMaterial()->getDiffuseColor());
+	//s->envoyerVec3("colorDiffuse", getMaterial()->getDiffuseColor());
 
 	/*s->envoyerFloat("utilisationDiffuse", m__material->getUtilisationDiffuse());
 	s->envoyerFloat("utilisationNormal", m__material->getUtilisationNormal());
@@ -341,11 +227,11 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 	glBindTexture(GL_TEXTURE_2D, shadowMap);*/
 
 
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, environmentMapID);
+	//glActiveTexture(GL_TEXTURE1);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, environmentMapID);
 
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, getMaterial()->getDiffuseTexture()->getID());
+	//glActiveTexture(GL_TEXTURE2);
+	//glBindTexture(GL_TEXTURE_2D, getMaterial()->getDiffuseTexture()->getID());
 
 /*
 	if (m__data->getMaterial()->getUtilisationNormal())
@@ -414,7 +300,7 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 
 	glUseProgram(0);
 
-
+/*
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((const GLfloat*)&projection[0]);
 
@@ -429,7 +315,11 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 
 	std::vector<glm::vec3> vertices = this->getVertices();
 
-	for (unsigned int i=0; i < vertices.size()-1; i++){
+    cout << "[Mesh] render(): a : " << vertices.size() << endl;
+	for (unsigned int i=0; i < vertices.size(); i++)
+    {
+
+        cout << "[Mesh] render(): b : " << vertices[i].x << " ; " << vertices[i].y << " ; "<< vertices[i].z << endl;
 
 		glm::vec3 p = vertices[i];
 		glVertex3fv(&p.x);
@@ -441,7 +331,7 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 	}
 
 	glEnd();
-
+*/
 }
 
 
@@ -461,6 +351,59 @@ GLuint& Mesh::getVBO()
 
 }
 
+
+//=====Vertices=====
+int Mesh::getVertexCount()
+{
+
+	return m__vertices.size();
+
+}
+
+
+int Mesh::getVerticesSize()
+{
+
+	int size = m__vertices.size();
+
+	return size * 3 * sizeof(float);
+
+}
+
+
+vector<vec3> Mesh::getVertices()
+{
+
+	return m__vertices;
+
+}
+
+
+float* Mesh::getVerticesFloat()
+{
+
+	return this->vec3ToFloat(m__vertices);
+
+}
+
+
+float* Mesh::vec3ToFloat(vector<vec3> tab)
+{
+
+	float* res = (float*)malloc(sizeof(float) * tab.size() * 3);
+
+	for (unsigned int i = 0; i < tab.size(); i++)
+	{
+
+		res[i*3] = tab[i].x;
+		res[i*3 + 1] = tab[i].y;
+		res[i*3 + 2] = tab[i].z;
+
+	}
+
+	return res;
+
+}
 
 
 //=====UVs=====
@@ -545,5 +488,62 @@ float* Mesh::getNormalsFloat()
 	}
 
 	return res;
+
+}
+
+
+void Mesh::computeTangentBasis(   // inputs
+	std::vector<glm::vec3> & vertices,
+	std::vector<glm::vec2> & uvs,
+	std::vector<glm::vec3> & normals,
+
+	// outputs
+	std::vector<glm::vec3> & tangents,
+	std::vector<glm::vec3> & bitangents)
+{
+
+	for (unsigned int i = 0; i<vertices.size(); i += 3) {
+
+
+		// Shortcuts for vertices
+		glm::vec3 & v0 = vertices[i + 0];
+		glm::vec3 & v1 = vertices[i + 1];
+		glm::vec3 & v2 = vertices[i + 2];
+
+
+		// Shortcuts for UVs
+		glm::vec2 & uv0 = uvs[i + 0];
+		glm::vec2 & uv1 = uvs[i + 1];
+		glm::vec2 & uv2 = uvs[i + 2];
+
+
+		// Edges of the triangle : postion delta
+		glm::vec3 deltaPos1 = v1 - v0;
+		glm::vec3 deltaPos2 = v2 - v0;
+
+
+		// UV delta
+		glm::vec2 deltaUV1 = uv1 - uv0;
+		glm::vec2 deltaUV2 = uv2 - uv0;
+
+
+		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+		glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
+		glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
+
+
+		// Set the same tangent for all three vertices of the triangle.
+
+		// They will be merged later, in vboindexer.cpp
+		tangents.push_back(tangent);
+		tangents.push_back(tangent);
+		tangents.push_back(tangent);
+
+		// Same thing for binormals
+		bitangents.push_back(bitangent);
+		bitangents.push_back(bitangent);
+		bitangents.push_back(bitangent);
+
+	}
 
 }

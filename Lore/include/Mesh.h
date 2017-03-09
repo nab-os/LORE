@@ -32,29 +32,20 @@ namespace LORE
 
             void load();
 
-            int getVertexCount();
-            int getVerticesSize();
-            void setVertices(std::vector<glm::vec3> vertices) { m__vertices = vertices; };
-            std::vector<glm::vec3> getVertices();
-            float* getVerticesFloat();
-
             void setMaterial(Material* mat) { m__material = mat; };
-            Material* getMaterial() { return m__material;  };
-
-            void computeTangentBasis(
-                    // inputs
-                    std::vector<glm::vec3> & vertices,
-                    std::vector<glm::vec2> & uvs,
-                    std::vector<glm::vec3> & normals,
-
-                    // outputs
-                    std::vector<glm::vec3> & tangents,
-                    std::vector<glm::vec3> & bitangents);
 
             void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
 
             GLuint& getVAO();
             GLuint& getVBO();
+
+            Material* getMaterial() { return m__material;  };
+
+            int getVertexCount();
+            int getVerticesSize();
+            void setVertices(std::vector<glm::vec3> vertices) { m__vertices = vertices; };
+            std::vector<glm::vec3> getVertices();
+            float* getVerticesFloat();
 
             void setUVs(std::vector<glm::vec2> uvs) { m__UVs = uvs; };
             int getUVCount();
@@ -67,6 +58,16 @@ namespace LORE
             int getNormalsSize();
             std::vector<glm::vec3> getNormals();
             float* getNormalsFloat();
+
+            void computeTangentBasis(
+                    // inputs
+                    std::vector<glm::vec3> & vertices,
+                    std::vector<glm::vec2> & uvs,
+                    std::vector<glm::vec3> & normals,
+
+                    // outputs
+                    std::vector<glm::vec3> & tangents,
+                    std::vector<glm::vec3> & bitangents);
 
         private :
 
