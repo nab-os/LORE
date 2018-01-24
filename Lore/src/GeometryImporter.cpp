@@ -8,7 +8,6 @@
 #include <COLLADAFramework/COLLADAFWTristrips.h>
 #include <COLLADAFramework/COLLADAFWTrifans.h>
 #include <COLLADAFramework/COLLADAFWPolygons.h>
-#include <COLLADAFramework/COLLADAFWPolylist.h>
 
 #include "Importer.h"
 #include "ModelRender.h"
@@ -442,37 +441,6 @@ bool GeometryImporter::importPolygonMeshPositions( Mesh* triangleMesh )
                     }*/
                     break;
                 }
-            case COLLADAFW::MeshPrimitive::POLYLIST:
-                {
-                    cout << "[GeometryImporter] Polylist" << endl;
-
-                    const COLLADAFW::Polylist* polylist = (const COLLADAFW::Polylist*) meshPrimitive;
-                    const COLLADAFW::UIntValuesArray& positionIndices =  polylist->getPositionIndices();
-                    const COLLADAFW::IntValuesArray& faceVertexCountArray = polylist->getGroupedVerticesVertexCountArray();
-                    size_t currentIndex = 0;
-
-                    for ( size_t j = 0, count = faceVertexCountArray.getCount() ; j < count; ++j )
-                    {
-                        int faceVertexCount = faceVertexCountArray[j];
-                        // polylist does not support holes!
-
-                        if(faceVertexCount != 3)
-                            cout << "[GeometryImporter]: ONLY SUPPORT TRIANGLE FACES FOR NOW /!\\" << endl;
-
-                        for(int k = 0; k < faceVertexCount; k++)
-                        {
-
-                            finalPositions.push_back(positions[positionIndices[currentIndex + k]]);
-
-                        }
-
-                        currentIndex += faceVertexCount;
-                        ++faceIndex;
-
-                    }
-                    break;
-                }
-
             default:
                 continue;
 

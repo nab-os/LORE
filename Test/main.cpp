@@ -19,7 +19,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    string file = "/home/guy/untitled.dae";
+    string file = "./Objects/untitled.dae";
 
     if(argc >= 2)
     {

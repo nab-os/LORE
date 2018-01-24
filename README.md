@@ -89,6 +89,7 @@ You will need to install multiple libraries :
 
 ```bash
 apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev opencollada-dev
+apt instell libllvm-3.8 libXinerama-dev libXi-div libXcursor-dev
 ```
 
 ## Licence
