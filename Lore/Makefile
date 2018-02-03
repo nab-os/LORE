@@ -2,10 +2,11 @@ EXEC=libLore.so
 
 SOURCES=Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Material.cpp \
-		Mesh.cpp Object.cpp \
+		Mesh.cpp Object.cpp Node.cpp \
 		Shader.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
 		Lore.cpp Library.cpp \
-		Importer.cpp GeometryImporter.cpp ImportErrorHandler.cpp
+		Importer.cpp \
+		Cube.cpp
 
 OUT_DIR=lib
 OBJ_DIR=obj
@@ -16,19 +17,13 @@ IDIR=-I include \
 	 -I /usr/include \
 	 -I /usr/include/SOIL \
 	 -I /usr/include/libdrm \
-	 -I /usr/include/opencollada \
-	 -I /usr/include/opencollada/COLLADAFramework \
-	 -I /usr/include/opencollada/COLLADASaxFramework \
-	 -I /usr/include/opencollada/COLLADABaseUtils
+	 -I glTF2-loader/include
 
 LDIR=-L /usr/lib \
 	 -L /usr/local/lib \
 	 -L /usr/lib64 \
 	 -L /usr/lib/x86_64-linux-gnu \
-	 -L /usr/lib/opencollada \
-	 -L /usr/lib/opencollada/COLLADAFramework \
-	 -L /usr/lib/opencollada/COLLADASaxFrameworkLoader \
-	 -L /usr/lib/opencollada/COLLADABaseUtils
+	 -L glTF2-loader/build
 
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter -fPIC
@@ -38,8 +33,8 @@ LFLAGS=-lstdc++ \
 	   -lglfw -lrt -lm -ldl -lXrandr -lXinerama -lXext -lXcursor -lXrender -lXfixes -lX11 \
 	   -lpthread -lxcb -lXau -lXdmcp \
 	   -lSOIL \
-	   -lOpenCOLLADAFramework -lOpenCOLLADABaseUtils -lOpenCOLLADAStreamWriter -lOpenCOLLADASaxFrameworkLoader \
-	   -lGeneratedSaxParser -lMathMLSolver -lOpenCOLLADABaseUtils -lpcre -lxml2 -lLLVM-3.8
+	   -lgltf2-loader \
+	   -lpcre -lxml2 -lLLVM
 
 CC=g++
 

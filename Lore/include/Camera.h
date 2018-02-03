@@ -14,7 +14,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Object.h"
+#include "Node.h"
 
 #include "Scene.h"
 #include "Texture.h"
@@ -22,7 +22,7 @@
 namespace LORE
 {
 
-    class Camera: public Object
+    class Camera: public Node
     {
 
         public:
@@ -35,6 +35,10 @@ namespace LORE
 
             void load();
             void render();
+
+            virtual bool isEmpty() { return false; };
+            virtual bool isObject() { return false; };
+            virtual bool isCamera() { return true; };
 
             Scene* getScene(){ return m__scene; };
             void setScene(Scene* scene){ m__scene = scene; };
@@ -52,9 +56,18 @@ namespace LORE
             void setProjection(glm::mat4 projection) { m__projection = projection; };
             void setBackgroundColor(glm::vec3 color) { m__backgroundColor = color; };
 
+            void setAspectRatio(double ratio) { m__ratio = ratio; updatePerspective(); };
+            void setFar(double limit) { m__far = limit; updatePerspective(); };
+            void setNear(double limit) { m__near = limit; updatePerspective(); };
+
+            double getRatio() { return m__ratio; };
+            double getFar() { return m__far; };
+            double getNear() { return m__near; };
+
         private:
 
             glm::mat4 getView();
+            void updatePerspective();
 
             Scene* m__scene;
 
@@ -76,8 +89,9 @@ namespace LORE
             glm::mat4 m__projection;
             glm::mat4 m__model;
 
-            int m__width;
-            int m__height;
+            double m__ratio;
+            double m__far;
+            double m__near;
 
             glm::vec3 m__backgroundColor;
     };

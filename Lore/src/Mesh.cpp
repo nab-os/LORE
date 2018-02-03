@@ -28,7 +28,7 @@ Mesh::~Mesh()
 void Mesh::load()
 {
 
-	//cout << "[Mesh] load : " << getVerticesSize() << endl;
+	cout << "[Mesh] load : " << getVerticesSize() << endl;
 
 	if(m__material)
 		m__material->load();
@@ -174,6 +174,7 @@ void Mesh::load()
 
 void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
 {
+    cout << this << "[Mesh] render" << endl;
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
@@ -276,6 +277,7 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 
 	/*glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDrawArrays(GL_PATCHES, 0, getVertexCount());*/
+    cout << this << "[Mesh] render 2" << endl;
 
 	glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
 

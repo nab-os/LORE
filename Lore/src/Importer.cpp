@@ -2,20 +2,20 @@
 
 #include <iostream>
 
-#include <COLLADABaseUtils/COLLADABUPlatform.h>
-#include <COLLADASaxFrameworkLoader/COLLADASaxFWLLoader.h>
-#include <COLLADAFramework/COLLADAFWRoot.h>
+// Includes GLM
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Camera.h"
 #include "Scene.h"
 #include "Lore.h"
 
-#include "ImportErrorHandler.h"
-
+using namespace glm;
 using namespace std;
 using namespace LORE;
 
-Importer::Importer(string colladaFile): m__filePath(colladaFile), mCurrentParsingPass(GENERAL_PASS)
+Importer::Importer(string file): m__filePath(file)
 {
 
 
@@ -25,297 +25,154 @@ Importer::Importer(string colladaFile): m__filePath(colladaFile), mCurrentParsin
 Importer::~Importer()
 {
 
-
-
 }
 
-
-float Importer::convertSpaceUnit( float originalValue  )
-{
-    return originalValue * mFileInfo.unitScale;
-}
-
-
-bool Importer::import()
+void Importer::import()
 {
 
     cout << "[Importer]: import()" << endl;
 
-    ImportErrorHandler errorHandler;
-    COLLADASaxFWL::Loader loader(&errorHandler);
-    COLLADAFW::Root root(&loader, this);
+    gltf2::Asset asset = gltf2::load(m__filePath);
+    
+    cout << "[Importer]: import(): copyright " << asset.metadata.copyright << endl; 
+    cout << "[Importer]: import(): version " << asset.metadata.version << endl; 
+    cout << "[Importer]: import(): generator " << asset.metadata.generator << endl; 
 
-    if ( !root.loadDocument(m__filePath))
-        return false;
-
-    mCurrentParsingPass = CONTROLLER_DATA_PASS;
-
-
-
-}
-
-
-bool Importer::writeGlobalAsset( const COLLADAFW::FileInfo* asset )
-{
-    cout << "GlobalAsset" << endl;
-
-    mFileInfo.absoluteFileUri = asset->getAbsoluteFileUri();
-
-    const COLLADAFW::FileInfo::ValuePairPointerArray& valuePairs = asset->getValuePairArray();
-
-    float systemUnitScale = 1.0f;
-/*
-    // Retrieve the system unit information
-    int systemUnitType = UNITS_CENTIMETERS;
-    GetMasterUnitInfo(&systemUnitType, &systemUnitScale);
-
-    switch (systemUnitType)
+    for(unsigned int i = 0; i < asset.scenes.size(); ++i)
     {
-        case UNITS_INCHES:
-            systemUnitScale *= 0.0254f;
-            break;
-        case UNITS_FEET:
-            systemUnitScale *= 0.3048f;
-            break;
-        case UNITS_MILES:
-            systemUnitScale *= 1609.344f;
-            break;
-        case UNITS_MILLIMETERS:
-            systemUnitScale *= 0.001f;
-            break;
-        case UNITS_CENTIMETERS:
-            systemUnitScale *= 0.01f;
-            break;
-        case UNITS_METERS:
-            break;
-        case UNITS_KILOMETERS:
-            systemUnitScale *= 1000.0f;
-            break;
-        default: break;
-    }*/
-    mFileInfo.unitScale = (float)asset->getUnit().getLinearUnitMeter() / systemUnitScale;
-    /*delete mUnitConversionFunctors.lengthConversion;
-    mUnitConversionFunctors.lengthConversion = new ScaleConversionFunctor(mFileInfo.unitScale);
-    if ( mFileInfo.unitScale != 0)
+        importScene(asset, i);
+    }
+    
+    //Not yet implemented by glTF2-loader
+    /*for(unsigned int i = 0; i < asset.cameras.size(); ++i)
     {
-        mUnitConversionFunctors.inverseLengthConversion = new ScaleConversionFunctor(1/mFileInfo.unitScale);
+        importCamera(asset, i);
     }*/
 
-    /*COLLADAFW::FileInfo::Unit::AngularUnit angularUnit = asset->getUnit().getAngularUnit();
-    if ( angularUnit == COLLADAFW::FileInfo::Unit::DEGREES )
+    for(unsigned int i = 0; i < asset.nodes.size(); ++i)
     {
-        delete mUnitConversionFunctors.angleConversion;
-        mUnitConversionFunctors.angleConversion = ConversionFunctors::degToRad.clone();
-    }*/
+        importNode(asset, i);
+    }
 
-    mFileInfo.upAxis = asset->getUpAxisType();
-
-    return true;
-}
-
-//---------------------------------------------------------------
-bool Importer::writeVisualScene( const COLLADAFW::VisualScene* visualScene )
-{
-    cout << "VisualScene" << endl;
-
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    VisualSceneImporter visualSceneImporter(this, visualScene);
-    return visualSceneImporter.import();
-*/
-    return true;
-}
-
-//---------------------------------------------------------------
-bool Importer::writeLibraryNodes( const COLLADAFW::LibraryNodes* libraryNodes )
-{
-
-    cout << "LibNodes" << endl;
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    LibraryNodesImporter libraryNodesImporter(this, libraryNodes);
-    bool success = libraryNodesImporter.import();
-    return success;
-*/
-    return true;
-}
-
-//---------------------------------------------------------------
-bool Importer::writeGeometry( const COLLADAFW::Geometry* geometry )
-{
-
-    cout << "Geometry" << endl;
-
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    GeometryImporter geometryImporter(this, geometry);
-    return geometryImporter.import();
+    for(unsigned int i = 0; i < asset.meshes.size(); ++i)
+    {
+        importMesh(asset, i);
+    }
 
 }
 
-//---------------------------------------------------------------
-bool Importer::writeMaterial( const COLLADAFW::Material* material )
+void Importer::importScene(gltf2::Asset asset, unsigned int i)
 {
-
-    cout << "Material" << endl;
-
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    MaterialImporter materialImporter(this, material);
-    return materialImporter.import();
-*/
-    return true;
+    gltf2::Scene gscene = asset.scenes[i];
+    Scene* scene = Lore::createScene(gscene.name);
+    cout << "[Importer]: Scene: " << gscene.name << endl;
 }
 
-//---------------------------------------------------------------
-bool Importer::writeEffect( const COLLADAFW::Effect* effect )
+
+void Importer::importCamera(gltf2::Asset asset, unsigned int i)
 {
-
-    cout << "Effect" << endl;
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    EffectImporter effectImporter(this, effect);
-    return effectImporter.import();
-*/
-    return true;
+    //Not yet implemented by glTF2-loader
+    /*gltf2::Camera gcamera = asset.cameras[i];
+    Camera* camera = Lore::createCamera(gcamera.name);
+    cout << "[Importer]: Camera: " << gcamera.name << endl;
+    camera->setRatio(gcamera.perspective.aspectRatio);
+    camera->setFar(gcamera.perspective.zfar);
+    camera->setNear(gcamera.perspective.znear);*/
 }
 
-//---------------------------------------------------------------
-bool Importer::writeCamera( const COLLADAFW::Camera* camera )
+
+void Importer::importNode(gltf2::Asset asset, unsigned int i)
 {
+    gltf2::Node gnode = asset.nodes[i];
+    cout << "[Importer]: Node: " << gnode.name << endl;
 
-    cout << "Camera" << endl;
+    Node* node;
 
-    Camera* cam = new Camera();
+    if(gnode.camera != -1)
+    {
+        node = Lore::createCamera(gnode.name);
+    }else if(gnode.mesh != -1)
+    {
+        node = Lore::createObject(gnode.name);
+        importMesh(asset, gnode.mesh);
+    }else if(gnode.skin != -1)
+    {
+        cout << "[Importer] Skin not implemented" << endl;
+    }else
+    {
+        node = Lore::createNode(gnode.name);
+    }
+    
+    node->setPosition(vec3(gnode.translation[0], gnode.translation[1], gnode.translation[2]));
+    node->setScale(vec3(gnode.scale[0], gnode.scale[1], gnode.scale[2]));
 
-    Lore::importCamera("Camera temp", cam);
-
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    CameraImporter cameraImporter(this, camera);
-    return cameraImporter.import();
-*/
-    return true;
 }
 
-//---------------------------------------------------------------
-bool Importer::writeImage( const COLLADAFW::Image* image )
+
+void Importer::importMesh(gltf2::Asset asset, unsigned int i)
 {
+    gltf2::Mesh gmesh = asset.meshes[i];
+    Mesh* mesh = Lore::createMesh(gmesh.name);
+    
+    for(unsigned int j = 0; j < gmesh.primitives.size(); ++j)
+    {
+        gltf2::Primitive primitive = gmesh.primitives[j];
 
-    cout << "Image" << endl;
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
+        switch(primitive.mode)
+        {
+            case(gltf2::Primitive::Mode::Points):
+                cout << "[Importer]: " << "Points primitive mode" << endl;
+                break;
+            case(gltf2::Primitive::Mode::Lines):
+                cout << "[Importer]: " << "Lines primitive mode" << endl;
+                break;
+            case(gltf2::Primitive::Mode::LineLoop):
+                cout << "[Importer]: " << "LineLoop primitive mode" << endl;
+                break;
+            case(gltf2::Primitive::Mode::LineStrip):
+                cout << "[Importer]: " << "LineStrip primitive mode" << endl;
+                break;
+            case(gltf2::Primitive::Mode::Triangles):
+                cout << "[Importer]: " << "Triangles primitive mode" << endl;
+                cout << "[Importer]: " << "Indices: " << primitive.indices << endl;
+                break;
+            case(gltf2::Primitive::Mode::TriangleStrip):
+                cout << "[Importer]: " << "TriangleStrip primitive mode" << endl;
+                break;
+            case(gltf2::Primitive::Mode::TriangleFan):
+                cout << "[Importer]: " << "TriangleFan primitive mode" << endl;
+                break;
+            default:
+                cout << "[Importer]: Unknown primitive mode." << endl;
+        }
 
-    ImageImporter imageImporter(this, image);
-    return imageImporter.import();
-*/
-    return true;
+        gltf2::Attributes attributes = primitive.attributes;
+        for(auto it: attributes)
+        {
+            //gltf2::Accessor accessor = asset.accessors[it.second];
+            //gltf2::BufferView buffer_view = asset.bufferViews[accessor.bufferView];
+            if( it.first == "POSITION")
+            {
+                cout << "[Importer]: " << "POSITION primitive" << endl;
+            }else if(it.first == "NORMAL")
+            {
+                cout << "[Importer]: " << "NORMAL primitive" << endl;
+            }else if(it.first == "TANGENT")
+            {    
+                cout << "[Importer]: " << "TANGENT primitive" << endl;
+            }else if(it.first == "TEXCOORD_0")
+            {        
+                cout << "[Importer]: " << "TEXCOORD_0 primitive" << endl;
+            }else   
+            {    
+                cout << "[Importer]: " << it.first << " not implemented." << endl;
+            }
+        }
+    }
 }
 
-//---------------------------------------------------------------
-bool Importer::writeLight( const COLLADAFW::Light* light )
+
+void Importer::importAccessor(gltf2::Asset asset, unsigned int i)
 {
-
-    cout << "Light" << endl;
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    LightImporter lightImporter(this, light);
-    return lightImporter.import();
-*/
-    return true;
-}
-
-//---------------------------------------------------------------
-bool Importer::writeAnimation( const COLLADAFW::Animation* animation )
-{
-
-    cout << "Animation" << endl;
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    AnimationImporter animationImporter(this, animation);
-    return animationImporter.import();
-*/
-    return true;
-}
-
-//---------------------------------------------------------------
-bool Importer::writeAnimationList( const COLLADAFW::AnimationList* animationList )
-{
-
-    cout << "AnimationList" << endl;
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    AnimationListImporter animationListImporter(this, animationList);
-    return animationListImporter.import();
-*/
-    return true;
-}
-
-//---------------------------------------------------------------
-bool Importer::writeController( const COLLADAFW::Controller* controller )
-{
-
-    cout << "Controller" << endl;
-    /*
-    if ( mCurrentParsingPass != GENERAL_PASS )
-        return true;
-
-    ControllerImporter controllerImporter(this, controller);
-    return controllerImporter.import();
-*/
-    return true;
-}
-
-//---------------------------------------------------------------
-bool Importer::writeSkinControllerData( const COLLADAFW::SkinControllerData* skinControllerData )
-{
-
-    cout << "SkinControllerData" << endl;
-    /*
-    if ( mCurrentParsingPass != CONTROLLER_DATA_PASS )
-        return true;
-
-    SkinControllerDataImporter skinControllerDataImporter(this, skinControllerData);
-    return skinControllerDataImporter.import();
-*/
-    return true;
-}
-
-bool Importer::writeScene( const COLLADAFW::Scene* scene  )
-{
-
-    cout << "Scene" << endl;
-    if( scene == 0  )
-        return true;
-
-    Scene* lscene = new Scene();
-
-    Lore::importScene("Scene temp", lscene);
-
-/*
-    const COLLADAFW::InstanceVisualScene* instanceVisualScene = scene->getInstanceVisualScene();
-    COLLADAFW::UniqueId id = instanceVisualScene->getInstanciatedObjectId();
-    if(id.getFileId() == 0)
-        mVisualSceneUniqueId = id;
-*/
-    return true;
-
+    
 }

@@ -6,7 +6,7 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse): Object(),
+Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVertical, float sensibilite, float vitesse): Node(),
     m__scene(),
     m_pointCible(pointCible),
     m_axeVertical(axeVertical),
@@ -16,16 +16,16 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
     m_sensibilite(sensibilite),
     m_vitesse(vitesse),
     m__model(mat4(1.0)),
-    m__width(width),
-    m__height(height),
+    m__far(0.1),
+    m__near(500.0),
     m__backgroundColor(vec3(0.2, 0.2, 0.2))
 {
 
     cout << this << " [Camera] constructor" << endl;
 
-    m__projection = perspective(90.0, (double)m__width / m__height, 0.1, 500.0);
+    updatePerspective();
 
-    Object::setPosition(position);
+    Node::setPosition(position);
 
 }
 
@@ -43,7 +43,7 @@ void Camera::load()
 
     cout << this << " [Camera] load" << endl;
 
-    Object::load(/*m__scene->getWorld()*/);
+    Node::load(/*m__scene->getWorld()*/);
 
 }
 
@@ -51,7 +51,7 @@ void Camera::load()
 void Camera::render()
 {
 
-    glViewport(0, 0, m__width, m__height);
+    glViewport(0, 0, 1920, 1080);
 
     glClearColor(m__backgroundColor.x, m__backgroundColor.y, m__backgroundColor.z, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -72,6 +72,12 @@ void Camera::render()
 }
 
 // Méthodes
+
+void Camera::updatePerspective()
+{
+    m__projection = perspective(90.0, m__ratio, m__near, m__far);
+}
+
 void Camera::orienter(double xRel, double yRel)
 {
     // Récupération des angles
@@ -141,16 +147,16 @@ void Camera::orienter(double xRel, double yRel)
 
     // Calcul du point ciblé pour OpenGL
 
-    m_pointCible = Object::getPosition() + m_orientation;
+    m_pointCible = Node::getPosition() + m_orientation;
 }
 
 
 void Camera::deplacer(glm::vec3 direction)
 {
 
-    //glm::vec3 position = Object::getPosition();
+    //glm::vec3 position = Node::getPosition();
 
-    Object::move(direction * m_orientation * m_vitesse);
+    Node::move(direction * m_orientation * m_vitesse);
 
     //glm::vec3 deplacement = normalize(m_orientation + direction);
 
@@ -158,7 +164,7 @@ void Camera::deplacer(glm::vec3 direction)
 
       m_pointCible = position + m_orientation;
 
-      Object::setPosition(position);*/
+      Node::setPosition(position);*/
 
 }
 
@@ -167,7 +173,7 @@ glm::mat4 Camera::getView()
 {
 
     //return glm::lookAt( glm::vec3(10,10, 10), glm::vec3(m_pointCible), glm::vec3(0, 1, 0));
-    return glm::lookAt( Object::getPosition(), glm::vec3(m_pointCible), glm::vec3(0, 1, 0));
+    return glm::lookAt( Node::getPosition(), glm::vec3(m_pointCible), glm::vec3(0, 1, 0));
 
 }
 
@@ -177,7 +183,7 @@ void Camera::setPointcible(glm::vec3 pointCible)
 {
     // Calcul du vecteur orientation
 
-    glm::vec3 position = Object::getPosition();
+    glm::vec3 position = Node::getPosition();
 
     m_orientation = m_pointCible - position;
     m_orientation = normalize(m_orientation);

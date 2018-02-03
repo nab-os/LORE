@@ -8,7 +8,7 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-Scene::Scene(int width, int height):	Object(),
+Scene::Scene():	Node(),
 										m__paused(false),
 										m__environmentMap(),
 										m__lights()
@@ -35,10 +35,10 @@ void Scene::load()
 
 	cout << this << " [Scene] load" << endl;
 
-    m__environmentMap = new CubeMap();
-	m__environmentMap->load();
+    if(m__environmentMap)
+        m__environmentMap->load();
 
-    Object::load();
+    Node::load();
 
 }
 
@@ -46,20 +46,16 @@ void Scene::load()
 void Scene::render(mat4 &projection, mat4 &view, mat4 &model)
 {
 
-	this->renderObjects(projection, view, model);
+	this->renderNodes(projection, view, model);
 
 }
 
 
-void Scene::renderObjects(mat4 &projection, mat4 &view, mat4 &model)
+void Scene::renderNodes(mat4 &projection, mat4 &view, mat4 &model)
 {
-
 	mat4 saveModel = model;
-
-	Object::render(projection, view, model, m__environmentMap->getID());
-
+	Node::render(projection, view, model, m__environmentMap->getID());
 	model = saveModel;
-
 }
 
 

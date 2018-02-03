@@ -11,6 +11,8 @@
 
 #include "Window.h"
 #include "Scene.h"
+#include "Node.h"
+#include "Object.h"
 #include "Controller.h"
 #include "ModelRender.h"
 #include "Material.h"
@@ -33,15 +35,20 @@ namespace LORE
 
             static Window* createWindow(std::string id, std::string name);
             static bool importScene(std::string id, Scene* scene);
-            static bool importCamera(std::string id, Camera* cam);
-            static bool importObject(std::string id, Object* obj);
+            static bool importNode(std::string id, Node* node);
             static bool importMesh(std::string id, Mesh* mesh);
+            static Scene* createScene(std::string id);
+            static Node* createNode(std::string id);
+            static Object* createObject(std::string id);
+            static Camera* createCamera(std::string id);
+            static Mesh* createMesh(std::string id);
             static Material* createMaterial(std::string id, std::string name);
             static Texture* createTexture(std::string id, std::string name);
             static Shader* createShader(std::string id, std::string name);
 
             static Camera* load(std::string path);
 
+            static Node* getNode(std::string id);
             static Mesh* getMesh(std::string id);
 
         private:
@@ -53,8 +60,7 @@ namespace LORE
 
             static Library<Window>* m__windowLibrary;
             static Library<Scene>* m__sceneLibrary;
-            static Library<Camera>*	m__cameraLibrary;
-            static Library<Object>*	m__objectLibrary;
+            static Library<Node>*	m__nodeLibrary;
             static Library<Mesh>* m__meshLibrary;
             static Library<Material>* m__materialLibrary;
             static Library<Texture>* m__textureLibrary;

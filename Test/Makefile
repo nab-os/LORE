@@ -7,24 +7,20 @@ OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-I ../Lore/include \
+IDIR=-isystem ../Lore/include \
 	 -I /usr/include/ \
 	 -I /usr/include/SOIL \
 	 -I /usr/include/libdrm \
 	 -I /usr/include/opencollada \
-	 -I /usr/include/opencollada/COLLADAFramework \
-	 -I /usr/include/opencollada/COLLADASaxFramework \
-	 -I /usr/include/opencollada/COLLADABaseUtils
+	 -I ../Lore/glTF2-loader/include 
 
 LDIR=-L /usr/lib \
 	 -L /usr/local/lib \
 	 -L /usr/lib64 \
 	 -L /usr/lib/x86_64-linux-gnu \
 	 -L /usr/lib/opencollada \
-	 -L /usr/lib/opencollada/COLLADAFramework \
-	 -L /usr/lib/opencollada/COLLADASaxFrameworkLoader \
-	 -L /usr/lib/opencollada/COLLADABaseUtils \
-	 -L ../Lore/lib
+	 -L ../Lore/lib \
+	 -L ../Lore/glTF2-loader/build
 
 CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 LFLAGS=-lstdc++ -lLore \
@@ -33,8 +29,8 @@ LFLAGS=-lstdc++ -lLore \
 	   -lglfw -lrt -lm -ldl -lXrandr -lXinerama -lXext -lXcursor -lXrender -lXfixes -lX11 \
 	   -lpthread -lxcb -lXau -lXdmcp \
 	   -lSOIL \
-	   -lOpenCOLLADAFramework -lOpenCOLLADABaseUtils -lOpenCOLLADAStreamWriter -lOpenCOLLADASaxFrameworkLoader \
-	   -lGeneratedSaxParser -lMathMLSolver -lOpenCOLLADABaseUtils -lpcre -lxml2 -lLLVM-3.8
+	   -lgltf2-loader \
+	   -lpcre -lxml2 -lLLVM
 
 CC=g++
 

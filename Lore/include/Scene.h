@@ -11,7 +11,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Object.h"
+#include "Node.h"
 
 #include "Light.h"
 #include "CubeMap.h"
@@ -19,12 +19,12 @@
 namespace LORE
 {
 
-    class Scene: public Object
+    class Scene: public Node
     {
 
         public:
 
-            Scene(int width = 1920, int height = 1080);
+            Scene();
             virtual ~Scene();
 
             void load();
@@ -40,7 +40,7 @@ namespace LORE
             CubeMap* m__environmentMap;
             std::vector<Light*> m__lights;
 
-            void renderObjects(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
+            void renderNodes(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model);
             void renderLights();
 
     };

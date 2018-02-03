@@ -2,6 +2,7 @@
 #include <string>
 
 #include <Lore.h>
+#include <Cube.h>
 
 using namespace std;
 using namespace LORE;
@@ -19,7 +20,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    string file = "./Objects/untitled.dae";
+    string file = "./Objects/texture.gltf";
 
     if(argc >= 2)
     {
@@ -28,7 +29,7 @@ int main(int argc, char** argv)
 
     }
 
-    Camera* camera = Lore::load(file);
+    Lore::load(file);
 
     //----------
 
@@ -39,15 +40,6 @@ int main(int argc, char** argv)
         window->close();
 
     });
-
-    Object* obj = new Object();
-    obj->setMesh(Lore::getMesh("Cube"));
-    obj->load();
-
-    Lore::importObject("Cube", obj);
-
-    Scene* scene = window->getScene();
-    scene->addObject(obj);
 
 
     //===================================
