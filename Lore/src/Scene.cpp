@@ -9,52 +9,33 @@ using namespace glm;
 using namespace LORE;
 
 Scene::Scene():	Node(),
-										m__paused(false),
-										m__environmentMap(),
-										m__lights()
+                m__paused(false),
+                m__environmentMap(),
+                m__lights()
 {
-
 	cout << this << " [Scene] constructor" << endl;
-
 }
 
 
 Scene::~Scene()
 {
-
 	cout << this << " [ModelRender] destructor" << endl;
-
-    if(m__environmentMap)
-		delete m__environmentMap;
-
 }
 
 
-void Scene::load()
+void Scene::render(mat4 projection, mat4 view, mat4 model)
 {
 
-	cout << this << " [Scene] load" << endl;
-
-    if(m__environmentMap)
-        m__environmentMap->load();
-
-    Node::load();
-
-}
-
-
-void Scene::render(mat4 &projection, mat4 &view, mat4 &model)
-{
-
+    //cout << this << " [Scene] render" << endl;
 	this->renderNodes(projection, view, model);
 
 }
 
 
-void Scene::renderNodes(mat4 &projection, mat4 &view, mat4 &model)
+void Scene::renderNodes(mat4 projection, mat4 view, mat4 model)
 {
 	mat4 saveModel = model;
-	Node::render(projection, view, model, m__environmentMap->getID());
+	Node::render(projection, view, model);//, m__environmentMap->getID());
 	model = saveModel;
 }
 

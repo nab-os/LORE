@@ -26,6 +26,8 @@ LORE::Window::~Window()
 
 	cout << this << " [Window] destructor" << endl;
 
+    delete m__camera;
+
 }
 
 
@@ -65,15 +67,12 @@ void LORE::Window::window_close_callback(GLFWwindow* window)
 
 void LORE::Window::mouse_move_callback(GLFWwindow* window, double x, double y)
 {
-
 	//cout << "[Window] mouse_move_callback" << endl;
-
 }
 
 
 void LORE::Window::load()
 {
-
     cout << this << " [Window] load" << endl;
 
 	// Création de la fenêtre
@@ -101,23 +100,14 @@ void LORE::Window::load()
 	glfwSetCursorPosCallback(m__window, mouse_move_callback);
 
     m__camera = new Camera();
-    m__scene = new Scene();
-
-    m__camera->load();
-    m__scene->load();
-
-    m__camera->setScene(m__scene);
 
     m__camera->setPosition(vec3(5, 5, 5));
-
 }
 
 
 void LORE::Window::close()
 {
-
 	glfwSetWindowShouldClose(m__window, GL_TRUE);
-
 }
 
 int LORE::Window::shouldClose()
@@ -128,19 +118,14 @@ int LORE::Window::shouldClose()
 
 int LORE::Window::startFrame()
 {
-
 	int startTime = int(glfwGetTime() * 1000);
 
-
-
 	return startTime;
-
 }
 
 
 void LORE::Window::endFrame(int startTime)
 {
-
 	glfwSwapBuffers(m__window);
 
 	glfwPollEvents();
@@ -152,7 +137,6 @@ void LORE::Window::endFrame(int startTime)
 
 	if(elapsedTime < m__frameRate)
 		this_thread::sleep_for(std::chrono::milliseconds(m__frameRate - elapsedTime));
-
 }
 
 

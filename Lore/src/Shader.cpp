@@ -99,6 +99,7 @@ bool Shader::load()
 	glBindAttribLocation(m__programID, 2, "in_Normal");
 	glBindAttribLocation(m__programID, 3, "in_Tangent");
 	glBindAttribLocation(m__programID, 4, "in_Bitangent");
+	glBindAttribLocation(m__programID, 5, "in_Color");
 
 
 	// Linkage du programme

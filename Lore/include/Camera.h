@@ -27,14 +27,22 @@ namespace LORE
 
         public:
 
-            Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(0, 0, -1), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.1, float vitesse = 0.5);
+            Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(0, 0, 0), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.01, float vitesse = 0.001);
             virtual ~Camera();
 
+            void move(glm::vec3 pos);
             void deplacer(glm::vec3 direction = glm::vec3(0, 0, 0));
+            void forward();
+            void backward();
+            void left();
+            void right();
+            void up();
+            void down();
             void orienter(double xRel, double yRel);
 
-            void load();
-            void render();
+            virtual void render();
+            virtual void render(glm::mat4 projection, glm::mat4 view, glm::mat4 model);
+
 
             virtual bool isEmpty() { return false; };
             virtual bool isObject() { return false; };
@@ -53,7 +61,6 @@ namespace LORE
 
             void setPointcible(glm::vec3 pointCible);
 
-            void setProjection(glm::mat4 projection) { m__projection = projection; };
             void setBackgroundColor(glm::vec3 color) { m__backgroundColor = color; };
 
             void setAspectRatio(double ratio) { m__ratio = ratio; updatePerspective(); };

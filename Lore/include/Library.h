@@ -32,30 +32,24 @@ namespace LORE
 
                 bool has(std::string path)
                 {
-
                     return m__objects.find(path) != m__objects.end();
-
                 }
 
                 void add(std::string path, T* object)
                 {
-
                     m__objects.insert(pair<string, T*>(path, object));
-
                 }
 
                 T* get(std::string path)
                 {
-
                     return m__objects.at(path);
-
                 }
 
                 void flush()
                 {
-
+                    for(auto it: m__objects)
+                        delete(it.second);
                     m__objects.clear();
-
                 }
 
             private:

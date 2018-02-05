@@ -20,27 +20,40 @@ namespace LORE
             Shader* getShader() { return m__shader; };
             void setShader(Shader* shader) { m__shader = shader; };
 
-            glm::vec3 getDiffuseColor() { return m__diffuseColor; };
-            void setDiffuseColor(glm::vec3 color) { m__diffuseColor = color; };
+            glm::vec4 getDiffuseColor() { return m__diffuseColor; };
+            void setDiffuseColor(glm::vec4 color) { m__diffuseColor = color; };
 
-            glm::vec3 getSpecularColor() { return m__specularColor; };
-            void setSpecularColor(glm::vec3 color) { m__specularColor = color; };
+            float getMetallness() { return m__metallness; };
+            void setMetallness(float metallness) { m__metallness = metallness; };
+
+            float getRoughness() { return m__roughness; };
+            void setRoughness(float roughness) { m__roughness = roughness; };
+
+            Texture* getPbrTexture() { return m__pbrTexture; };
+            void setPbrTexture(Texture* texture) { m__pbrTexture = texture; };
 
             Texture* getDiffuseTexture() { return m__diffuseTexture; };
             void setDiffuseTexture(Texture* texture) { m__diffuseTexture = texture; };
 
-            Texture* getSpecularTexture() { return m__diffuseSpecular; };
-            void setSpecularTexture(Texture* texture) { m__diffuseSpecular = texture; };
+            Texture* getNormalTexture() { return m__normalTexture; };
+            void setNormalTexture(Texture* texture) { m__normalTexture = texture; };
+
+            bool getCulling() { return m__culling; };
+            void setCulling(bool culling) { m__culling = culling; };
 
         private:
 
             Shader* m__shader;
 
-            glm::vec3 m__diffuseColor;
-            glm::vec3 m__specularColor;
+            glm::vec4 m__diffuseColor;
+            float m__metallness;
+            float m__roughness;
 
+            Texture* m__pbrTexture;
             Texture* m__diffuseTexture;
-            Texture* m__diffuseSpecular;
+            Texture* m__normalTexture;
+
+            bool m__culling;
 
     };
 

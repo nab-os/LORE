@@ -79,6 +79,9 @@ LORE::Window* Lore::init()
 
 	}
 
+    Lore::createMaterial("default")->load();
+    Lore::createShader("default-120")->load();
+
 	return w;
 }
 
@@ -93,14 +96,6 @@ void Lore::unload()
 	Lore::m__textureLibrary->flush();
 	Lore::m__shaderLibrary->flush();
 	glfwTerminate();
-}
-
-
-LORE::Window* Lore::createWindow(string id, string name)
-{
-    LORE::Window* w = new Window(name);
-	Lore::m__windowLibrary->add(id, w);
-	return w;
 }
 
 
@@ -125,6 +120,14 @@ bool Lore::importMesh(string id, Mesh* mesh)
     cout << "[Lore]: importMesh" << endl;
 	Lore::m__meshLibrary->add(id, mesh);
     return true;
+}
+
+
+LORE::Window* Lore::createWindow(string id, string name)
+{
+    LORE::Window* w = new Window(name);
+	Lore::m__windowLibrary->add(id, w);
+	return w;
 }
 
 
@@ -168,35 +171,40 @@ Mesh* Lore::createMesh(string id)
 }
 
 
-Material* Lore::createMaterial(string id, string name)
+Material* Lore::createMaterial(string id)
 {
-	Material* m = new Material(/*name*/);
+	Material* m = new Material();
 	Lore::m__materialLibrary->add(id, m);
 	return m;
 }
 
 
-Texture* Lore::createTexture(string id, string name)
+Texture* Lore::createTexture(string id)
 {
-	Texture* t = new Texture(/*name*/);
+	Texture* t = new Texture(id);
 	Lore::m__textureLibrary->add(id, t);
 	return t;
 }
 
 
-Shader* Lore::createShader(string id, string name)
+Shader* Lore::createShader(string id)
 {
-	Shader* s = new Shader(/*name*/);
+	Shader* s = new Shader(id);
 	Lore::m__shaderLibrary->add(id, s);
 	return s;
 }
 
 
-Camera* Lore::load(string path)
+Scene* Lore::load(string path)
 {
     Importer importer(path);
-    importer.import();
-    return NULL;
+    return importer.import();
+}
+
+
+Scene* Lore::getScene(string id)
+{
+    return m__sceneLibrary->get(id);
 }
 
 
@@ -209,4 +217,22 @@ Node* Lore::getNode(string id)
 Mesh* Lore::getMesh(string id)
 {
     return m__meshLibrary->get(id);
+}
+
+
+Texture* Lore::getTexture(string id)
+{
+    return m__textureLibrary->get(id);
+}
+
+
+Material* Lore::getMaterial(string id)
+{
+    return m__materialLibrary->get(id);
+}
+
+
+Shader* Lore::getShader(string id)
+{
+    return m__shaderLibrary->get(id);
 }

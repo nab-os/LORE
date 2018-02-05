@@ -7,8 +7,8 @@ using namespace glm;
 using namespace LORE;
 
 Node::Node(): m__childs(),
-              m__position(),
-              m__scale()
+              m__position(0.0),
+              m__scale(1.0)
 {
 
 	cout << this << " [Node] constructor" << endl;
@@ -18,57 +18,30 @@ Node::Node(): m__childs(),
 
 Node::~Node()
 {
-
 	cout << this << " [Node] destructor" << endl;
-
-    for (auto const &child : m__childs) {
-
-		delete child;
-
-	}
-
 }
 
 
-void Node::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
+void Node::render(mat4 projection, mat4 view, mat4 model, GLuint environmentMapID)
 {
-
-    //cout << this << "[Node] render" << endl;
-
-    mat4 save = model;
-
-    //glm::vec3 pos = m__position;
-	//glm::vec3 scale = m__scale;
-	//glm::vec3 rot = vec3(0, 0, 0);
-
-	//model = glm::scale(model, scale);
-	//model = glm::translate(model, pos);
-	//model = glm::rotate(model, );
+    //cout << this << " [Node] render" << endl;
+    glm::mat4 local_model = getModel(model);
 
 	for (auto const &child : m__childs) {
-
-		child->render(projection, view, model, environmentMapID);
-
+		child->render(projection, view, local_model);
 	}
-
-    model = save;
-
 }
 
 
 void Node::addChild(Node* obj)
 {
-
 	m__childs.push_back(obj);
-
 }
 
 
 vector<Node*> Node::getChilds()
 {
-
 	return m__childs;
-
 }
 
 
@@ -99,5 +72,11 @@ glm::vec3 Node::getPosition()
 void Node::setScale(glm::vec3 scale)
 {
     m__scale = scale;
+}
+
+
+glm::mat4 Node::getModel(glm::mat4 model)
+{
+	return glm::translate(/*glm::rotate(*/glm::scale(model, m__scale)/*, )*/, m__position);
 }
 

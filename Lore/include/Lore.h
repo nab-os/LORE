@@ -42,14 +42,18 @@ namespace LORE
             static Object* createObject(std::string id);
             static Camera* createCamera(std::string id);
             static Mesh* createMesh(std::string id);
-            static Material* createMaterial(std::string id, std::string name);
-            static Texture* createTexture(std::string id, std::string name);
-            static Shader* createShader(std::string id, std::string name);
+            static Material* createMaterial(std::string id);
+            static Texture* createTexture(std::string id);
+            static Shader* createShader(std::string id);
 
-            static Camera* load(std::string path);
+            static Scene* load(std::string path);
 
+            static Scene* getScene(std::string id);
             static Node* getNode(std::string id);
             static Mesh* getMesh(std::string id);
+            static Texture* getTexture(std::string id);
+            static Material* getMaterial(std::string id);
+            static Shader* getShader(std::string id);
 
         private:
 

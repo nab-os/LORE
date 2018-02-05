@@ -34,32 +34,32 @@ namespace LORE
 
             void setMaterial(Material* mat) { m__material = mat; };
 
-            void render(glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, GLuint environmentMapID = 0);
-
-            GLuint& getVAO();
-            GLuint& getVBO();
+            void render(glm::mat4 projection, glm::mat4 view, glm::mat4 model, GLuint environmentMapID = 0);
 
             Material* getMaterial() { return m__material;  };
 
-            int getVertexCount();
-            int getVerticesSize();
-            void setVertices(std::vector<glm::vec3> vertices) { m__vertices = vertices; };
-            std::vector<glm::vec3> getVertices();
-            float* getVerticesFloat();
+            void setIndices(std::vector<unsigned int> indices) { m__indices = indices; };
+            std::vector<unsigned int> getIndices() { return m__indices; };
 
-            void setUVs(std::vector<glm::vec2> uvs) { m__UVs = uvs; };
-            int getUVCount();
-            int getUVsSize();
-            std::vector<glm::vec2> getUVs();
-            float* getUVsFloat();
+            void setVertices(std::vector<float> vertices) { m__vertices = vertices; };
+            std::vector<float> getVertices() { return m__vertices; };
 
-            void setNormals(std::vector<glm::vec3> normals) { m__normals = normals; };
-            int getNormalCount();
-            int getNormalsSize();
-            std::vector<glm::vec3> getNormals();
-            float* getNormalsFloat();
+            void setUVs(std::vector<float> uvs) { m__UVs = uvs; };
+            std::vector<float> getUVs() { return m__UVs; };
 
-            void computeTangentBasis(
+            void setNormals(std::vector<float> normals) { m__normals = normals; };
+            std::vector<float> getNormals() { return m__normals; };
+
+            void setColors(std::vector<float> colors) { m__colors = colors; };
+            std::vector<float> getColors() { return m__colors; };
+
+            void setIndexed(bool indexed) { m__indexed = indexed; };
+            bool getIndexed() { return m__indexed; };
+
+            void setMode(int mode) { m__mode = mode; };
+            int getMode() { return m__mode; };
+
+/*            void computeTangentBasis(
                     // inputs
                     std::vector<glm::vec3> & vertices,
                     std::vector<glm::vec2> & uvs,
@@ -68,23 +68,29 @@ namespace LORE
                     // outputs
                     std::vector<glm::vec3> & tangents,
                     std::vector<glm::vec3> & bitangents);
+                    */
 
         private :
 
             GLuint m__VAO;
-            GLuint m__VBO;
+            GLuint m__elementBuffer;
+            GLuint m__vertexBuffer;
+            GLuint m__UVBuffer;
+            GLuint m__normalBuffer;
+            GLuint m__colorBuffer;
 
-            std::vector<glm::vec2> m__UVs;
-            std::vector<glm::vec3> m__normals;
+            std::vector<float> m__UVs;
+            std::vector<float> m__normals;
+            std::vector<float> m__colors;
 
             Material* m__material;
 
-            std::vector<glm::vec3> m__vertices;
+            std::vector<unsigned int> m__indices;
+            std::vector<float> m__vertices;
 
-            static float* vec3ToFloat(std::vector<glm::vec3>);
-
+            bool m__indexed;
+            int m__mode;
     };
-
 }
 
 #endif

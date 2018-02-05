@@ -6,35 +6,24 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-Material::Material(): m__shader(), m__diffuseColor(vec3(0.5, 0, 0))
+Material::Material(): m__shader(), m__diffuseColor(vec4(0.5, 0, 0, 1)),
+    m__metallness(0.0),
+    m__roughness(0.5),
+    m__pbrTexture(),
+    m__diffuseTexture(),
+    m__normalTexture(),
+    m__culling(true)
 {
-
 	cout << this << " [Material] constructor" << endl;
-
-	m__shader = new Shader();
-
 }
 
 
 Material::~Material()
 {
-
-	if(m__shader)
-		delete m__shader;
-	if(m__diffuseTexture)
-		delete m__diffuseTexture;
-	if(m__diffuseSpecular)
-		delete m__diffuseSpecular;
-
 }
 
 
 void Material::load()
 {
-
 	cout << this << " [Material] load" << endl;
-
-	m__shader->load();
-	m__diffuseTexture->load();
-
 }

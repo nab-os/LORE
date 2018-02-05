@@ -6,152 +6,45 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-Mesh::Mesh(): m__material(), m__vertices()
+Mesh::Mesh(): m__VAO(), m__elementBuffer(), m__vertexBuffer(), m__UVBuffer(), m__normalBuffer(), m__colorBuffer(), m__material(), m__vertices(), m__indexed(false), m__mode(GL_TRIANGLES)
 {
-
 	//cout << this << " [Mesh] constructor" << endl;
-
 }
 
 
 Mesh::~Mesh()
 {
-
 	//cout << this << " [Mesh] destructor" << endl;
-
-	if (m__material)
-		delete m__material;
-
 }
 
 
 void Mesh::load()
 {
 
-	cout << "[Mesh] load : " << getVerticesSize() << endl;
-
-	if(m__material)
-		m__material->load();
-
-	int sizeVerticesBytes = this->getVerticesSize();
-	//int sizeUVsBytes = this->getUVsSize();
-	//int sizeNormalsBytes = this->getNormalsSize();
-
-	float* vertices = this->getVerticesFloat();
-	//float* UVs = this->getUVsFloat();
-	//float* normals = this->getNormalsFloat();
+	cout << "[Mesh] load: " << m__vertices.size() << endl;
 
 	//Tangent compute
-	//vector<vec3> vecTangents = this->getNormals();
-	//vector<vec3> vecBytangents = this->getNormals();
+	//vector<float> vecTangents = m__normals;
+	//vector<float> vecBytangents = m__normals;
 
-	//computeTangentBasis(this->getVertices(), this->getUVs(), this->getNormals(), vecTangents, vecBytangents);
-
-	//float* tangents = this->vec3ToFloat(vecTangents);
-	//float* bytangents = this->vec3ToFloat(vecBytangents);
-
-
-
-	GLuint& idVAO = this->getVAO();
-	GLuint& idVBO = this->getVBO();
-
-	//===============================VBO================================
-
-	// Destruction d'un éventuel ancien VBO
-	if (glIsBuffer(idVBO) == GL_TRUE)
-		glDeleteBuffers(1, &idVBO);
-
-
-	// Génération de l'ID
-	glGenBuffers(1, &idVBO);
-
-
-	// Verrouillage du VBO
-	glBindBuffer(GL_ARRAY_BUFFER, idVBO);
-
-
-		// Allocation de la mémoire vidéo
-		glBufferData(GL_ARRAY_BUFFER, sizeVerticesBytes/* + sizeUVsBytes + sizeNormalsBytes*3*/, 0, GL_STATIC_DRAW); // * 3 for Tangent and Bytangent
-
-
-		// Transfert des données
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeVerticesBytes, vertices);
-		//glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes,  sizeUVsBytes,  UVs);
-
-		//glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes,  sizeNormalsBytes, normals);
-		//glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes, sizeNormalsBytes, tangents);
-		//glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes * 2, sizeNormalsBytes, bytangents);
-
-
-
-	// Déverrouillage de l'objet
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	//=======================================================================
-	// Destruction d'un éventuel ancien VAO
-
-	if (glIsVertexArray(idVAO) == GL_TRUE)
-		glDeleteVertexArrays(1, &idVAO);
-
-
-	// Génération de l'identifiant du VAO
-	glGenVertexArrays(1, &idVAO);
-
-
-	// Verrouillage du VAO
-	glBindVertexArray(idVAO);
-
-
-		// Verrouillage du VBO
-		glBindBuffer(GL_ARRAY_BUFFER, idVBO);
-
-
-			// Accès aux vertices dans la mémoire vidéo
-
-			//Vertices
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-			glEnableVertexAttribArray(0);
-
-			//UVs
-			//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes));
-			//glEnableVertexAttribArray(1);
-
-			//Normals
-			/*glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes));
-			glEnableVertexAttribArray(2);
-
-			//Tangents
-			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes));
-			glEnableVertexAttribArray(3);
-
-			//Bytangents
-			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes + sizeNormalsBytes)); //sizeTangentBytes
-			glEnableVertexAttribArray(4);*/
-
-		// Déverrouillage du VBO
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	// Déverrouillage du VAO
-	glBindVertexArray(0);
-
-	/*
-	cout << "[Mesh] load() : Vertices : \n";
-	vector<vec3> vecVertices = this->getVertices();
-	for (int i = 0; i < this->getVertexCount(); i++)
-	{
-
-		cout << vecVertices[i].x << ", " << vecVertices[i].y << ", " << vecVertices[i].z << endl;
-
+	//computeTangentBasis(m__vertices, m__UVs, m__normals, vecTangents, vecBytangents);
+   /* 
+	cout << "[Mesh] load() : Indices : " << endl;
+    for(unsigned int i = 0; i < m__indices.size(); i+=3)
+    {
+		cout << (i/3) << ": " << m__indices[i] << ", " << m__indices[i+1] << ", " << m__indices[i+2] << endl;
 	}
 
+	cout << "[Mesh] load() : Vertices : " << endl;
+    for(unsigned int i = 0; i < m__vertices.size(); i+=3)
+    {
+		cout << (i/3) << ": " << m__vertices[i] << ", " << m__vertices[i+1] << ", " << m__vertices[i+2] << endl;
+	}
 	cout << "[Mesh] load() : UVs : \n";
-	for (int i = 0; i < this->getUVCount(); i++)
+	for (unsigned int i = 0; i < m__UVs.size(); i+=2)
 	{
-
-		cout << m__UVs[i].x << ", " << m__UVs[i].y << endl;
-
+		cout << (i/2) << ": " << m__UVs[i] << ", " << m__UVs[i+1] << endl;
 	}
-
 	cout << "[Mesh] load() : Normals : \n";
 	for (int i = 0; i < this->getNormalCount(); i++)
 	{
@@ -161,10 +54,183 @@ void Mesh::load()
 	}
 	*/
 
-	free(vertices);
-	//free(UVs);
-	//free(normals);
+	//===============================VBOs================================
 
+    if(m__indexed)
+    {
+        // Destruction d'un éventuel ancien VBO
+        if (glIsBuffer(m__elementBuffer) == GL_TRUE)
+            glDeleteBuffers(1, &m__elementBuffer);
+
+        // Génération de l'ID
+        glGenBuffers(1, &m__elementBuffer);
+
+        // Verrouillage du VBO
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m__elementBuffer);
+
+            // Allocation de la mémoire vidéo
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, m__indices.size() * sizeof(unsigned int), &m__indices[0], GL_STATIC_DRAW);
+
+        // Déverrouillage de l'objet
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    // Destruction d'un éventuel ancien VBO
+	if (glIsBuffer(m__vertexBuffer) == GL_TRUE)
+		glDeleteBuffers(1, &m__vertexBuffer);
+
+	// Génération de l'ID
+	glGenBuffers(1, &m__vertexBuffer);
+
+	// Verrouillage du VBO
+	glBindBuffer(GL_ARRAY_BUFFER, m__vertexBuffer);
+
+		// Allocation de la mémoire vidéo
+		glBufferData(GL_ARRAY_BUFFER, m__vertices.size() * sizeof(float), &m__vertices[0], GL_STATIC_DRAW);
+
+	// Déverrouillage de l'objet
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+    
+    if(m__UVs.size() > 0)
+    {
+        // Destruction d'un éventuel ancien VBO
+        if (glIsBuffer(m__UVBuffer) == GL_TRUE)
+            glDeleteBuffers(1, &m__UVBuffer);
+
+        // Génération de l'ID
+        glGenBuffers(1, &m__UVBuffer);
+
+        // Verrouillage du VBO
+        glBindBuffer(GL_ARRAY_BUFFER, m__UVBuffer);
+
+            // Allocation de la mémoire vidéo
+            glBufferData(GL_ARRAY_BUFFER, m__UVs.size() * sizeof(float), &m__UVs[0], GL_STATIC_DRAW);
+
+        // Déverrouillage de l'objet
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+	
+    
+    if(m__normals.size() > 0)
+    {
+        // Destruction d'un éventuel ancien VBO
+        if (glIsBuffer(m__normalBuffer) == GL_TRUE)
+            glDeleteBuffers(1, &m__normalBuffer);
+
+        // Génération de l'ID
+        glGenBuffers(1, &m__normalBuffer);
+
+        // Verrouillage du VBO
+        glBindBuffer(GL_ARRAY_BUFFER, m__normalBuffer);
+
+            // Allocation de la mémoire vidéo
+            glBufferData(GL_ARRAY_BUFFER, m__normals.size() * sizeof(float), &m__normals[0], GL_STATIC_DRAW);
+
+        // Déverrouillage de l'objet
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+	
+    
+    if(m__colors.size() > 0)
+    {
+        // Destruction d'un éventuel ancien VBO
+        if (glIsBuffer(m__colorBuffer) == GL_TRUE)
+            glDeleteBuffers(1, &m__colorBuffer);
+
+        // Génération de l'ID
+        glGenBuffers(1, &m__colorBuffer);
+
+        // Verrouillage du VBO
+        glBindBuffer(GL_ARRAY_BUFFER, m__colorBuffer);
+
+            // Allocation de la mémoire vidéo
+            glBufferData(GL_ARRAY_BUFFER, m__colors.size() * sizeof(float), &m__colors[0], GL_STATIC_DRAW);
+
+        // Déverrouillage de l'objet
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+
+	//=======================================================================
+	// Destruction d'un éventuel ancien VAO
+
+	if (glIsVertexArray(m__VAO) == GL_TRUE)
+		glDeleteVertexArrays(1, &m__VAO);
+
+	// Génération de l'identifiant du VAO
+	glGenVertexArrays(1, &m__VAO);
+
+	// Verrouillage du VAO
+	glBindVertexArray(m__VAO);
+
+		// Verrouillage du VBO
+		glBindBuffer(GL_ARRAY_BUFFER, m__vertexBuffer);
+
+			// Accès aux vertices dans la mémoire vidéo
+
+			//Vertices
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+			glEnableVertexAttribArray(0);
+
+		// Déverrouillage du VBO
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        if(m__UVs.size() > 0)
+        {
+            // Verrouillage du VBO
+            glBindBuffer(GL_ARRAY_BUFFER, m__UVBuffer);
+
+                // Accès aux uvs dans la mémoire vidéo
+
+                //UVs
+                glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+                glEnableVertexAttribArray(1);
+
+            // Déverrouillage du VBO
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        if(m__normals.size() > 0)
+        {
+            // Verrouillage du VBO
+            glBindBuffer(GL_ARRAY_BUFFER, m__normalBuffer);
+
+                // Accès aux normales dans la mémoire vidéo
+
+                //Normals
+                glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+                glEnableVertexAttribArray(2);
+
+            // Déverrouillage du VBO
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        if(m__colors.size() > 0)
+        {
+            // Verrouillage du VBO
+            glBindBuffer(GL_ARRAY_BUFFER, m__colorBuffer);
+
+                // Accès aux colores dans la mémoire vidéo
+
+                //colors
+                glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+                glEnableVertexAttribArray(5);
+
+            // Déverrouillage du VBO
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+/*
+			//Tangents
+			glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+			glEnableVertexAttribArray(3);
+
+			//Bytangents
+			glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+			glEnableVertexAttribArray(4);*/
+
+	// Déverrouillage du VAO
+	glBindVertexArray(0);
 }
 
 
@@ -172,136 +238,90 @@ void Mesh::load()
 
 
 
-void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
+void Mesh::render(mat4 projection, mat4 view, mat4 model, GLuint environmentMapID)
 {
-    cout << this << "[Mesh] render" << endl;
+    //cout << this << "[Mesh] render" << endl;
 
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
+    if(m__material->getCulling())
+        glEnable(GL_CULL_FACE);
+    else
+        glDisable(GL_CULL_FACE);
 
-	Shader* s = new Shader("default-120");//getMaterial()->getShader();
-    s->load();
+    Shader* s = m__material->getShader();
 
 	glUseProgram(s->getProgramID());
 
-	glBindVertexArray(getVAO());
+	glBindVertexArray(m__VAO);
 
-	s->envoyerMat4("projection", projection);
-	s->envoyerMat4("view", view);
-	s->envoyerMat4("model", model);
-	s->envoyerMat4("MVP", projection * view * model);
+    s->envoyerMat4("projection", projection);
+    s->envoyerMat4("view", view);
+    s->envoyerMat4("model", model);
 
-	/*s->envoyerVec3("cameraPos", cameraPos);
-	s->envoyerMat4("cameraProjection", depthProjection);
-	s->envoyerMat4("cameraView", depthView);
-	s->envoyerMat4("cameraModel", depthModel);
-	s->envoyerMat4("cameraMVP", depthBias * (depthProjection * (depthView * depthModel)));*/
+    s->envoyerVec4("u_diffuseColor", m__material->getDiffuseColor());
+    s->envoyerFloat("u_metalness", m__material->getMetallness());
+    s->envoyerFloat("u_roughness", m__material->getRoughness());
+    
+    if(m__material->getDiffuseTexture())
+    {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, m__material->getDiffuseTexture()->getID());
+        s->envoyer1I("u_diffuseTexture", 0); 
+        s->envoyer1I("u_useDiffuseTexture", 1); 
+    }else
+    {
+        s->envoyer1I("u_useDiffuseTexture", 0); 
+    }
+    
+    if(m__material->getPbrTexture())
+    {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m__material->getPbrTexture()->getID());
+        s->envoyer1I("u_pbrTexture", 1); 
+        s->envoyer1I("u_usePbrTexture", 1); 
+    }else
+    {
+        s->envoyer1I("u_usePbrTexture", 0); 
+    }
+    
+    if(m__material->getNormalTexture())
+    {
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, m__material->getNormalTexture()->getID());
+        s->envoyer1I("u_normalTexture", 2); 
+        s->envoyer1I("u_useNormalTexture", 1); 
+    }else
+    {
+        s->envoyer1I("u_useNormalTexture", 0); 
+    }
 
-	/*s->envoyerMat3("MV3x3", glm::mat3(view * model));
-	s->envoyerMat3("M3x3", glm::mat3(model));*/
-
-	/*s->envoyerVec3("lightPositionWorldspace", Light::getInstance()->getLightPos());*/
-
-	//s->envoyerVec3("colorDiffuse", getMaterial()->getDiffuseColor());
-
-	/*s->envoyerFloat("utilisationDiffuse", m__material->getUtilisationDiffuse());
-	s->envoyerFloat("utilisationNormal", m__material->getUtilisationNormal());
-	s->envoyerFloat("utilisationSpecular", m__material->getUtilisationSpecular());
-	s->envoyerFloat("utilisationDisplacement", m__material->getUtilisationDisplacement());
-	s->envoyerFloat("utilisationReflection", m__data->getMaterial()->getUtilisationReflection());
-	s->envoyerFloat("utilisationRefraction", m__data->getMaterial()->getUtilisationRefraction());*/
-
-	s->envoyer1I("shadowMap1", 0);
-	s->envoyer1I("shadowMap2", 0);
-	s->envoyer1I("environment", 1);
-	s->envoyer1I("diffuse", 2);
-	s->envoyer1I("normal", 3);
-	s->envoyer1I("specular", 4);
-	s->envoyer1I("displacement", 5);
-	s->envoyer1I("reflection", 6);
-	s->envoyer1I("refraction", 7);
-
-	//s->envoyerFloat("spreadFactor", Light::getInstance()->spread);
-
-
-	/*glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, shadowMap);*/
-
-
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, environmentMapID);
-
-	//glActiveTexture(GL_TEXTURE2);
-	//glBindTexture(GL_TEXTURE_2D, getMaterial()->getDiffuseTexture()->getID());
-
-/*
-	if (m__data->getMaterial()->getUtilisationNormal())
-	{
-
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureNormal()->getTextureID());
-
-	}
-
-	if (m__data->getMaterial()->getUtilisationSpecular())
-	{
-
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureSpecular()->getTextureID());
-
-	}
-
-	if (m__data->getMaterial()->getUtilisationDisplacement())
-	{
-
-	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureDisplacement()->getTextureID());
-
-	}
-
-	if (m__data->getMaterial()->getUtilisationReflection())
-	{
-
-	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureReflection()->getTextureID());
-
-	}
-
-	if (m__data->getMaterial()->getUtilisationRefraction())
-	{
-
-	glActiveTexture(GL_TEXTURE7);
-	glBindTexture(GL_TEXTURE_2D, m__data->getMaterial()->getTextureRefraction()->getTextureID());
-
-	}*/
-
-	/*glPatchParameteri(GL_PATCH_VERTICES, 3);
+    /*glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDrawArrays(GL_PATCHES, 0, getVertexCount());*/
-    cout << this << "[Mesh] render 2" << endl;
+    //cout << this << "[Mesh] render 2" << endl;
 
-	glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
+    if(m__indexed)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m__elementBuffer);
 
-	/*glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE7);
-	glBindTexture(GL_TEXTURE_2D, 0);*/
+        // Draw the triangles !
+        glDrawElements(
+                m__mode,      // mode
+                m__indices.size(),    // count
+                GL_UNSIGNED_INT,   // type
+                (void*)0           // element array buffer offset
+        );
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }else
+    {
+        glDrawArrays(m__mode, 0, m__vertices.size());
+    }
+    
+    glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindVertexArray(0);
 
 	glUseProgram(0);
-
 /*
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((const GLfloat*)&projection[0]);
@@ -315,20 +335,17 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 
 	glBegin(GL_LINES);
 
-	std::vector<glm::vec3> vertices = this->getVertices();
-
-    cout << "[Mesh] render(): a : " << vertices.size() << endl;
-	for (unsigned int i=0; i < vertices.size(); i++)
+    cout << "[Mesh] render(): a : " << m__vertices.size() << endl;
+	for (unsigned int i=0; i < m__vertices.size(); i+=3)
     {
 
-        cout << "[Mesh] render(): b : " << vertices[i].x << " ; " << vertices[i].y << " ; "<< vertices[i].z << endl;
+        cout << "[Mesh] render(): b : " << m__vertices[i] << " ; " << m__vertices[i] << " ; " << m__vertices[i] << endl;
 
-		glm::vec3 p = vertices[i];
-		glVertex3fv(&p.x);
+		glVertex3fv(&m__vertices[i]);
 
-		glm::vec3 o = glm::normalize(m__normals[i]);
-		p+=o*0.1f;
-		glVertex3fv(&p.x);
+//		glm::vec3 o = glm::normalize(m__normals[i]);
+//		p+=o*0.1f;
+//		glVertex3fv(&p.x);
 
 	}
 
@@ -337,163 +354,7 @@ void Mesh::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentM
 }
 
 
-//=====VAO/VBO=====
-GLuint& Mesh::getVAO()
-{
-
-	return m__VAO;
-
-}
-
-
-GLuint& Mesh::getVBO()
-{
-
-	return m__VBO;
-
-}
-
-
-//=====Vertices=====
-int Mesh::getVertexCount()
-{
-
-	return m__vertices.size();
-
-}
-
-
-int Mesh::getVerticesSize()
-{
-
-	int size = m__vertices.size();
-
-	return size * 3 * sizeof(float);
-
-}
-
-
-vector<vec3> Mesh::getVertices()
-{
-
-	return m__vertices;
-
-}
-
-
-float* Mesh::getVerticesFloat()
-{
-
-	return this->vec3ToFloat(m__vertices);
-
-}
-
-
-float* Mesh::vec3ToFloat(vector<vec3> tab)
-{
-
-	float* res = (float*)malloc(sizeof(float) * tab.size() * 3);
-
-	for (unsigned int i = 0; i < tab.size(); i++)
-	{
-
-		res[i*3] = tab[i].x;
-		res[i*3 + 1] = tab[i].y;
-		res[i*3 + 2] = tab[i].z;
-
-	}
-
-	return res;
-
-}
-
-
-//=====UVs=====
-int Mesh::getUVCount()
-{
-
-	return m__UVs.size();
-
-}
-
-
-int Mesh::getUVsSize()
-{
-
-	return m__UVs.size() * 2 * sizeof(float);
-
-}
-
-
-vector<vec2> Mesh::getUVs()
-{
-
-	return m__UVs;
-
-}
-
-
-float* Mesh::getUVsFloat()
-{
-
-	float* res = (float*)malloc(sizeof(float) * m__UVs.size() * 2);
-
-	for (unsigned int i = 0; i < m__UVs.size(); i++)
-	{
-
-		res[i*2] = m__UVs[i].x;
-		res[i*2 + 1] = m__UVs[i].y;
-
-	}
-
-	return res;
-
-}
-
-//=====Normals=====
-int Mesh::getNormalCount()
-{
-
-	return m__normals.size();
-
-}
-
-
-int Mesh::getNormalsSize()
-{
-
-	return m__normals.size() * 3 * sizeof(float);
-
-}
-
-
-vector<vec3> Mesh::getNormals()
-{
-
-	return m__normals;
-
-}
-
-
-float* Mesh::getNormalsFloat()
-{
-
-	float* res = (float*)malloc(sizeof(float) * m__normals.size() * 3);
-
-	for (unsigned int i = 0; i < m__normals.size(); i += 3)
-	{
-
-		res[i] = m__normals[i].x;
-		res[i + 1] = m__normals[i].y;
-		res[i + 2] = m__normals[i].z;
-
-	}
-
-	return res;
-
-}
-
-
+/*
 void Mesh::computeTangentBasis(   // inputs
 	std::vector<glm::vec3> & vertices,
 	std::vector<glm::vec2> & uvs,
@@ -548,4 +409,4 @@ void Mesh::computeTangentBasis(   // inputs
 
 	}
 
-}
+}*/

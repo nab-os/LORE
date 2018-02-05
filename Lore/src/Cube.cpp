@@ -16,13 +16,30 @@ Cube::Cube(): Mesh()
 
 	cout << this << " [Cube] constructor" << endl;
 
-    vector<vec3> vertices;
-    vertices.push_back(vec3(0, 0, 0));
-    vertices.push_back(vec3(0, 1, 0));
-    vertices.push_back(vec3(1, 0, 0));
-    vertices.push_back(vec3(0, 1, 0));
-    vertices.push_back(vec3(1, 1, 0));
-    vertices.push_back(vec3(1, 0, 0));
+    vector<float> vertices;
+    vertices.push_back(0);
+    vertices.push_back(0);
+    vertices.push_back(0);
+
+    vertices.push_back(0);
+    vertices.push_back(1);
+    vertices.push_back(0);
+
+    vertices.push_back(1);
+    vertices.push_back(0);
+    vertices.push_back(0);
+
+    vertices.push_back(0);
+    vertices.push_back(1);
+    vertices.push_back(0);
+
+    vertices.push_back(1);
+    vertices.push_back(1);
+    vertices.push_back(0);
+
+    vertices.push_back(1);
+    vertices.push_back(0);
+    vertices.push_back(0);
 
     setVertices(vertices);
 

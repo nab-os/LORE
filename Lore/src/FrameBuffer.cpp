@@ -58,8 +58,6 @@ void FrameBuffer::load()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	m__camera->load();
-
 }
 
 
