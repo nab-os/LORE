@@ -7,30 +7,54 @@ OBJ_DIR=obj
 
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
-IDIR=-isystem ../Lore/include \
-	 -I /usr/include/ \
-	 -I /usr/include/SOIL \
-	 -I /usr/include/libdrm \
-	 -I /usr/include/opencollada \
-	 -I ../Lore/glTF2-loader/include 
+ifeq ($(OS),Windows_NT)
+	
+	IDIR=-isystem ../Lore/include \
+		 -I C://Mingw/include \
+		 -I C://Mingw/glew/include \
+		 -I C://Mingw/glfw/include \
+		 -I C://Mingw/SOIL/src \
+		 -I C://Mingw/glm \
+		 -I ../Lore/glTF2-loader/include
+	
+	LDIR=-L C://Mingw/lib \
+		 -L C://MinGW/glew/lib/Release/Win32 \
+		 -L C://Mingw/glfw/lib-mingw \
+		 -L C://Mingw/SOIL/lib \
+		 -L ../Lore/lib \
+		 -L ../Lore/glTF2-loader/build
+		 
+	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
+	LFLAGS=-lstdc++ \
+		   -lLore \
+		   -lSOIL \
+		   -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 \
+		   -lgltf2-loader
+else
 
-LDIR=-L /usr/lib \
-	 -L /usr/local/lib \
-	 -L /usr/lib64 \
-	 -L /usr/lib/x86_64-linux-gnu \
-	 -L /usr/lib/opencollada \
-	 -L ../Lore/lib \
-	 -L ../Lore/glTF2-loader/build
-
-CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
-LFLAGS=-lstdc++ -lLore \
-	   -lXi -lGLEW -lGLU -lm -lGL -lm -lpthread -ldl -ldrm \
-	   -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm \
-	   -lglfw -lrt -lm -ldl -lXrandr -lXinerama -lXext -lXcursor -lXrender -lXfixes -lX11 \
-	   -lpthread -lxcb -lXau -lXdmcp \
-	   -lSOIL \
-	   -lgltf2-loader \
-	   -lpcre -lxml2 -lLLVM
+	IDIR=-I include \
+		 -I /usr/include \
+		 -I /usr/include/SOIL \
+		 -I /usr/include/libdrm \
+		 -I glTF2-loader/include
+	
+	LDIR=-L /usr/lib \
+		 -L /usr/local/lib \
+		 -L /usr/lib64 \
+		 -L /usr/lib/x86_64-linux-gnu \
+		 -L glTF2-loader/build
+		 
+	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
+	LFLAGS=-lstdc++ \
+		   -lLore \
+		   -lXi -lGLEW -lm -lGL -lm -lpthread -ldl -ldrm \
+		   -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm \
+		   -lglfw -lrt -lm -ldl -lXrandr -lXinerama -lXext -lXcursor -lXrender -lXfixes -lX11 \
+		   -lpthread -lxcb -lXau -lXdmcp \
+		   -lSOIL \
+		   -lgltf2-loader \
+		   -lpcre -lxml2 -lLLVM
+endif
 
 CC=g++
 

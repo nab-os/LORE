@@ -1,10 +1,16 @@
+ifeq ($(OS),Windows_NT)
+	MAKE=@mingw32-make
+else
+	MAKE=@make
+endif
+	
 all:
 	@echo "=====Compiling Lore Library====="
-	@make -C Lore
+	$(MAKE) -C Lore
 	@echo "=====Compiling Test project====="
-	@make -C Test
+		$(MAKE) -C Test
 	@echo "=====Compiling Done====="
 
 clean:
-	@make -C Lore clean
-	@make -C Test clean
+	$(MAKE) -C Lore clean
+	$(MAKE) -C Test clean

@@ -4,6 +4,7 @@
 
 #include <chrono>
 #include <thread>
+#include "Thread.h"
 
 using namespace std;
 using namespace glm;
@@ -136,7 +137,7 @@ void LORE::Window::endFrame(int startTime)
 	//cout << elapsedTime << endl;
 
 	if(elapsedTime < m__frameRate)
-		this_thread::sleep_for(std::chrono::milliseconds(m__frameRate - elapsedTime));
+		Thread::sleep(m__frameRate - elapsedTime);
 }
 
 
