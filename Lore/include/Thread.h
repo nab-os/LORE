@@ -4,7 +4,7 @@
 
 #elif __linux__
 
-    #include "ThreadUnix.h"
+    #include "ThreadPosix.h"
 
 #elif __APPLE
 

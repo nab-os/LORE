@@ -55,9 +55,9 @@ else
 		 -L /usr/lib/x86_64-linux-gnu \
 		 -L glTF2-loader/build
 		 
-	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
+	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter -fPIC
 	LFLAGS=-lstdc++ \
-		   -lXi -lGLEW -lm -lGL -lm -lpthread -ldl -ldrm \
+		   -lXi -lGLEW -lGLU -lm -lGL -lm -lpthread -ldl -ldrm \
 		   -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm \
 		   -lglfw -lrt -lm -ldl -lXrandr -lXinerama -lXext -lXcursor -lXrender -lXfixes -lX11 \
 		   -lpthread -lxcb -lXau -lXdmcp \
@@ -72,6 +72,7 @@ all: init $(OUT_DIR)/$(EXEC)
 
 $(OUT_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
+	#ar rcs $@ $^
 	$(CC) -o $@ $^ $(LDIR) $(LFLAGS) -shared
 
 $(OBJ_DIR)/%.o: src/%.cpp
