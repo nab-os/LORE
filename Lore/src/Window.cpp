@@ -24,11 +24,9 @@ LORE::Window::Window(std::string tittle, int width, int height, int fps): m__win
 
 LORE::Window::~Window()
 {
-
 	cout << this << " [Window] destructor" << endl;
 
     delete m__camera;
-
 }
 
 
@@ -40,19 +38,15 @@ void LORE::Window::error_callback(int error, const char* description)
 
 void LORE::Window::window_size_callback(GLFWwindow* window, int width, int height)
 {
-
 	cout << "[Window] window_size_callback" << endl;
-
 }
 
 
 void LORE::Window::window_focus_callback(GLFWwindow* window, int state)
 {
-
 	cout << "[Window] window_focus_callback: " << state << endl;
 
 	//static_cast<Window*>(glfwGetWindowUserPointer(window))->m__paused = !state;
-
 }
 
 void LORE::Window::window_close_callback(GLFWwindow* window)
@@ -134,7 +128,7 @@ void LORE::Window::endFrame(int startTime)
 	int endTime = int(glfwGetTime() * 1000);
 	int elapsedTime = endTime - startTime;
 
-	//cout << elapsedTime << endl;
+	//cout << 1.0/elapsedTime*1000 << " fps" << endl;
 
 	if(elapsedTime < m__frameRate)
 		Thread::sleep(m__frameRate - elapsedTime);
@@ -143,10 +137,8 @@ void LORE::Window::endFrame(int startTime)
 
 void LORE::Window::render()
 {
-
 	glfwMakeContextCurrent(m__window);
 
 	if(m__camera)
 		m__camera->render();
-
 }

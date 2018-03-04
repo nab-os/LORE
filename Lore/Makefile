@@ -6,7 +6,7 @@ endif
 
 SOURCES=Window.cpp Scene.cpp Camera.cpp Controller.cpp \
 		Material.cpp \
-		Mesh.cpp Object.cpp Node.cpp \
+		Mesh.cpp Light.cpp Object.cpp Node.cpp \
 		Shader.cpp Texture.cpp CubeMap.cpp FrameBuffer.cpp \
 		Lore.cpp Library.cpp \
 		Importer.cpp \

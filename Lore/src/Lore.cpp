@@ -80,6 +80,7 @@ LORE::Window* Lore::init()
 	}
 
     Lore::createMaterial("default")->load();
+    Lore::createShader("default")->load();
     Lore::createShader("default-120")->load();
 
 	return w;

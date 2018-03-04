@@ -23,23 +23,6 @@ Scene::~Scene()
 }
 
 
-void Scene::render(mat4 projection, mat4 view, mat4 model)
-{
-
-    //cout << this << " [Scene] render" << endl;
-	this->renderNodes(projection, view, model);
-
-}
-
-
-void Scene::renderNodes(mat4 projection, mat4 view, mat4 model)
-{
-	mat4 saveModel = model;
-	Node::render(projection, view, model);//, m__environmentMap->getID());
-	model = saveModel;
-}
-
-
 void Scene::renderLights()
 {
 

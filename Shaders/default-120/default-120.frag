@@ -1,44 +1,49 @@
 #version 120
 
-varying vec4 position;
-varying vec2 uv;
-varying vec3 normal;
-varying vec4 color;
+varying vec3 v_position;
+varying vec3 v_objectPosition;
+varying vec2 v_uv;
+varying vec4 v_color;
+varying vec3 v_normal;
+varying vec3 v_tangent;
+varying vec3 v_bitangent;
+varying vec3 v_cameraDirection;
+varying vec3 v_lightDirection;
+varying mat3 v_TBN;
 
 uniform vec4 u_diffuseColor;
 uniform float u_metallness;
 uniform float u_roughness;
 
+uniform int u_useVertexColor;
 uniform int u_useDiffuseTexture;
 uniform int u_usePbrTexture;
 uniform int u_useNormalTexture;
 
+uniform samplerCube u_environmentMap;
 uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_pbrTexture;
 uniform sampler2D u_normalTexture;
+uniform sampler2D u_occlusionTexture;
 
 void main()
 {
+    vec3 environment = textureCube(u_environmentMap, v_objectPosition).xyz; 
+    vec3 diffuse = texture2D(u_diffuseTexture, v_uv).xyz;
+
+    vec3 occlusion =  texture2D(u_occlusionTexture, v_uv).xyz;
+    occlusion = pow(occlusion, vec3(2));
+
+    vec3 normal_tangentSpace =  texture2D(u_normalTexture, v_uv).xyz;
+    normal_tangentSpace = v_TBN * normalize(normal_tangentSpace * 2.0 - 1.0);
     
-    // ===== Textures or not =====
-    vec4 diffuse = u_diffuseColor;
-    if(u_useDiffuseTexture > 0)
-    {
-        diffuse = texture2D(u_diffuseTexture, uv);
-    }
+    float shadow = clamp(dot(v_lightDirection, normal_tangentSpace), 0.0, 1.0);
 
-    float metallness = u_metallness;
-    float roughness = u_roughness;
-    if(u_usePbrTexture > 0)
-    {
-        vec2 temp = texture2D(u_pbrTexture, uv).xy;
-        metallness = temp.x;
-        roughness = temp.y;
-    }
+    vec3 reflectDirection = reflect(-v_lightDirection, normal_tangentSpace);
+    vec3 halfDir = normalize(v_lightDirection + v_cameraDirection);
+    float specular = pow(max(dot(normal_tangentSpace, halfDir), 0.0), 32);
 
-    // ===== Compute =====
+    vec3 final = diffuse * shadow * occlusion;
     
-    vec4 final = vec4(diffuse.xyz, 1);
-
-    gl_FragColor = final;
+    gl_FragColor = vec4(environment, 1.0);
 }

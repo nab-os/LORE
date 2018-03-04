@@ -32,17 +32,18 @@ ifeq ($(OS),Windows_NT)
 		   -lgltf2-loader
 else
 
-	IDIR=-I include \
+	IDIR=-isystem ../Lore/include \
 		 -I /usr/include \
 		 -I /usr/include/SOIL \
 		 -I /usr/include/libdrm \
-		 -I glTF2-loader/include
+		 -I ../Lore/glTF2-loader/include
 	
 	LDIR=-L /usr/lib \
 		 -L /usr/local/lib \
 		 -L /usr/lib64 \
 		 -L /usr/lib/x86_64-linux-gnu \
-		 -L glTF2-loader/build
+		 -L ../Lore/lib \
+		 -L ../Lore/glTF2-loader/build
 		 
 	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
 	LFLAGS=-lstdc++ \

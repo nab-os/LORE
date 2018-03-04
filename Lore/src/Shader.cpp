@@ -35,10 +35,9 @@ Shader::~Shader()
 
 bool Shader::load()
 {
-
 	cout << this << " [Shader] load" << endl;
 
-	// Destruction d'un éventuel ancien Shader
+    // Destruction d'un éventuel ancien Shader
 	if (glIsShader(m__vertexID) == GL_TRUE)
 		glDeleteShader(m__vertexID);
 
@@ -54,15 +53,11 @@ bool Shader::load()
 	if (glIsShader(m__fragmentID) == GL_TRUE)
 		glDeleteShader(m__fragmentID);
 
-
-
 	if (glIsProgram(m__programID) == GL_TRUE)
 		glDeleteProgram(m__programID);
 
-
 	cout << this << " [Shader] load() 1 : " << m__vertexShaderFile << endl;
 	cout << this << " [Shader] load() 2 : " << m__fragmentShaderFile << endl;
-
 
 	// Compilation des shaders
 	if (!compilerShader(m__vertexID, GL_VERTEX_SHADER, m__vertexShaderFile))
@@ -80,10 +75,8 @@ bool Shader::load()
 	if (!compilerShader(m__fragmentID, GL_FRAGMENT_SHADER, m__fragmentShaderFile))
 		return false;
 
-
 	// Création du programme
 	m__programID = glCreateProgram();
-
 
 	// Association des shaders
 	glAttachShader(m__programID, m__vertexID);
@@ -91,7 +84,6 @@ bool Shader::load()
 	//glAttachShader(m__programID, m__tessEvaluationID);
 	//glAttachShader(m__programID, m__geometryID);
 	glAttachShader(m__programID, m__fragmentID);
-
 
 	// Verrouillage des entrées shader
 	glBindAttribLocation(m__programID, 0, "in_Vertex");
@@ -101,50 +93,38 @@ bool Shader::load()
 	glBindAttribLocation(m__programID, 4, "in_Bitangent");
 	glBindAttribLocation(m__programID, 5, "in_Color");
 
-
 	// Linkage du programme
 	glLinkProgram(m__programID);
-
 
 	// Vérification du linkage
 	GLint erreurLink(0);
 	glGetProgramiv(m__programID, GL_LINK_STATUS, &erreurLink);
 
-
 	// S'il y a eu une erreur
 	if (erreurLink != GL_TRUE)
 	{
-
 		// Récupération de la taille de l'erreur
 		GLint tailleErreur(0);
 		glGetProgramiv(m__programID, GL_INFO_LOG_LENGTH, &tailleErreur);
 
-
 		// Allocation de mémoire
 		char *erreur = new char[tailleErreur + 1];
-
 
 		// Récupération de l'erreur
 		glGetShaderInfoLog(m__programID, tailleErreur, &tailleErreur, erreur);
 		erreur[tailleErreur] = '\0';
 
-
 		// Affichage de l'erreur
 		cout << erreur << endl;
-
 
 		// Libération de la mémoire et retour du booléen false
 		delete[] erreur;
 		glDeleteProgram(m__programID);
 
 		return false;
-
 	} else { // Sinon c'est que tout s'est bien passé
-
 		return true;
-
 	}
-
 }
 
 

@@ -18,7 +18,7 @@
 
 namespace LORE
 {
-
+    
     class Scene: public Node
     {
 
@@ -26,8 +26,6 @@ namespace LORE
 
             Scene();
             virtual ~Scene();
-
-            virtual void render(glm::mat4 projection, glm::mat4 view, glm::mat4 model);
 
             bool getPaused(){ return m__paused; };
 
@@ -38,7 +36,6 @@ namespace LORE
             CubeMap* m__environmentMap;
             std::vector<Light*> m__lights;
 
-            void renderNodes(glm::mat4 projection, glm::mat4 view, glm::mat4 model);
             void renderLights();
 
     };

@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <Lore.h>
+#include <Light.h>
 #include <Cube.h>
 
 using namespace std;
@@ -15,7 +16,6 @@ using namespace LORE;
 
 int main(int argc, char** argv)
 {
-
     cout << "===== INIT =====" << endl;
 
     LORE::Window* window = LORE::Lore::init(); // Initializes OpenGL context and creates a Window
@@ -27,12 +27,9 @@ int main(int argc, char** argv)
     }
 
     string file = "./Objects/TriangleWithoutIndices.gltf";
-
     if(argc >= 2)
     {
-
         file = argv[1];
-
     }
 
     Scene* default_scene = Lore::load(file);
@@ -41,15 +38,28 @@ int main(int argc, char** argv)
     //cout << "Test: " << Lore::getNode("Camera") << endl;
     //cout << "Test: " << Lore::getNode("Cube") << endl;
     window->getCamera()->setScene(default_scene);
+    window->getCamera()->setPointcible(vec3(1.0));
+
+    Lore::getMaterial("default")->setCulling(true);
+
+    Material* mat = Lore::createMaterial("empty");
+    Shader* shader = Lore::createShader("empty");
+    mat->setCulling(false);
+    mat->setShader(shader);
+    shader->load();
+    Cube* cube = new Cube();
+    cube->load();
+    cube->setMaterial(mat);
+    Object* obj = Lore::createObject("cube_");
+    obj->setMesh(cube);
+    default_scene->addChild(obj);
 
     //----------
 
     Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
 
     controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
-
         window->close();
-
     });
     
     controller->bind(GLFW_KEY_W, [&window](double x, double y) {
@@ -75,21 +85,23 @@ int main(int argc, char** argv)
         window->getCamera()->orienter(dx, dy);
     });
 
+    float a = 0;
 
     //===================================
     cout << "===== RENDER =====" << endl;
 
     while (!window->shouldClose())
     {
-
         int start = window->startFrame(); // Begin the frame render process
 
         controller->check(window); // Checks all bindings for the Window and execute the fonction if it matches
+        //a += 0.01;
+        Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
+        obj->setPosition(Light::lightPosition);
 
         window->render(); //
 
         window->endFrame(start); // End the frame render process and display the image on the window
-
     }
 
     //================================
@@ -101,5 +113,4 @@ int main(int argc, char** argv)
 
     cout << "===== SUCCESSFULLY ENDED =====" << endl;
     return 0;
-
 }

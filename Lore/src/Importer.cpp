@@ -17,20 +17,23 @@ using namespace LORE;
 
 Importer::Importer(string file): m__filePath(file)
 {
-
-
-
 }
 
 Importer::~Importer()
 {
-
 }
 
 Scene* Importer::import()
 {
 
     cout << "[Importer]: import()" << endl;
+
+    if(m__filePath.substr(m__filePath.find_last_of(".") + 1) != "gltf")
+    {
+        cout << "File extension must be .gltf" << endl;
+        exit(1);
+        return NULL;
+    }
 
     gltf2::Asset asset = gltf2::load(m__filePath);
     
@@ -135,6 +138,8 @@ void Importer::importMaterial(gltf2::Asset asset, unsigned int i)
         material->setDiffuseTexture(m__textures[pbr.baseColorTexture.index]);
     if(gmaterial.normalTexture.index != -1)
         material->setNormalTexture(m__textures[gmaterial.normalTexture.index]);
+    if(gmaterial.occlusionTexture.index != -1)
+        material->setOcclusionTexture(m__textures[gmaterial.occlusionTexture.index]);
 
     material->setDiffuseColor(glm::vec4(pbr.baseColorFactor[0], pbr.baseColorFactor[1], pbr.baseColorFactor[2], pbr.baseColorFactor[3]));
     material->setMetallness(pbr.metallicFactor);
@@ -216,7 +221,7 @@ void Importer::importMesh(gltf2::Asset asset, unsigned int i)
             }else if(it.first == "TANGENT")
             {    
                 cout << "[Importer]: " << "TANGENT attribute" << endl;
-                //mesh->setTangents(values);
+                mesh->setTangents(values);
             }else if(it.first == "COLOR_0")
             {    
                 cout << "[Importer]: " << "COLOR_0 attribute" << endl;

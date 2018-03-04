@@ -22,13 +22,13 @@ Node::~Node()
 }
 
 
-void Node::render(mat4 projection, mat4 view, mat4 model, GLuint environmentMapID)
+void Node::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint environmentMapID)
 {
     //cout << this << " [Node] render" << endl;
     glm::mat4 local_model = getModel(model);
 
 	for (auto const &child : m__childs) {
-		child->render(projection, view, local_model);
+		child->render(renderer, projection, view, local_model);
 	}
 }
 

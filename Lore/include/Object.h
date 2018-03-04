@@ -27,7 +27,7 @@ namespace LORE
             ~Object();
 
             void load();
-            void render(glm::mat4 projection, glm::mat4 view, glm::mat4 model, GLuint environmentMapID = 0);
+            void render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model, GLuint environmentMapID = 0);
 
             virtual bool isEmpty() { return false; };
             virtual bool isObject() { return true; };

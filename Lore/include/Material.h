@@ -38,6 +38,9 @@ namespace LORE
             Texture* getNormalTexture() { return m__normalTexture; };
             void setNormalTexture(Texture* texture) { m__normalTexture = texture; };
 
+            Texture* getOcclusionTexture() { return m__occlusionTexture; };
+            void setOcclusionTexture(Texture* texture) { m__occlusionTexture = texture; };
+
             bool getCulling() { return m__culling; };
             void setCulling(bool culling) { m__culling = culling; };
 
@@ -52,6 +55,7 @@ namespace LORE
             Texture* m__pbrTexture;
             Texture* m__diffuseTexture;
             Texture* m__normalTexture;
+            Texture* m__occlusionTexture;
 
             bool m__culling;
 

@@ -27,7 +27,7 @@ namespace LORE
 
         public:
 
-            Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(0, 0, 0), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.01, float vitesse = 0.001);
+            Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(0, 0, 0), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.04, float vitesse = 0.001);
             virtual ~Camera();
 
             void move(glm::vec3 pos);
@@ -41,7 +41,7 @@ namespace LORE
             void orienter(double xRel, double yRel);
 
             virtual void render();
-            virtual void render(glm::mat4 projection, glm::mat4 view, glm::mat4 model);
+            virtual void render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model);
 
 
             virtual bool isEmpty() { return false; };
@@ -71,6 +71,8 @@ namespace LORE
             double getFar() { return m__far; };
             double getNear() { return m__near; };
 
+            GLuint getEnvironmentMap() { return m__environmentMap; };
+
         private:
 
             glm::mat4 getView();
@@ -94,13 +96,18 @@ namespace LORE
             bool m_fly;
 
             glm::mat4 m__projection;
-            glm::mat4 m__model;
 
             double m__ratio;
             double m__far;
             double m__near;
 
             glm::vec3 m__backgroundColor;
+
+            GLuint m__fbo;
+            GLuint m__rbo;
+            Texture* m__render;
+            GLuint m__environmentMap;
+
     };
 
 }

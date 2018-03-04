@@ -22,7 +22,7 @@ namespace LORE
             Node();
             virtual ~Node();
 
-            virtual void render(glm::mat4 projection, glm::mat4 view, glm::mat4 model, GLuint environmentMapID = 0);
+            virtual void render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model, GLuint environmentMapID = 0);
 
             Node* addChild(std::string path = "default");
             void addChild(Node* obj);

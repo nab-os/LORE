@@ -18,17 +18,17 @@ Object::~Object()
 }
 
 
-void Object::render(mat4 projection, mat4 view, mat4 model, GLuint environmentMapID)
+void Object::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint environmentMapID)
 {
     //cout << this << "[Object] render" << endl;
     glm::mat4 local_model = getModel(model);
 
 	if(m__mesh)
-		m__mesh->render(projection, view, local_model, environmentMapID);
+		m__mesh->render(renderer, projection, view, local_model, environmentMapID);
     else
         cout << "[Object]: mesh not set !" << endl;
 
-    Node::render(projection, view, model, environmentMapID);
+    Node::render(renderer, projection, view, model, environmentMapID);
 }
 
 

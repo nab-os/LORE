@@ -15,11 +15,13 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
     m_orientation(vec3(0)),
     m_sensibilite(sensibilite),
     m_vitesse(0.05),
-    m__model(mat4(1.0)),
     m__ratio(16.0/9.0),
     m__far(500.0),
     m__near(0.1),
-    m__backgroundColor(vec3(0.2, 0.2, 0.2))
+    m__backgroundColor(vec3(0.2, 0.2, 0.2)),
+    m__fbo(),
+    m__render(),
+    m__rbo()
 {
 
     cout << this << " [Camera] constructor" << endl;
@@ -27,47 +29,94 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
     m__projection = perspective(90.0, m__ratio, m__near, m__far);
 
     Node::setPosition(position);
+    m__environmentMap = SOIL_load_OGL_cubemap
+	(
+		"Textures/right.jpg",
+		"Textures/left.jpg",
+		"Textures/top.jpg",
+		"Textures/bottom.jpg",
+		"Textures/back.jpg",
+		"Textures/front.jpg",
+		SOIL_LOAD_RGB,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS
+	);
+   
+    /*
+    m__render = new Texture();
+    m__render->load();
+    cout << "Texture loaded" << endl;
+    glBindTexture(GL_TEXTURE_2D, m__render->getID());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 800, 600, 0, 
+        //        GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    cout << "BBBB" << endl;
 
+    glGenFramebuffers(1, &m__fbo);
+    cout << "BBBB_" << endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, m__fbo);
+        cout << "CCC" << endl;
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m__render->getID(), 0);
+        //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m__render->getID(), 0);
+        cout << "DDD" << endl;
+        
+        glGenRenderbuffers(1, &m__rbo);
+        glBindRenderbuffer(GL_RENDERBUFFER, m__rbo);  
+            cout << "EEE" << endl;
+
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m__rbo);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;  
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    cout << "FFF" << endl;
+    */
 }
 
 
 Camera::~Camera()
 {
-
     cout << this << " [Camera] destructor" << endl;
-
+    delete m__render;
 }
 
 
 void Camera::render()
 {
-
     //cout << this << " [Camera] render" << endl;
-
-    glViewport(0, 0, 1280, 768);
-
-    glClearColor(m__backgroundColor.x, m__backgroundColor.y, m__backgroundColor.z, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    glm::mat4 view = getView();
-    glm::mat4 local_model = getModel(glm::mat4(1.0));
-
-    if(m__scene)
-        m__scene->render(m__projection, m__model, view);
-    else
-        cout << "[Camera]: Scene not set !" << endl;
-
-    Node::render(m__projection, m__model, view);
-
+    render(NULL, m__projection, getView(), getModel(mat4(1.0)));
 }
 
 
-void Camera::render(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
+void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
 {
-    render();
-    Node::render(projection, view, model);
+    if(renderer != this)
+    {
+        //cout << this << " [Camera] render" << endl;
+       // glBindFramebuffer(GL_FRAMEBUFFER, m__fbo);
+            glViewport(0, 0, 1280, 768);
+
+            glClearColor(m__backgroundColor.x, m__backgroundColor.y, m__backgroundColor.z, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+            glm::mat4 view = getView();
+            glm::mat4 local_model = getModel(model);
+
+            if(m__scene)
+                m__scene->render(this, m__projection, mat4(1.0), view);
+            else
+                cout << "[Camera]: Scene not set !" << endl;
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    Node::render(renderer, projection, view, model);
 }
 
 // Méthodes
