@@ -17,19 +17,14 @@
 #include "Mesh.h"
 
 #ifndef BUFFER_OFFSET
-
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
-
 #endif
 
 namespace LORE
 {
-
     class Mesh
     {
-
         public:
-
             Mesh();
             ~Mesh();
 
@@ -39,7 +34,7 @@ namespace LORE
 
             void render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model, GLuint environmentMapID = 0);
 
-            Material* getMaterial() { return m__material;  };
+            Material* getMaterial() { return m__material; };
 
             void setIndices(std::vector<unsigned int> indices) { m__indices = indices; };
             std::vector<unsigned int> getIndices() { return m__indices; };

@@ -16,32 +16,18 @@ Cube::Cube(): Mesh()
 
 	cout << this << " [Cube] constructor" << endl;
 
-    vector<float> vertices;
-    vertices.push_back(0);
-    vertices.push_back(0);
-    vertices.push_back(0);
-
-    vertices.push_back(0);
-    vertices.push_back(1);
-    vertices.push_back(0);
-
-    vertices.push_back(1);
-    vertices.push_back(0);
-    vertices.push_back(0);
-
-    vertices.push_back(0);
-    vertices.push_back(1);
-    vertices.push_back(0);
-
-    vertices.push_back(1);
-    vertices.push_back(1);
-    vertices.push_back(0);
-
-    vertices.push_back(1);
-    vertices.push_back(0);
-    vertices.push_back(0);
-
+    vector<float> vertices = 
+    { 0,0,0,  -1,0,0,  1,0,0,
+      -1,-1,0, 1,-1,0,  0,10,0, 
+      -1,10,0,  1,10,0,  1,9,0, 0,9,0};
     setVertices(vertices);
+    
+    vector<unsigned int> indices = 
+    { 2,3,4,1,5,6,1,3,2,5,0,1};
+    setIndices(indices);
+
+    setIndexed(true);
+    setMode(GL_TRIANGLES);
 
 }
 

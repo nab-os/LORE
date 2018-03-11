@@ -311,7 +311,7 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
     //if(m__material->getCulling())
     //    glEnable(GL_CULL_FACE);
     //else
-        glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
 
     Shader* s = m__material->getShader();
 
@@ -319,71 +319,74 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
 
 	glBindVertexArray(m__VAO);
 
-    s->envoyerMat4("projection", projection);
-    s->envoyerMat4("view", view);
-    s->envoyerMat4("model", model);
-    
-    s->envoyerVec3("u_cameraPosition", renderer->getPosition());
-    s->envoyerVec3("u_lightPosition", Light::lightPosition);
+    s->sendMat4Uniform("projection", projection);
+    s->sendMat4Uniform("view", view);
+    s->sendMat4Uniform("model", model);
 
-    s->envoyerVec4("u_diffuseColor", m__material->getDiffuseColor());
-    s->envoyerFloat("u_metalness", m__material->getMetallness());
-    s->envoyerFloat("u_roughness", m__material->getRoughness());
-    
+    s->sendVec3Uniform("u_cameraPosition", renderer->getPosition());
+    s->sendVec3Uniform("u_lightPosition", Light::lightPosition);
+
+    s->sendVec4Uniform("u_diffuseColor", m__material->getDiffuseColor());
+    s->sendFloatUniform("u_metalness", m__material->getMetallness());
+    s->sendFloatUniform("u_roughness", m__material->getRoughness());
+
     glActiveTexture(GL_TEXTURE9);
     glBindTexture(GL_TEXTURE_CUBE_MAP, ((Camera*)renderer)->getEnvironmentMap());
-    s->envoyer1I("u_environmentMap", 9);
+    s->sendIntUniform("u_environmentMap", 9);
 
     if(m__colors.size() >  0)
     {
-        s->envoyer1I("u_useVertexColor", 1); 
+        s->sendIntUniform("u_useVertexColor", 1); 
     }else
     {
-        s->envoyer1I("u_useVertexColor", 0); 
+        s->sendIntUniform("u_useVertexColor", 0); 
     }
-    
+
     if(m__material->getDiffuseTexture())
     {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m__material->getDiffuseTexture()->getID());
-        s->envoyer1I("u_diffuseTexture", 0); 
-        s->envoyer1I("u_useDiffuseTexture", 1); 
+        s->sendIntUniform("u_diffuseTexture", 0); 
+        s->sendIntUniform("u_useDiffuseTexture", 1); 
     }else
     {
-        s->envoyer1I("u_useDiffuseTexture", 0); 
+        s->sendIntUniform("u_useDiffuseTexture", 0); 
     }
     
     if(m__material->getPbrTexture())
     {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, m__material->getPbrTexture()->getID());
-        s->envoyer1I("u_pbrTexture", 1); 
-        s->envoyer1I("u_usePbrTexture", 1); 
+        s->sendIntUniform("u_pbrTexture", 1); 
+        s->sendIntUniform("u_usePbrTexture", 1); 
     }else
     {
-        s->envoyer1I("u_usePbrTexture", 0); 
+        s->sendIntUniform("u_usePbrTexture", 0); 
     }
+
+    if(m__material)
+        m__material->sendCustomUniforms();
     
     if(m__material->getNormalTexture())
     {
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, m__material->getNormalTexture()->getID());
-        s->envoyer1I("u_normalTexture", 2); 
-        s->envoyer1I("u_useNormalTexture", 1); 
+        s->sendIntUniform("u_normalTexture", 2); 
+        s->sendIntUniform("u_useNormalTexture", 1); 
     }else
     {
-        s->envoyer1I("u_useNormalTexture", 0); 
+        s->sendIntUniform("u_useNormalTexture", 0); 
     }
     
     if(m__material->getOcclusionTexture())
     {
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, m__material->getOcclusionTexture()->getID());
-        s->envoyer1I("u_occlusionTexture", 3); 
-        s->envoyer1I("u_useOcclusionTexture", 1); 
+        s->sendIntUniform("u_occlusionTexture", 3); 
+        s->sendIntUniform("u_useOcclusionTexture", 1); 
     }else
     {
-        s->envoyer1I("u_useOcclusionTexture", 0); 
+        s->sendIntUniform("u_useOcclusionTexture", 0); 
     }
 
     /*glPatchParameteri(GL_PATCH_VERTICES, 3);

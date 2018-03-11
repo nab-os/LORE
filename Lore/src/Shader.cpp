@@ -13,15 +13,13 @@ Shader::Shader(std::string shaderName): m__programID(),
 										m__tessEvaluationID(),
 										m__geometryID(),
 										m__fragmentID(),
-										m__vertexShaderFile("Shaders/" + shaderName + "/" + shaderName + ".vert"),
-										m__tessControlShaderFile("Shaders/" + shaderName + "/" + shaderName + ".tese"),
-										m__tessEvaluationShaderFile("Shaders/" + shaderName + "/" + shaderName + ".tesc"),
-										m__geometryShaderFile("Shaders/" + shaderName + "/" + shaderName + ".geom"),
-										m__fragmentShaderFile("Shaders/" + shaderName + "/" + shaderName + ".frag")
+										m__vertexShaderFile("Shaders/" + shaderName + "/vertex.shader"),
+										m__tessControlShaderFile("Shaders/" + shaderName + "/tessControl.shader"),
+										m__tessEvaluationShaderFile("Shaders/" + shaderName + "/tessEvaluation.shader"),
+										m__geometryShaderFile("Shaders/" + shaderName + "/geometry.shader"),
+										m__fragmentShaderFile("Shaders/" + shaderName + "/fragment.shader")
 {
-
 	cout << this << " [Shader] constructor" << endl;
-
 }
 
 
@@ -56,6 +54,8 @@ bool Shader::load()
 	if (glIsProgram(m__programID) == GL_TRUE)
 		glDeleteProgram(m__programID);
 
+
+    cout << this << " [Shader]: " << m__programID << endl;
 	cout << this << " [Shader] load() 1 : " << m__vertexShaderFile << endl;
 	cout << this << " [Shader] load() 2 : " << m__fragmentShaderFile << endl;
 
@@ -225,7 +225,7 @@ bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSo
 }
 
 
-void Shader::envoyerMat4(string nom, glm::mat4 matrice)
+void Shader::sendMat4Uniform(string nom, glm::mat4 matrice)
 {
 
 	// Localisation de la matrice
@@ -237,7 +237,7 @@ void Shader::envoyerMat4(string nom, glm::mat4 matrice)
 }
 
 
-void Shader::envoyerMat3(string nom, glm::mat3 matrice)
+void Shader::sendMat3Uniform(string nom, glm::mat3 matrice)
 {
 
 	// Localisation de la matrice
@@ -249,7 +249,7 @@ void Shader::envoyerMat3(string nom, glm::mat3 matrice)
 }
 
 
-void Shader::envoyerVec4(std::string nom, glm::vec4 vecteur)
+void Shader::sendVec4Uniform(std::string nom, glm::vec4 vecteur)
 {
 
 	// Localisation de la matrice
@@ -261,7 +261,7 @@ void Shader::envoyerVec4(std::string nom, glm::vec4 vecteur)
 }
 
 
-void Shader::envoyerVec3(std::string nom, glm::vec3 vecteur)
+void Shader::sendVec3Uniform(std::string nom, glm::vec3 vecteur)
 {
 
 	// Localisation de la matrice
@@ -273,7 +273,19 @@ void Shader::envoyerVec3(std::string nom, glm::vec3 vecteur)
 }
 
 
-void Shader::envoyer1I(std::string nom, GLuint id)
+void Shader::sendVec2Uniform(std::string nom, glm::vec2 vecteur)
+{
+
+	// Localisation de la matrice
+	int localisation = glGetUniformLocation(m__programID, nom.c_str());
+
+	// Envoi des valeurs
+	glUniform2f(localisation, vecteur.x, vecteur.y);
+
+}
+
+
+void Shader::sendIntUniform(std::string nom, GLuint id)
 {
 
 	// Localisation de la matrice
@@ -285,7 +297,7 @@ void Shader::envoyer1I(std::string nom, GLuint id)
 }
 
 
-void Shader::envoyerFloat(std::string nom, float val)
+void Shader::sendFloatUniform(std::string nom, float val)
 {
 
 	// Localisation de la matrice
@@ -299,91 +311,69 @@ void Shader::envoyerFloat(std::string nom, float val)
 
 GLuint Shader::getProgramID()
 {
-
 	return m__programID;
-
 }
 
 
 //=====Shaders=====
 string Shader::getVertexShaderFile()
 {
-
 	return m__vertexShaderFile;
-
 }
 
 
 void Shader::setVertexShaderFile(string val)
 {
-
 	m__vertexShaderFile = val;
-
 }
 
 
 string Shader::getTessControlShaderFile()
 {
-
 	return m__tessControlShaderFile;
-
 }
 
 
 void Shader::setTessControlShaderFile(string val)
 {
-
 	m__tessControlShaderFile = val;
-
 }
 
 
 string Shader::getTessEvaluationShaderFile()
 {
-
 	return m__tessEvaluationShaderFile;
-
 }
 
 
 void Shader::setTessEvaluationShaderFile(string val)
 {
-
 	m__tessEvaluationShaderFile = val;
-
 }
 
 
 
 string Shader::getGeometryShaderFile()
 {
-
 	return m__geometryShaderFile;
-
 }
 
 
 void Shader::setGeometryShaderFile(string val)
 {
-
 	m__geometryShaderFile = val;
-
 }
 
 
 
 string Shader::getFragmentShaderFile()
 {
-
 	return m__fragmentShaderFile;
-
 }
 
 
 void Shader::setFragmentShaderFile(string val)
 {
-
 	m__fragmentShaderFile = val;
-
 }
 

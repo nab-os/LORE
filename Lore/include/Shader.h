@@ -26,12 +26,13 @@ namespace LORE
             GLuint getProgramID();
 
 
-            void envoyerMat4(std::string nom, glm::mat4 matrice);
-            void envoyerMat3(std::string nom, glm::mat3 matrice);
-            void envoyerVec4(std::string nom, glm::vec4 vecteur);
-            void envoyerVec3(std::string nom, glm::vec3 vecteur);
-            void envoyer1I(std::string nom, GLuint id);
-            void envoyerFloat(std::string nom, float val);
+            void sendMat4Uniform(std::string nom, glm::mat4 matrice);
+            void sendMat3Uniform(std::string nom, glm::mat3 matrice);
+            void sendVec4Uniform(std::string nom, glm::vec4 vecteur);
+            void sendVec3Uniform(std::string nom, glm::vec3 vecteur);
+            void sendVec2Uniform(std::string nom, glm::vec2 vecteur);
+            void sendIntUniform(std::string nom, GLuint id);
+            void sendFloatUniform(std::string nom, float val);
 
 
             std::string getVertexShaderFile();

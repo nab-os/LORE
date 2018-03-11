@@ -26,34 +26,18 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    string file = "./Objects/TriangleWithoutIndices.gltf";
+    string file = "./Objects/empty.gltf";
     if(argc >= 2)
     {
         file = argv[1];
     }
+    
 
     Scene* default_scene = Lore::load(file);
     cout << "Scene_ " << default_scene << endl;
-    //cout << "Test: " << Lore::getScene("Scene") << endl;
-    //cout << "Test: " << Lore::getNode("Camera") << endl;
-    //cout << "Test: " << Lore::getNode("Cube") << endl;
     window->getCamera()->setScene(default_scene);
     window->getCamera()->setPointcible(vec3(1.0));
-
-    Lore::getMaterial("default")->setCulling(true);
-
-    Material* mat = Lore::createMaterial("empty");
-    Shader* shader = Lore::createShader("empty");
-    mat->setCulling(false);
-    mat->setShader(shader);
-    shader->load();
-    Cube* cube = new Cube();
-    cube->load();
-    cube->setMaterial(mat);
-    Object* obj = Lore::createObject("cube_");
-    obj->setMesh(cube);
-    default_scene->addChild(obj);
-
+    
     //----------
 
     Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
@@ -96,8 +80,8 @@ int main(int argc, char** argv)
 
         controller->check(window); // Checks all bindings for the Window and execute the fonction if it matches
         //a += 0.01;
-        Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
-        obj->setPosition(Light::lightPosition);
+        //Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
+        //obj->setPosition(Light::lightPosition);
 
         window->render(); //
 

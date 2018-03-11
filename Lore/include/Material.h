@@ -1,6 +1,13 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include <map>
+
+// Includes GLM
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Shader.h"
 #include "Texture.h"
 
@@ -44,6 +51,13 @@ namespace LORE
             bool getCulling() { return m__culling; };
             void setCulling(bool culling) { m__culling = culling; };
 
+            void addCustomIntUniform(std::string name, int* value);
+            void addCustomFloatUniform(std::string name, float* value);
+            void addCustomVec2Uniform(std::string name, glm::vec2* value);
+            void addCustomVec3Uniform(std::string name, glm::vec3* value);
+
+            void sendCustomUniforms();
+
         private:
 
             Shader* m__shader;
@@ -51,6 +65,11 @@ namespace LORE
             glm::vec4 m__diffuseColor;
             float m__metallness;
             float m__roughness;
+
+            std::map<std::string, int*> m__customIntUniforms;
+            std::map<std::string, float*> m__customFloatUniforms;
+            std::map<std::string, glm::vec2*> m__customVec2Uniforms;
+            std::map<std::string, glm::vec3*> m__customVec3Uniforms;
 
             Texture* m__pbrTexture;
             Texture* m__diffuseTexture;
