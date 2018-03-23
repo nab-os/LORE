@@ -60,6 +60,9 @@ namespace LORE
             void setMode(int mode) { m__mode = mode; };
             int getMode() { return m__mode; };
 
+            void setPolyMode(int mode) { m__polyMode = mode; };
+            int getPolyMode() { return m__polyMode; };
+
             void computeBitangents();
             void computeTangentBasis();
 
@@ -87,6 +90,7 @@ namespace LORE
 
             bool m__indexed;
             int m__mode;
+            int m__polyMode;
     };
 }
 

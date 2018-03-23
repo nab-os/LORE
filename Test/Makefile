@@ -1,6 +1,6 @@
 EXEC=test
 
-SOURCES=main.cpp
+SOURCES=main.cpp Diamond.cpp
 
 OUT_DIR=bin
 OBJ_DIR=obj
@@ -10,6 +10,7 @@ OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 ifeq ($(OS),Windows_NT)
 	
 	IDIR=-isystem ../Lore/include \
+		 -I include \
 		 -I C://Mingw/include \
 		 -I C://Mingw/glew/include \
 		 -I C://Mingw/glfw/include \
@@ -33,6 +34,7 @@ ifeq ($(OS),Windows_NT)
 else
 
 	IDIR=-isystem ../Lore/include \
+		 -I include \
 		 -I /usr/include \
 		 -I /usr/include/SOIL \
 		 -I /usr/include/libdrm \
@@ -65,7 +67,7 @@ $(OUT_DIR)/$(EXEC): $(OBJECTS)
 	@echo "\n=======LINKING=======\n"
 	$(CC) -o $@ $^ $(LDIR) $(LFLAGS)
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: src/%.cpp
 	@echo "\n=======COMPILING $@======="
 	$(CC) -o $@ -c $< $(IDIR) $(CFLAGS)
 

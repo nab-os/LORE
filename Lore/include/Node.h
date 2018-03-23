@@ -32,6 +32,8 @@ namespace LORE
             void setPosition(glm::vec3 pos);
             void setPosition(float x, float y, float z);
             glm::vec3 getPosition();
+            void setRotation(glm::quat rotation) { m__rotation = rotation; };
+            glm::quat getRotation() { return m__rotation; };
             void setScale(glm::vec3 scale);
 
             glm::mat4 getModel(glm::mat4 model);
@@ -45,6 +47,7 @@ namespace LORE
             std::vector<Node*> m__childs;
 
             glm::vec3 m__position;
+            glm::quat m__rotation;
             glm::vec3 m__scale;
 
     };

@@ -1,11 +1,12 @@
 #version 120
 
-varying vec3 position;
-varying vec2 uv;
-varying vec3 normal;
-varying vec4 color;
-varying vec3 lightDirection;
-varying vec3 cameraDirection;
+varying vec3 v_position;
+varying vec2 v_uv;
+varying vec3 v_normal;
+varying vec3 v_tangent;
+varying vec4 v_color;
+varying vec3 v_lightDirection;
+varying vec3 v_cameraDirection;
 
 uniform vec3 u_cameraPosition;
 uniform vec3 u_lightPosition;
@@ -73,17 +74,17 @@ void main()
     vec3 diffuse = u_diffuseColor.xyz;
     if(u_useDiffuseTexture > 0)
     {
-        diffuse = pow(texture2D(u_diffuseTexture, uv).xyz, vec3(2.2)).xyz;
+        diffuse = pow(texture2D(u_diffuseTexture, v_uv).xyz, vec3(2.2)).xyz;
     }else if(u_useVertexColor > 0)
     {
-        diffuse = color.xyz;
+        diffuse = v_color.xyz;
     }
 
     float metallness = u_metallness;
     float roughness = u_roughness;
     if(u_usePbrTexture > 0)
     {
-        vec2 temp = texture2D(u_pbrTexture, uv).zy;
+        vec2 temp = texture2D(u_pbrTexture, v_uv).zy;
         metallness = temp.x;
         roughness = temp.y;
     }
@@ -91,29 +92,39 @@ void main()
     float occlusion = 0;
     if(u_usePbrTexture > 0)
     {
-        occlusion = texture2D(u_occlusionTexture, uv).x;
+        occlusion = texture2D(u_occlusionTexture, v_uv).x;
     }
 
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
+
+    vec3 T = v_tangent;
+    vec3 N = v_normal;
+    vec3 B = cross(N, T);
+    mat3 TBN = mat3(T, B, N);
+
+    if(u_useNormalTexture > 0)
+    {
+        vec3 textureNormal_tangentSpace = texture2D(u_normalTexture, v_uv).xyz;
+        N = TBN * normalize(textureNormal_tangentSpace * 2.0 - 1.0);
+    }
+
     // ===== Compute =====
 
-    vec3 textureNormal_tangentSpace = texture2D(u_normalTexture, uv).xyz;
-    textureNormal_tangentSpace = normalize(textureNormal_tangentSpace * 2.0 - 1.0);   
-   
-    vec3 N = normalize(textureNormal_tangentSpace); 
-    vec3 V = normalize(cameraDirection);
+    vec3 V = normalize(v_cameraDirection);
+    vec3 L = normalize(v_lightDirection);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
-    vec3 F0 = vec3(0.04); 
+    vec3 F0 = vec3(0.04);
     F0 = mix(F0, diffuse, metallness);
+
     // reflectance equation
     vec3 Lo = vec3(0.0);
+
     // calculate per-light radiance
-    vec3 L = normalize(lightDirection);
     vec3 H = normalize(V + L);
-    float distance = length(lightDirection);
+    float distance = length(v_lightDirection);
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = lightColor * attenuation;
 
@@ -121,11 +132,11 @@ void main()
     float NDF = DistributionGGX(N, H, roughness);   
     float G   = GeometrySmith(N, V, L, roughness);      
     vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);
-       
+
     vec3 nominator    = NDF * G * F; 
     float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.
     vec3 specular = nominator / denominator;
-    
+
     // kS is equal to Fresnel
     vec3 kS = F;
     // for energy conservation, the diffuse and specular light can't
@@ -144,7 +155,7 @@ void main()
     Lo += (kD * diffuse / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
 
     vec3 final = diffuse.xyz * occlusion;
-    final = final * clamp(dot(textureNormal_tangentSpace, lightDirection), 0, 1);
+    final = final * clamp(NdotL, 0, 1);
     final += Lo;
 
     // HDR tonemapping
@@ -152,5 +163,5 @@ void main()
     // gamma correct
     final = pow(final, vec3(1.0/2.2)); 
 
-    gl_FragColor = vec4(final, 1.0);
+    gl_FragColor = vec4(vec3(diffuse), 1.0);
 }

@@ -129,7 +129,7 @@ void Importer::importMaterial(gltf2::Asset asset, unsigned int i)
     Material* material = Lore::createMaterial(gmaterial.name);
     m__materials.push_back(material);
 
-    material->setShader(Lore::getShader("default-120"));
+    material->setShader(Lore::getShader("default"));
     
     gltf2::Material::Pbr pbr = gmaterial.pbr;
     if(pbr.metallicRoughnessTexture.index != -1)

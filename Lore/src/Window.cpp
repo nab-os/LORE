@@ -94,9 +94,6 @@ void LORE::Window::load()
 	glfwSetWindowCloseCallback(m__window, window_close_callback);
 	glfwSetCursorPosCallback(m__window, mouse_move_callback);
 
-    m__camera = new Camera();
-
-    m__camera->setPosition(vec3(5, 5, 5));
 }
 
 

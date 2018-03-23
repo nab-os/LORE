@@ -17,26 +17,21 @@ uniform vec3 u_lightPosition;
 varying vec3 position;
 varying vec2 uv;
 varying vec3 normal;
+varying vec3 tangent;
 varying vec4 color;
 varying vec3 lightDirection;
 varying vec3 cameraDirection;
 
 void main()
 {
-    vec3 T = vec3(model * vec4(in_Tangent, 0));
-    vec3 N = vec3(model * vec4(in_Normal, 0));
-    T = normalize(T - dot(T, N) * N);
-    vec3 B = cross(N, T);
-    mat3 TBN = transpose(mat3(T, B, N)); 
-
-    position = TBN * vec3(model * vec4(in_Vertex, 1));
+    position = vec3(model * vec4(in_Vertex, 1));
     uv = in_TexCoord0;
-    normal = in_Normal;
+    normal = normalize(in_Normal);
+    tangent = normalize(in_Tangent);
 
     color = in_Color;
-    cameraDirection = TBN * vec3(model * vec4(u_cameraPosition, 1.0)) - position;
-    lightDirection = TBN * vec3(model * vec4(u_lightPosition, 1.0)) - position;
+    cameraDirection = u_cameraPosition - position;
+    lightDirection = u_lightPosition - position;
 
     gl_Position = projection * view * model * vec4(in_Vertex, 1);
-
 }

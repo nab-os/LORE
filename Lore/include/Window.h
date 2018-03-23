@@ -51,6 +51,7 @@ namespace LORE
             void load();
 
             GLFWwindow* getWindow() { return m__window; };
+            void setCamera(Camera* camera) { m__camera = camera; };
             Camera* getCamera() { return m__camera; };
             
             void setScene(Scene* scene) { m__scene = scene; };

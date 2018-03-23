@@ -2,6 +2,11 @@
 
 #include <iostream>
 
+#include <stb_image.h>
+
+#include <Lore.h>
+#include <Cube.h>
+
 using namespace std;
 using namespace glm;
 using namespace LORE;
@@ -26,23 +31,43 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
 
     cout << this << " [Camera] constructor" << endl;
 
-    m__projection = perspective(90.0, m__ratio, m__near, m__far);
+    m__projection = perspective(M_PI / 2.0, m__ratio, m__near, m__far);
+
+
+
+    glGenTextures(1, &m__environmentMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m__environmentMap);
+
+    std::vector<std::string> textures_faces = 
+    {"Textures/right.jpg","Textures/left.jpg","Textures/top.jpg","Textures/bottom.jpg","Textures/back.jpg","Textures/front.jpg"};
+    int imageWidth, imageHeight, nrChannels;
+    unsigned char *data;  
+    for(GLuint i = 0; i < textures_faces.size(); i++)
+    {
+        data = stbi_load(textures_faces[i].c_str(), &imageWidth, &imageHeight, &nrChannels, 0);
+        if (data)
+            {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
+                             0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+                );
+                stbi_image_free(data);
+            }
+            else
+            {
+                std::cout << "Cubemap texture failed to load at path: " << textures_faces[i] << std::endl;
+                stbi_image_free(data);
+            }
+        }
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);  
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
 
     Node::setPosition(position);
-    m__environmentMap = SOIL_load_OGL_cubemap
-	(
-		"Textures/right.jpg",
-		"Textures/left.jpg",
-		"Textures/top.jpg",
-		"Textures/bottom.jpg",
-		"Textures/back.jpg",
-		"Textures/front.jpg",
-		SOIL_LOAD_RGB,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS
-	);
-   
-    /*
+/*   
     m__render = new Texture();
     m__render->load();
     cout << "Texture loaded" << endl;
@@ -75,8 +100,12 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;  
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    cout << "FFF" << endl;
-    */
+    cout << "FFF" << endl;*/
+
+    m__environmentCube = new Cube();
+    m__environmentCube->load();
+    m__environmentCube->setMaterial(Lore::getMaterial("environmentMap"));
+
 }
 
 
@@ -84,6 +113,7 @@ Camera::~Camera()
 {
     cout << this << " [Camera] destructor" << endl;
     delete m__render;
+    delete m__environmentCube;
 }
 
 
@@ -96,8 +126,8 @@ void Camera::render()
 
 void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
 {
-    if(renderer != this)
-    {
+//    if(renderer != this)
+//   {
         //cout << this << " [Camera] render" << endl;
        // glBindFramebuffer(GL_FRAMEBUFFER, m__fbo);
             glViewport(0, 0, 1280, 768);
@@ -107,16 +137,19 @@ void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::m
 
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-            glm::mat4 view = getView();
-            glm::mat4 local_model = getModel(model);
+            glm::mat4 _view = getView();
 
+            glDepthMask(GL_FALSE);
+            m__environmentCube->render(this, m__projection, mat4(mat3(_view)), mat4(1.0));
+            glDepthMask(GL_TRUE);
             if(m__scene)
-                m__scene->render(this, m__projection, mat4(1.0), view);
+                m__scene->render(this, m__projection, _view, mat4(1.0));
             else
                 cout << "[Camera]: Scene not set !" << endl;
+            
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
-    Node::render(renderer, projection, view, model);
+//    }
+//    Node::render(renderer, projection, view, model);
 }
 
 // Méthodes
@@ -165,6 +198,7 @@ void Camera::orienter(double xRel, double yRel)
         m_orientation.z = sin(phiRadian);
     }
 
+    
     // Calcul du point ciblé pour OpenGL
     m_pointCible = Node::getPosition() + m_orientation;
 }
@@ -193,7 +227,7 @@ void Camera::backward()
 
 void Camera::left()
 {
-    glm::vec3 side = cross(m_axeVertical, m_orientation); 
+    glm::vec3 side = normalize(cross(m_axeVertical, m_orientation)); 
     move(side * m_vitesse);
     m_pointCible = Node::getPosition() + m_orientation;
 }
@@ -201,7 +235,7 @@ void Camera::left()
 
 void Camera::right()
 {
-    glm::vec3 side = cross(m_axeVertical, m_orientation); 
+    glm::vec3 side = normalize(cross(m_axeVertical, m_orientation)); 
     move(-side * m_vitesse);
     m_pointCible = Node::getPosition() + m_orientation;
 }
@@ -223,13 +257,13 @@ void Camera::down()
 
 void Camera::deplacer(glm::vec3 direction)
 {
-    Node::move(direction * m_orientation * m_vitesse);
+    Node::move(normalize(direction * m_orientation) * m_vitesse);
 }
 
 
 glm::mat4 Camera::getView()
 {
-    return glm::lookAt(Node::getPosition(), glm::vec3(m_pointCible), glm::vec3(0, 1, 0));
+    return glm::lookAt(Node::getPosition(), m_pointCible, glm::vec3(0, 1, 0));
 }
 
 

@@ -26,7 +26,8 @@ ifeq ($(OS),Windows_NT)
 		 -I C://Mingw/glfw/include \
 		 -I C://Mingw/SOIL/src \
 		 -I C://Mingw/glm \
-		 -I glTF2-loader/include
+		 -I glTF2-loader/include \
+		 -I stb
 	
 	LDIR=-L C://Mingw/lib \
 		 -L C://MinGW/glew/lib/Release/Win32 \
@@ -47,7 +48,8 @@ else
 		 -I /usr/include \
 		 -I /usr/include/SOIL \
 		 -I /usr/include/libdrm \
-		 -I glTF2-loader/include
+		 -I glTF2-loader/include \
+		 -I stb
 	
 	LDIR=-L /usr/lib \
 		 -L /usr/local/lib \
@@ -57,7 +59,7 @@ else
 		 
 	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter -fPIC
 	LFLAGS=-lstdc++ \
-		   -lXi -lGLEW -lGLU -lm -lGL -lm -lpthread -ldl -ldrm \
+		   -lXi -lGLEW -lm -lGL -lm -lpthread -ldl -ldrm \
 		   -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm \
 		   -lglfw -lrt -lm -ldl -lXrandr -lXinerama -lXext -lXcursor -lXrender -lXfixes -lX11 \
 		   -lpthread -lxcb -lXau -lXdmcp \

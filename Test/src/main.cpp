@@ -10,6 +10,8 @@
 #include <Light.h>
 #include <Cube.h>
 
+#include "Diamond.h"
+
 using namespace std;
 using namespace glm;
 using namespace LORE;
@@ -31,13 +33,35 @@ int main(int argc, char** argv)
     {
         file = argv[1];
     }
+    Camera* camera = new Camera();
+    camera->setPosition(vec3(5, 5, 5));
+    window->setCamera(camera);
     
 
     Scene* default_scene = Lore::load(file);
     cout << "Scene_ " << default_scene << endl;
-    window->getCamera()->setScene(default_scene);
-    window->getCamera()->setPointcible(vec3(1.0));
-    
+    camera->setScene(default_scene);
+    camera->setPointcible(vec3(1.0));
+
+    Material* mat_reflections = Lore::createMaterial("reflections");
+    mat_reflections->load();
+    Shader* shader_reflections = Lore::createShader("reflections");
+    shader_reflections->load();
+    mat_reflections->setShader(shader_reflections);
+    mat_reflections->setCulling(false);
+
+    Diamond* diamond = new Diamond();
+    diamond->load();
+    diamond->setMaterial(mat_reflections);
+
+    Object* obj = Lore::createObject("cube");
+    obj->setMesh(diamond);
+    default_scene->addChild(obj);
+
+    vec3 cameraPos;
+    mat_reflections->addCustomVec3Uniform("cameraPos", &cameraPos);
+
+
     //----------
 
     Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
@@ -46,27 +70,27 @@ int main(int argc, char** argv)
         window->close();
     });
     
-    controller->bind(GLFW_KEY_W, [&window](double x, double y) {
-        window->getCamera()->forward();
+    controller->bind(GLFW_KEY_W, [&camera](double x, double y) {
+        camera->forward();
     });
-    controller->bind(GLFW_KEY_S, [&window](double x, double y) {
-        window->getCamera()->backward();
+    controller->bind(GLFW_KEY_S, [&camera](double x, double y) {
+        camera->backward();
     });
-    controller->bind(GLFW_KEY_A, [&window](double x, double y) {
-        window->getCamera()->left();
+    controller->bind(GLFW_KEY_A, [&camera](double x, double y) {
+        camera->left();
     });
-    controller->bind(GLFW_KEY_D, [&window](double x, double y) {
-        window->getCamera()->right();
+    controller->bind(GLFW_KEY_D, [&camera](double x, double y) {
+        camera->right();
     });
-    controller->bind(GLFW_KEY_SPACE, [&window](double x, double y) {
-        window->getCamera()->up();
+    controller->bind(GLFW_KEY_SPACE, [&camera](double x, double y) {
+        camera->up();
     });
-    controller->bind(GLFW_KEY_LEFT_SHIFT, [&window](double x, double y) {
-        window->getCamera()->down();
+    controller->bind(GLFW_KEY_LEFT_SHIFT, [&camera](double x, double y) {
+        camera->down();
     });
 
-    controller->setMouseEvent([&window](double x, double y, double dx, double dy){
-        window->getCamera()->orienter(dx, dy);
+    controller->setMouseEvent([&camera](double x, double y, double dx, double dy){
+        camera->orienter(dx, dy);
     });
 
     float a = 0;
@@ -79,9 +103,10 @@ int main(int argc, char** argv)
         int start = window->startFrame(); // Begin the frame render process
 
         controller->check(window); // Checks all bindings for the Window and execute the fonction if it matches
-        //a += 0.01;
-        //Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
-        //obj->setPosition(Light::lightPosition);
+        cameraPos = camera->getPosition();
+        a += 0.01;
+        Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
+        obj->setPosition(Light::lightPosition);
 
         window->render(); //
 

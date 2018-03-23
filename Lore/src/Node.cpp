@@ -8,6 +8,7 @@ using namespace LORE;
 
 Node::Node(): m__childs(),
               m__position(0.0),
+              m__rotation(),
               m__scale(1.0)
 {
 
@@ -77,6 +78,8 @@ void Node::setScale(glm::vec3 scale)
 
 glm::mat4 Node::getModel(glm::mat4 model)
 {
-	return glm::translate(/*glm::rotate(*/glm::scale(model, m__scale)/*, )*/, m__position);
+    mat4 scaled = glm::scale(model, m__scale);
+    mat4 rotated = glm::mat4_cast(m__rotation) * scaled;
+	return glm::translate(model, m__position);
 }
 

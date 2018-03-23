@@ -57,6 +57,7 @@ namespace LORE
             void addCustomVec3Uniform(std::string name, glm::vec3* value);
 
             void sendCustomUniforms();
+            void sendTextures();
 
         private:
 
@@ -75,6 +76,8 @@ namespace LORE
             Texture* m__diffuseTexture;
             Texture* m__normalTexture;
             Texture* m__occlusionTexture;
+
+            std::map<std::string, std::pair<GLuint, GLuint>> m__textures;
 
             bool m__culling;
 

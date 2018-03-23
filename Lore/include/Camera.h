@@ -18,6 +18,7 @@
 
 #include "Scene.h"
 #include "Texture.h"
+#include "Mesh.h"
 
 namespace LORE
 {
@@ -107,6 +108,7 @@ namespace LORE
             GLuint m__rbo;
             Texture* m__render;
             GLuint m__environmentMap;
+            Mesh* m__environmentCube;
 
     };
 

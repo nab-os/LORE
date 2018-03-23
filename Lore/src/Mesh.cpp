@@ -18,7 +18,8 @@ Mesh::Mesh(): m__VAO(),
     m__material(),
     m__vertices(),
     m__indexed(false),
-    m__mode(GL_TRIANGLES)
+    m__mode(GL_TRIANGLES),
+    m__polyMode(GL_FILL)
 {
 	//cout << this << " [Mesh] constructor" << endl;
 }
@@ -124,6 +125,7 @@ void Mesh::load()
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 	
+    computeTangentBasis();
     if(m__normals.size() > 0 && m__tangents.size() > 0)
         computeBitangents();
     else if(m__normals.size() > 0 && m__UVs.size() > 0)
@@ -308,10 +310,12 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
     //cout << this << "[Mesh] render" << endl;
 
 	glEnable(GL_DEPTH_TEST);
-    //if(m__material->getCulling())
-    //    glEnable(GL_CULL_FACE);
-    //else
-    glDisable(GL_CULL_FACE);
+
+    if(m__material->getCulling())
+        glEnable(GL_CULL_FACE);
+    else
+        glDisable(GL_CULL_FACE);
+
 
     Shader* s = m__material->getShader();
 
@@ -322,6 +326,7 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
     s->sendMat4Uniform("projection", projection);
     s->sendMat4Uniform("view", view);
     s->sendMat4Uniform("model", model);
+    s->sendMat4Uniform("_model", transpose(inverse(model)));
 
     s->sendVec3Uniform("u_cameraPosition", renderer->getPosition());
     s->sendVec3Uniform("u_lightPosition", Light::lightPosition);
@@ -392,6 +397,8 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
     /*glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDrawArrays(GL_PATCHES, 0, getVertexCount());*/
     //cout << this << "[Mesh] render 2" << endl;
+    
+    glPolygonMode(GL_FRONT_AND_BACK, m__polyMode);
 
     if(m__indexed)
     {

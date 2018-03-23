@@ -89,7 +89,13 @@ LORE::Window* Lore::init()
     shader_basic->load();
     mat_basic->setShader(shader_basic);
     
-
+    Material* mat_environmentMap = Lore::createMaterial("environmentMap");
+    mat_environmentMap->load();
+    Shader* shader_environmentMap = Lore::createShader("environmentMap");
+    shader_environmentMap->load();
+    mat_environmentMap->setShader(shader_environmentMap);
+    mat_environmentMap->setCulling(false);
+    
 	return w;
 }
 

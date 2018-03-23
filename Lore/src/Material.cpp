@@ -17,6 +17,7 @@ Material::Material(): m__shader(), m__diffuseColor(vec4(0.5, 0, 0, 1)),
     m__diffuseTexture(),
     m__normalTexture(),
     m__occlusionTexture(),
+    m__textures(),
     m__culling(true)
 {
 	cout << this << " [Material] constructor" << endl;
@@ -81,4 +82,24 @@ void Material::sendCustomUniforms()
         m__shader->sendVec3Uniform(p.first, *p.second);
     }
 
+}
+
+
+void Material::sendTextures()
+{
+/*
+    int i = 0;
+    for(auto it: m__textures)
+    {
+        string name = it.first;
+        GLuint texture_type = it.second.first;
+        GLuint texture_id = it.second.second;
+
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, texture_id);
+        m__shader->sendIntUniform(name, i); 
+
+        i++;
+    }
+*/
 }

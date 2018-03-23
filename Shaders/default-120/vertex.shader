@@ -8,6 +8,7 @@ attribute vec4 in_Color;
 
 uniform mat4 projection;
 uniform mat4 model;
+uniform mat4 _model;
 uniform mat4 view;
 
 uniform vec3 u_cameraPosition;
@@ -26,13 +27,6 @@ varying mat3 v_TBN;
 
 void main()
 {
-    /*
-    vec3 T = vec3(model * vec4(in_Tangent, 0));
-    vec3 N = vec3(model * vec4(in_Normal, 0));
-    //T = normalize(T - dot(T, N) * N);
-    vec3 B = cross(N, T);
-    mat3 TBN = transpose(mat3(T, B, N)); 
-*/
     vec3 T = in_Tangent;
     vec3 N = in_Normal;
     vec3 B = cross(N, T);
@@ -42,9 +36,9 @@ void main()
     v_objectPosition = in_Vertex;
     v_uv = in_TexCoord0;
     v_color = in_Color;
-    v_normal = normalize(in_Normal);
-    v_tangent = normalize(in_Tangent);
-    v_bitangent = normalize(cross(in_Normal, in_Tangent));
+    v_normal = mat3(_model) * normalize(in_Normal);
+    v_tangent = mat3(_model) * normalize(in_Tangent);
+    v_bitangent = mat3(_model) * normalize(cross(in_Normal, in_Tangent));
     v_cameraDirection = normalize(u_cameraPosition - v_position);
     v_lightDirection = normalize(vec3(model * vec4(u_lightPosition, 1.0)) - v_position);
 
