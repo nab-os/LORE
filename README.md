@@ -1,4 +1,4 @@
-# Lore | STILL IN DEVELOPMENT /!\
+# Lore
 
 Lore, Light OpenGL Rendering Engine, allows you to create/import 3D environment.
 You can create games, use it to visualize raw data, etc...
@@ -27,6 +27,9 @@ int main(int argc, char** argv)
 	}
 
     //----------
+
+    Camera* camera = new Camera();
+    window->setCamera(camera);
 
 	Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
 
@@ -95,9 +98,11 @@ cd Lore
 git clone https://github.com/nothings/stb
 git clone https://github.com/gnikwo/glTF2-loader
 cd glTF2-loader
-cmake .
+mkdir build
+cd build
+cmake ../
 make
-cd ../..
+cd ../../..
 ```
 
 ## Licence
