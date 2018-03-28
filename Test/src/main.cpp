@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #include <Lore.h>
 #include <Light.h>
@@ -106,7 +107,9 @@ int main(int argc, char** argv)
         cameraPos = camera->getPosition();
         a += 0.01;
         Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
-        obj->setPosition(Light::lightPosition);
+        //obj->setPosition(Light::lightPosition);
+        quat myQuat = quat(vec3(0,a,0));
+        obj->setRotation(myQuat);
 
         window->render(); //
 

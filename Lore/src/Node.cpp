@@ -80,6 +80,6 @@ glm::mat4 Node::getModel(glm::mat4 model)
 {
     mat4 scaled = glm::scale(model, m__scale);
     mat4 rotated = glm::mat4_cast(m__rotation) * scaled;
-	return glm::translate(model, m__position);
+	return glm::translate(model, m__position) * rotated;
 }
 
