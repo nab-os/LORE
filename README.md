@@ -12,12 +12,13 @@ A simple window that closes when ESCAPE key is pressed
 #include <Lore.h>
 
 using namespace std;
+using namespace LORE;
 int main(int argc, char** argv)
 {
 
 	cout << "===== INIT =====" << endl;
 
-	OpenGL_Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
+	LORE::Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
 	if(!window)
 	{
 		cout << "Error during OpenGL context initialization." << endl;
