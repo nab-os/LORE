@@ -1,3 +1,5 @@
+VERSION=V1.0
+
 ifeq ($(OS),Windows_NT)
 	EXEC=Lore.lib
 else
