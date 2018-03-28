@@ -84,12 +84,19 @@ You will need to install multiple libraries :
 * -glew: OpenGL development environment
 * -glm: Math objects for OpenGL
 * -glfw3: Window and context handler
-* -soil: Texture loading library
-* -open collada: collada document importer
+* -stb: Texture loading library
+* -gltf-importer: gltf document importer
 
 ```bash
-apt install libglew-dev libglm-dev libsoil-dev libglfw3-dev opencollada-dev
-apt instell libllvm-3.8 libXinerama-dev libXi-div libXcursor-dev
+apt install libglew-dev libglm-dev libglfw3-dev
+apt install libllvm-3.8 libXinerama-dev libXi-div libXcursor-dev
+cd Lore
+git clone https://github.com/nothings/stb
+git clone https://github.com/gnikwo/glTF2-loader
+cd glTF2-loader
+cmake .
+make
+cd ../..
 ```
 
 ## Licence
