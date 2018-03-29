@@ -27,8 +27,7 @@ namespace LORE
     {
 
         public:
-
-            Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(0, 0, 0), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.04, float vitesse = 0.001);
+            Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(1, 0, 0), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.04, float vitesse = 0.001);
             virtual ~Camera();
 
             void move(glm::vec3 pos);
@@ -64,7 +63,7 @@ namespace LORE
 
             void setBackgroundColor(glm::vec3 color) { m__backgroundColor = color; };
 
-            void setAspectRatio(double ratio) { m__ratio = ratio; updatePerspective(); };
+            void setRatio(double ratio) { m__ratio = ratio; updatePerspective(); };
             void setFar(double limit) { m__far = limit; updatePerspective(); };
             void setNear(double limit) { m__near = limit; updatePerspective(); };
 

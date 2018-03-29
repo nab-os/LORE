@@ -34,15 +34,25 @@ int main(int argc, char** argv)
     {
         file = argv[1];
     }
-    Camera* camera = new Camera();
-    camera->setPosition(vec3(5, 5, 5));
-    window->setCamera(camera);
-    
 
+    cout << "===Importing===" << endl;
     Scene* default_scene = Lore::load(file);
+    cout << "===Finished importing===" << endl;
     cout << "Scene_ " << default_scene << endl;
-    camera->setScene(default_scene);
-    camera->setPointcible(vec3(1.0));
+    Camera* camera = Lore::getCamera("Camera");
+    if(!camera)
+    {
+        cout << "Could'nt find Camera, creating one..." << endl;
+        camera = Lore::createCamera("Camera");
+        camera->setPosition(vec3(5, 5, 5));
+        camera->setScene(default_scene);
+    }
+	camera = Lore::createCamera("Camera");
+	camera->setPosition(vec3(5, 5, 5));
+	camera->setScene(default_scene);
+    window->setCamera(camera);
+
+    Lore::listCameras();
 
     Material* mat_reflections = Lore::createMaterial("reflections");
     mat_reflections->load();
@@ -71,27 +81,35 @@ int main(int argc, char** argv)
         window->close();
     });
     
-    controller->bind(GLFW_KEY_W, [&camera](double x, double y) {
-        camera->forward();
+    controller->bind(GLFW_KEY_W, [&window](double x, double y) {
+        window->getCamera()->forward();
     });
-    controller->bind(GLFW_KEY_S, [&camera](double x, double y) {
-        camera->backward();
+    controller->bind(GLFW_KEY_S, [&window](double x, double y) {
+        window->getCamera()->backward();
     });
-    controller->bind(GLFW_KEY_A, [&camera](double x, double y) {
-        camera->left();
+    controller->bind(GLFW_KEY_A, [&window](double x, double y) {
+        window->getCamera()->left();
     });
-    controller->bind(GLFW_KEY_D, [&camera](double x, double y) {
-        camera->right();
+    controller->bind(GLFW_KEY_D, [&window](double x, double y) {
+        window->getCamera()->right();
     });
-    controller->bind(GLFW_KEY_SPACE, [&camera](double x, double y) {
-        camera->up();
+    controller->bind(GLFW_KEY_SPACE, [&window](double x, double y) {
+        window->getCamera()->up();
     });
-    controller->bind(GLFW_KEY_LEFT_SHIFT, [&camera](double x, double y) {
-        camera->down();
+    controller->bind(GLFW_KEY_LEFT_SHIFT, [&window](double x, double y) {
+        window->getCamera()->down();
     });
 
-    controller->setMouseEvent([&camera](double x, double y, double dx, double dy){
-        camera->orienter(dx, dy);
+    controller->setMouseEvent([&window](double x, double y, double dx, double dy){
+        window->getCamera()->orienter(dx, dy);
+    });
+    
+	controller->bind(GLFW_KEY_T, [&window](double x, double y) {
+		window->setCamera(Lore::getCamera("Camera"));
+    });
+    
+	controller->bind(GLFW_KEY_G, [&window](double x, double y) {
+		window->setCamera(Lore::getCamera("Camera_1"));
     });
 
     float a = 0;
@@ -108,7 +126,7 @@ int main(int argc, char** argv)
         a += 0.01;
         Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
         //obj->setPosition(Light::lightPosition);
-        quat myQuat = quat(vec3(0,a,0));
+        quat myQuat = quat(vec3(0,-a,0));
         obj->setRotation(myQuat);
 
         window->render(); //
@@ -120,6 +138,7 @@ int main(int argc, char** argv)
     cout << "===== END =====" << endl;
 
     delete controller;
+    delete diamond;
 
     Lore::unload(); // Unload all dictionnaries, and unload OpenGL context
 

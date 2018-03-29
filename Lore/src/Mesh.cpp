@@ -493,58 +493,62 @@ void Mesh::computeTangentBasis()
     cout << "[Mesh] Computing tangent basis from Normals and UVs directions" << endl;
     m__tangents = m__normals;
     m__bitangents = m__normals;
-    for (unsigned int i=0; i < m__indices.size(); i+=3){
+    if(m__indexed && m__UVs.size() > 0)
+    {
+        for (unsigned int i=0; i < m__indices.size(); i+=3){
 
-        // Shortcuts for vertices
-        unsigned int index1_vec2 = m__indices[i] * 2;
-        unsigned int index2_vec2 = m__indices[i + 1] * 2;
-        unsigned int index3_vec2 = m__indices[i + 2] * 2;
-        unsigned int index1_vec3 = m__indices[i] * 3;
-        unsigned int index2_vec3 = m__indices[i + 1] * 3;
-        unsigned int index3_vec3 = m__indices[i + 2] * 3;
+            // Shortcuts for vertices
+            unsigned int index1_vec2 = m__indices[i] * 2;
+            unsigned int index2_vec2 = m__indices[i + 1] * 2;
+            unsigned int index3_vec2 = m__indices[i + 2] * 2;
+            unsigned int index1_vec3 = m__indices[i] * 3;
+            unsigned int index2_vec3 = m__indices[i + 1] * 3;
+            unsigned int index3_vec3 = m__indices[i + 2] * 3;
 
-        glm::vec3 v0 = vec3(m__vertices[index1_vec3], m__vertices[index1_vec3 + 1], m__vertices[index1_vec3 + 2]);
-        glm::vec3 v1 = vec3(m__vertices[index2_vec3], m__vertices[index2_vec3 + 1], m__vertices[index2_vec3 + 2]);
-        glm::vec3 v2 = vec3(m__vertices[index3_vec3], m__vertices[index3_vec3 + 1], m__vertices[index3_vec3 + 2]);
+            glm::vec3 v0 = vec3(m__vertices[index1_vec3], m__vertices[index1_vec3 + 1], m__vertices[index1_vec3 + 2]);
+            glm::vec3 v1 = vec3(m__vertices[index2_vec3], m__vertices[index2_vec3 + 1], m__vertices[index2_vec3 + 2]);
+            glm::vec3 v2 = vec3(m__vertices[index3_vec3], m__vertices[index3_vec3 + 1], m__vertices[index3_vec3 + 2]);
 
-        // Shortcuts for UVs
-        glm::vec2 uv0 = vec2(m__UVs[index1_vec2], m__UVs[index1_vec2 + 1]);
-        glm::vec2 uv1 = vec2(m__UVs[index2_vec2], m__UVs[index2_vec2 + 1]);
-        glm::vec2 uv2 = vec2(m__UVs[index3_vec2], m__UVs[index3_vec2 + 1]);
+            // Shortcuts for UVs
+            glm::vec2 uv0 = vec2(m__UVs[index1_vec2], m__UVs[index1_vec2 + 1]);
+            glm::vec2 uv1 = vec2(m__UVs[index2_vec2], m__UVs[index2_vec2 + 1]);
+            glm::vec2 uv2 = vec2(m__UVs[index3_vec2], m__UVs[index3_vec2 + 1]);
 
-        // Edges of the triangle : postion delta
-        glm::vec3 deltaPos1 = v1-v0;
-        glm::vec3 deltaPos2 = v2-v0;
+            // Edges of the triangle : postion delta
+            glm::vec3 deltaPos1 = v1-v0;
+            glm::vec3 deltaPos2 = v2-v0;
 
-        // UV delta
-        glm::vec2 deltaUV1 = uv1-uv0;
-        glm::vec2 deltaUV2 = uv2-uv0;
+            // UV delta
+            glm::vec2 deltaUV1 = uv1-uv0;
+            glm::vec2 deltaUV2 = uv2-uv0;
 
-        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-        glm::vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
-        glm::vec3 bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
-        //cout << i << ": " << m__tangents[index1_vec3] << ", " << m__tangents[index1_vec3+1] << ", " << m__tangents[index1_vec3+2] << endl;
-        //cout << i << ": " << tangent.x << ", " << tangent.y << ", " << tangent.z << endl;
-        
-        m__tangents[index1_vec3] = tangent.x;
-        m__tangents[index1_vec3 + 1] = tangent.y;
-        m__tangents[index1_vec3 + 2] = tangent.z;
-        m__tangents[index2_vec3] = tangent.x;
-        m__tangents[index2_vec3 + 1] = tangent.y;
-        m__tangents[index2_vec3 + 2] = tangent.z;
-        m__tangents[index3_vec3] = tangent.x;
-        m__tangents[index3_vec3 + 1] = tangent.y;
-        m__tangents[index3_vec3 + 2] = tangent.z;
-        
-        m__bitangents[index1_vec3] = bitangent.x;
-        m__bitangents[index1_vec3 + 1] = bitangent.y;
-        m__bitangents[index1_vec3 + 2] = bitangent.z;
-        m__bitangents[index2_vec3] = bitangent.x;
-        m__bitangents[index2_vec3 + 1] = bitangent.y;
-        m__bitangents[index2_vec3 + 2] = bitangent.z;
-        m__bitangents[index3_vec3] = bitangent.x;
-        m__bitangents[index3_vec3 + 1] = bitangent.y;
-        m__bitangents[index3_vec3 + 2] = bitangent.z;
+            float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+            glm::vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
+            glm::vec3 bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
+            //cout << i << ": " << m__tangents[index1_vec3] << ", " << m__tangents[index1_vec3+1] << ", " << m__tangents[index1_vec3+2] << endl;
+            //cout << i << ": " << tangent.x << ", " << tangent.y << ", " << tangent.z << endl;
+            
+            m__tangents[index1_vec3] = tangent.x;
+            m__tangents[index1_vec3 + 1] = tangent.y;
+            m__tangents[index1_vec3 + 2] = tangent.z;
+            m__tangents[index2_vec3] = tangent.x;
+            m__tangents[index2_vec3 + 1] = tangent.y;
+            m__tangents[index2_vec3 + 2] = tangent.z;
+            m__tangents[index3_vec3] = tangent.x;
+            m__tangents[index3_vec3 + 1] = tangent.y;
+            m__tangents[index3_vec3 + 2] = tangent.z;
+            
+            m__bitangents[index1_vec3] = bitangent.x;
+            m__bitangents[index1_vec3 + 1] = bitangent.y;
+            m__bitangents[index1_vec3 + 2] = bitangent.z;
+            m__bitangents[index2_vec3] = bitangent.x;
+            m__bitangents[index2_vec3 + 1] = bitangent.y;
+            m__bitangents[index2_vec3 + 2] = bitangent.z;
+            m__bitangents[index3_vec3] = bitangent.x;
+            m__bitangents[index3_vec3 + 1] = bitangent.y;
+            m__bitangents[index3_vec3 + 2] = bitangent.z;
+
+        }
 
     }
 }

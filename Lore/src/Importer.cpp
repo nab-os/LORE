@@ -7,8 +7,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Camera.h"
-#include "Scene.h"
+#include "Library.h"
 #include "Lore.h"
 
 using namespace glm;
@@ -46,11 +45,10 @@ Scene* Importer::import()
         importScene(asset, i);
     }
     
-    //Not yet implemented by glTF2-loader
-    /*for(unsigned int i = 0; i < asset.cameras.size(); ++i)
+    for(unsigned int i = 0; i < asset.cameras.size(); ++i)
     {
         importCamera(asset, i);
-    }*/
+    }
 
     for(unsigned int i = 0; i < asset.images.size(); ++i)
     {
@@ -94,21 +92,28 @@ Scene* Importer::import()
 void Importer::importScene(gltf2::Asset asset, unsigned int i)
 {
     gltf2::Scene gscene = asset.scenes[i];
-    Scene* scene = Lore::createScene(gscene.name);
-    m__scenes.push_back(scene);
-    cout << "[Importer]: Scene: " << gscene.name << endl;
+	string name = gscene.name;
+	if(name == "")
+		name = "Scene";
+    cout << "[Importer]: Scene: " << name << endl;
+    Scene* scene = Lore::createScene(name);
+	m__scenes.push_back(scene);
 }
 
 
 void Importer::importCamera(gltf2::Asset asset, unsigned int i)
 {
-    //Not yet implemented by glTF2-loader
-    /*gltf2::Camera gcamera = asset.cameras[i];
-    Camera* camera = Lore::createCamera(gcamera.name);
-    cout << "[Importer]: Camera: " << gcamera.name << endl;
+    gltf2::Camera gcamera = asset.cameras[i];
+	string name = gcamera.name;
+	if(name == "")
+		name = "Camera";
+    cout << "[Importer]: Camera: " << name << endl;
+    Camera* camera = Lore::createCamera(name);
+	m__cameras.push_back(camera);
+
     camera->setRatio(gcamera.perspective.aspectRatio);
-    camera->setFar(gcamera.perspective.zfar);
-    camera->setNear(gcamera.perspective.znear);*/
+    camera->setFar(gcamera.perspective.far);
+    camera->setNear(gcamera.perspective.near);
 }
 
 
@@ -117,7 +122,7 @@ void Importer::importTexture(gltf2::Asset asset, unsigned int i)
     gltf2::Image image = asset.images[i];
     cout << "[Importer]: Texture: " << image.name << endl;
     Texture* texture = Lore::createTexture(image.uri);
-    m__textures.push_back(texture);
+	m__textures.push_back(texture);
     texture->load();
 }
 
@@ -125,12 +130,15 @@ void Importer::importTexture(gltf2::Asset asset, unsigned int i)
 void Importer::importMaterial(gltf2::Asset asset, unsigned int i)
 {
     gltf2::Material gmaterial = asset.materials[i];
-    cout << "[Importer]: Material: " << gmaterial.name << endl;
-    Material* material = Lore::createMaterial(gmaterial.name);
-    m__materials.push_back(material);
+	string name = gmaterial.name;
+	if(name == "")
+		name = "Material";
+    cout << "[Importer]: Material: " << name << endl;
+    Material* material = Lore::createMaterial(name);
+	m__materials.push_back(material);
 
     material->setShader(Lore::getShader("default-120"));
-    
+
     gltf2::Material::Pbr pbr = gmaterial.pbr;
     if(pbr.metallicRoughnessTexture.index != -1)
         material->setPbrTexture(m__textures[pbr.metallicRoughnessTexture.index]);
@@ -155,24 +163,33 @@ void Importer::importMaterial(gltf2::Asset asset, unsigned int i)
 void Importer::importNode(gltf2::Asset asset, unsigned int i)
 {
     gltf2::Node gnode = asset.nodes[i];
-    cout << "[Importer]: Node: " << gnode.name << endl;
 
     Node* node;
+	string name = gnode.name;
 
     if(gnode.camera != -1)
     {
-        node = Lore::createCamera(gnode.name);
+		if(name == "")
+			name = "CameraNode";
+        node = m__cameras[gnode.camera];
     }else if(gnode.mesh != -1)
     {
-        node = Lore::createObject(gnode.name);
+		if(name == "")
+			name = "Object";
+        node = Lore::createObject(name);
     }else if(gnode.skin != -1)
     {
+		if(name == "")
+			name = "Skin";
         cout << "[Importer] Skin not implemented" << endl;
     }else
     {
-        node = Lore::createNode(gnode.name);
+		if(name == "")
+			name = "Node";
+        node = Lore::createNode(name);
     }
-    m__nodes.push_back(node);
+    cout << "[Importer]: Node: " << name << endl;
+	m__nodes.push_back(node);
     
     node->setPosition(vec3(gnode.translation[0], gnode.translation[1], gnode.translation[2]));
     node->setScale(vec3(gnode.scale[0], gnode.scale[1], gnode.scale[2]));
@@ -183,9 +200,12 @@ void Importer::importNode(gltf2::Asset asset, unsigned int i)
 void Importer::importMesh(gltf2::Asset asset, unsigned int i)
 {
     gltf2::Mesh gmesh = asset.meshes[i];
-    Mesh* mesh = Lore::createMesh(gmesh.name);
-    m__meshes.push_back(mesh);
-    cout << "[Importer]: Mesh: " << gmesh.name << endl;
+	string name = gmesh.name;
+	if(name == "")
+		name = "Mesh";
+    cout << "[Importer]: Mesh: " << name << endl;
+    Mesh* mesh = Lore::createMesh(name);
+	m__meshes.push_back(mesh);
     
     for(auto primitive: gmesh.primitives)
     {
@@ -200,6 +220,9 @@ void Importer::importMesh(gltf2::Asset asset, unsigned int i)
             }
             mesh->setIndexed(true);
             mesh->setIndices(indices);
+        }else
+        {
+            mesh->setIndexed(false);
         }
 
         mesh->setMode((int)primitive.mode);
@@ -348,12 +371,12 @@ void Importer::buildTree(gltf2::Asset asset, unsigned int i)
     for(unsigned int j = 0; j < gscene.nodes.size(); ++j)
     {
         scene->addChild(m__nodes[gscene.nodes[j]]);
-        buildNodeTree(asset, j);
+        buildNodeTree(asset, scene, j);
     }
 }
 
 
-void Importer::buildNodeTree(gltf2::Asset asset, unsigned int i)
+void Importer::buildNodeTree(gltf2::Asset asset, Scene* scene, unsigned int i)
 {
     cout << "[Importer]: buildNodeTree: " << i << endl;
     if(asset.nodes.size() > i)
@@ -361,7 +384,13 @@ void Importer::buildNodeTree(gltf2::Asset asset, unsigned int i)
         gltf2::Node gnode = asset.nodes[i];
         Node* node = m__nodes[i];
         
-        if(gnode.mesh != -1)
+        if(gnode.camera != -1)
+        {
+            Camera* camera = (Camera*)node;
+    		camera->setScene(scene);
+        }
+        
+		if(gnode.mesh != -1)
         {
             Object* obj = (Object*)node;
             obj->setMesh(m__meshes[gnode.mesh]);
@@ -370,7 +399,7 @@ void Importer::buildNodeTree(gltf2::Asset asset, unsigned int i)
         for(unsigned int j = 0; j < gnode.children.size(); ++j)
         {
             node->addChild(m__nodes[gnode.children[j]]);
-            buildNodeTree(asset, gnode.children[j]);
+            buildNodeTree(asset, scene, gnode.children[j]);
         }
     }else
     {

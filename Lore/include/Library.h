@@ -1,6 +1,7 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
+#include <iostream>
 #include <string>
 #include <map>
 
@@ -37,12 +38,29 @@ namespace LORE
 
                 void add(std::string path, T* object)
                 {
-                    m__objects.insert(pair<string, T*>(path, object));
+					string path_ = path;
+                    int i = 1;
+                    while(has(path_))
+                    {
+                        path_ = path + "_" + std::to_string(i);
+						i++;
+                    }
+					cout << "Resulting path: " << path_ << endl;
+                    m__objects.insert(pair<string, T*>(path_, object));
                 }
 
                 T* get(std::string path)
                 {
-                    return m__objects.at(path);
+                    if(has(path))
+                        return m__objects.at(path);
+                    else
+                        return nullptr;
+                }
+
+                void list()
+                {
+                    for(auto it: m__objects)
+                        std::cout << "[Library]: " << it.first << std::endl;
                 }
 
                 void flush()

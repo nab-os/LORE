@@ -25,8 +25,6 @@ LORE::Window::Window(std::string tittle, int width, int height, int fps): m__win
 LORE::Window::~Window()
 {
 	cout << this << " [Window] destructor" << endl;
-
-    delete m__camera;
 }
 
 

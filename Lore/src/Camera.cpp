@@ -17,7 +17,7 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
     m_axeVertical(axeVertical),
     m_phi(0),
     m_theta(0),
-    m_orientation(vec3(0)),
+    m_orientation(vec3(1, 0, 0)),
     m_sensibilite(sensibilite),
     m_vitesse(0.05),
     m__ratio(16.0/9.0),
@@ -31,9 +31,7 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
 
     cout << this << " [Camera] constructor" << endl;
 
-    m__projection = perspective(M_PI / 2.0, m__ratio, m__near, m__far);
-
-
+	updatePerspective();
 
     glGenTextures(1, &m__environmentMap);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m__environmentMap);
@@ -67,6 +65,7 @@ Camera::Camera(int width, int height, vec3 position, vec3 pointCible, vec3 axeVe
 
 
     Node::setPosition(position);
+	orienter(0,0);
 /*   
     m__render = new Texture();
     m__render->load();
@@ -275,39 +274,40 @@ void Camera::setPointcible(glm::vec3 pointCible)
 
     m_orientation = m_pointCible - position;
     m_orientation = normalize(m_orientation);
+	float phi, theta;
 
     // Si l'axe vertical est l'axe X
     if (m_axeVertical.x == 1.0)
     {
         // Calcul des angles
-        m_phi = asin(m_orientation.x);
-        m_theta = acos(m_orientation.y / cos(m_phi));
+        phi = asin(m_orientation.x);
+        theta = acos(m_orientation.y / cos(phi));
 
         if (m_orientation.y < 0)
-            m_theta *= -1;
+            theta *= -1;
     }
     else if (m_axeVertical.y == 1.0) // Si c'est l'axe Y
     {
         // Calcul des angles
-        m_phi = asin(m_orientation.y);
-        m_theta = acos(m_orientation.z / cos(m_phi));
+        phi = asin(m_orientation.y);
+        theta = acos(m_orientation.z / cos(phi));
 
         if (m_orientation.z < 0)
-            m_theta *= -1;
+            theta *= -1;
     }
     else // Sinon c'est l'axe Z
     {
         // Calcul des angles
-        m_phi = asin(m_orientation.x);
-        m_theta = acos(m_orientation.z / cos(m_phi));
+        phi = asin(m_orientation.x);
+        theta = acos(m_orientation.z / cos(phi));
 
         if (m_orientation.z < 0)
-            m_theta *= -1;
+            theta *= -1;
     }
 
     // Conversion en degrés
-    m_phi = m_phi * 180 / PI;
-    m_theta = m_theta * 180 / PI;
+    phi = phi * 180 / PI;
+    theta = theta * 180 / PI;
 }
 
 

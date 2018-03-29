@@ -7,6 +7,7 @@ using namespace LORE;
 
 Library<LORE::Window>* Lore::m__windowLibrary = new Library<Window>();
 Library<Scene>* Lore::m__sceneLibrary = new Library<Scene>();
+Library<Camera>* Lore::m__cameraLibrary = new Library<Camera>();
 Library<Node>* Lore::m__nodeLibrary = new Library<Node>();
 Library<Mesh>* Lore::m__meshLibrary = new Library<Mesh>();
 Library<Material>* Lore::m__materialLibrary = new Library<Material>();
@@ -79,9 +80,14 @@ LORE::Window* Lore::init()
 
 	}
 
-    Lore::createMaterial("default")->load();
-    Lore::createShader("default")->load();
-    Lore::createShader("default-120")->load();
+    Material* default_material = Lore::createMaterial("default");
+    default_material->load();
+    Shader* default_shader = Lore::createShader("default");
+    default_shader->load();
+    Shader* default_shader_120 = Lore::createShader("default-120");
+    default_shader_120->load();
+
+    default_material->setShader(default_shader_120);
     
     Material* mat_basic = Lore::createMaterial("basic");
     mat_basic->load();
@@ -104,6 +110,7 @@ void Lore::unload()
 {
 	Lore::m__windowLibrary->flush();
 	Lore::m__sceneLibrary->flush();
+	Lore::m__cameraLibrary->flush();
 	Lore::m__nodeLibrary->flush();
 	Lore::m__meshLibrary->flush();
 	Lore::m__materialLibrary->flush();
@@ -172,7 +179,7 @@ Object* Lore::createObject(string id)
 Camera* Lore::createCamera(string id)
 {
     Camera* c = new Camera();
-    Lore::m__nodeLibrary->add(id, c);
+    Lore::m__cameraLibrary->add(id, c);
     return c;
 }
 
@@ -219,6 +226,17 @@ Scene* Lore::load(string path)
 Scene* Lore::getScene(string id)
 {
     return m__sceneLibrary->get(id);
+}
+
+
+Camera* Lore::getCamera(string id)
+{
+    return m__cameraLibrary->get(id);
+}
+
+void Lore::listCameras()
+{
+    m__cameraLibrary->list();
 }
 
 

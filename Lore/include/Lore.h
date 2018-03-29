@@ -49,6 +49,8 @@ namespace LORE
             static Scene* load(std::string path);
 
             static Scene* getScene(std::string id);
+            static Camera* getCamera(std::string id);
+            static void listCameras();
             static Node* getNode(std::string id);
             static Mesh* getMesh(std::string id);
             static Texture* getTexture(std::string id);
@@ -64,6 +66,7 @@ namespace LORE
 
             static Library<Window>* m__windowLibrary;
             static Library<Scene>* m__sceneLibrary;
+            static Library<Camera>* m__cameraLibrary;
             static Library<Node>*	m__nodeLibrary;
             static Library<Mesh>* m__meshLibrary;
             static Library<Material>* m__materialLibrary;
