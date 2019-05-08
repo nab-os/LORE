@@ -82,8 +82,8 @@ Diamond::Diamond(int n): Mesh()
     {
 
         int i1 = i * 9; 
-        int i2 = ((i * 3)+1)*3; 
-        int i3 = ((i * 3)+2)*3; 
+        int i2 = i1 + 3; 
+        int i3 = i2 + 3; 
         vec3 v1 = vec3(vertices[i1], vertices[i1+1], vertices[i1+2]);
         vec3 v2 = vec3(vertices[i2], vertices[i2+1], vertices[i2+2]);
         vec3 v3 = vec3(vertices[i3], vertices[i3+1], vertices[i3+2]);
