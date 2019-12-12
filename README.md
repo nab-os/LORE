@@ -14,37 +14,37 @@ A simple window that closes when ESCAPE key is pressed
 using namespace std;
 using namespace LORE;
 int main(int argc, char** argv) {
-	cout << "===== INIT =====" << endl;
+    cout << "===== INIT =====" << endl;
 
-	LORE::Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
-	if(!window) {
-		cout << "Error during OpenGL context initialization." << endl;
-		Lore::unload();
-		return -1;
-	}
+    LORE::Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
+    if(!window) {
+        cout << "Error during OpenGL context initialization." << endl;
+        Lore::unload();
+        return -1;
+    }
 
     //----------
     Camera* camera = new Camera();
     window->setCamera(camera);
 
-	Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
-	controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
-		window->close();
+    Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
+    controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
+    window->close();
     });
 
-	//===================================
-	cout << "===== RENDER =====" << endl;
+    //===================================
+    cout << "===== RENDER =====" << endl;
 
-	while (!window->shouldClose()) {
-		int start = window->startFrame(); // Begin the frame render process
-		controller->check(window); // Checks all bindings for the Window and execute de fonction if it matches
-		window->render();
-		window->endFrame(start); // End the frame render process and display the image on the window
-	}
+    while (!window->shouldClose()) {
+        int start = window->startFrame(); // Begin the frame render process
+        controller->check(window); // Checks all bindings for the Window and execute de fonction if it matches
+        window->render();
+        window->endFrame(start); // End the frame render process and display the image on the window
+    }
 
-	//================================
-	cout << "===== END =====" << endl;
-	Lore::unload(); // Unload all dictionnaries, and unload OpenGL context
+    //================================
+    cout << "===== END =====" << endl;
+    Lore::unload(); // Unload all dictionnaries, and unload OpenGL context
     return 0;
 }
 ```
@@ -99,11 +99,11 @@ License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later version.
 
 This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     Library General Public License for more details.
 
-You should have received a copy of the GNU Library General Public
-License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
-Boston, MA  02110-1301, USA.
+     You should have received a copy of the GNU Library General Public
+     License along with this library; if not, write to the
+     Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+     Boston, MA  02110-1301, USA.
