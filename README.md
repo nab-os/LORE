@@ -51,7 +51,6 @@ int main(int argc, char** argv) {
 ## Why ?
 
 The purpose of this project is to create a simple and lightweight tool to use all the OpenGL's power.
-Another aim of this project is to stay cross-platform and open.
 
 ## Installation
 
@@ -69,11 +68,11 @@ apt install gcc
 
 You will need to install multiple libraries :
 
-* -glew: OpenGL development environment
-* -glm: Math objects for OpenGL
-* -glfw3: Window and context handler
-* -stb: Texture loading library
-* -gltf-importer: gltf document importer
+* glew: OpenGL development environment
+* glm: Math objects for OpenGL
+* glfw3: Window and context handler
+* stb: Texture loading library
+* gltf-importer: gltf document importer
 
 ```bash
 apt install libglew-dev libglm-dev libglfw3-dev
@@ -99,11 +98,11 @@ License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later version.
 
 This library is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-     Library General Public License for more details.
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
-     You should have received a copy of the GNU Library General Public
-     License along with this library; if not, write to the
-     Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
-     Boston, MA  02110-1301, USA.
+You should have received a copy of the GNU Library General Public
+License along with this library; if not, write to the
+Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+Boston, MA  02110-1301, USA.
