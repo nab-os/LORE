@@ -80,7 +80,7 @@ int main(int argc, char** argv)
     controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
         window->close();
     });
-    
+
     controller->bind(GLFW_KEY_W, [&window](double x, double y) {
         window->getCamera()->forward();
     });
@@ -101,13 +101,13 @@ int main(int argc, char** argv)
     });
 
     controller->setMouseEvent([&window](double x, double y, double dx, double dy){
-        window->getCamera()->orienter(dx, dy);
+        window->getCamera()->setOrientation(dx, dy);
     });
-    
+
 	controller->bind(GLFW_KEY_T, [&window](double x, double y) {
 		window->setCamera(Lore::getCamera("Camera"));
     });
-    
+
 	controller->bind(GLFW_KEY_G, [&window](double x, double y) {
 		window->setCamera(Lore::getCamera("Camera_1"));
     });

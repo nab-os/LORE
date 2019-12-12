@@ -19,7 +19,7 @@ namespace LORE {
         protected:
             GLuint m__id;
 
-            std::string m__nom;
-            std::string m__emplacementFichier;
+            std::string m__name;
+            std::string m__filePath;
     };
 }

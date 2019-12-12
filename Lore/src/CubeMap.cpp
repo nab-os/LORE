@@ -15,12 +15,12 @@ CubeMap::~CubeMap() {}
 void CubeMap::load() {
 	cout << this << " [CubeMap] load" << endl;
 
-	string left = (m__emplacementFichier + "/left.jpg");
-	string right = (m__emplacementFichier + "/right.jpg");
-	string top = (m__emplacementFichier + "/top.jpg");
-	string back = (m__emplacementFichier + "/back.jpg");
-	string front = (m__emplacementFichier + "/front.jpg");
-	string bottom = (m__emplacementFichier + "/bottom.jpg");
+	string left = (m__filePath + "/left.jpg");
+	string right = (m__filePath + "/right.jpg");
+	string top = (m__filePath + "/top.jpg");
+	string back = (m__filePath + "/back.jpg");
+	string front = (m__filePath + "/front.jpg");
+	string bottom = (m__filePath + "/bottom.jpg");
 
 	cout << this << " [CubeMap] load(): " << left << endl;
 	cout << this << " [CubeMap] load(): " << right << endl;

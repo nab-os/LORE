@@ -34,8 +34,8 @@ vector<Node*> Node::getChilds() {
 	return m__childs;
 }
 
-void Node::move(glm::vec3 pos) {
-    m__position += pos;
+void Node::move(glm::vec3 offset) {
+    m__position += offset;
 }
 
 void Node::setPosition(glm::vec3 pos) {

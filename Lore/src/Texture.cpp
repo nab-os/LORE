@@ -3,7 +3,7 @@
 using namespace std;
 using namespace LORE;
 
-Texture::Texture(std::string name): m__id(), m__nom(name), m__emplacementFichier(name) {
+Texture::Texture(std::string name): m__id(), m__name(name), m__filePath(name) {
 	cout << this << " [Texture] constructor" << endl;
 }
 
@@ -11,10 +11,10 @@ Texture::~Texture() {}
 
 void Texture::load() {
 	cout << this << " [Texture] load" << endl;
-	cout << this << " [Texture] load(): " << m__emplacementFichier << endl;
+	cout << this << " [Texture] load(): " << m__filePath << endl;
 
-	if(!m__nom.empty()) {
-		m__id = SOIL_load_OGL_texture((char*)m__emplacementFichier.c_str(),
+	if(!m__name.empty()) {
+		m__id = SOIL_load_OGL_texture((char*)m__filePath.c_str(),
                                       SOIL_LOAD_AUTO,
                                       SOIL_CREATE_NEW_ID,
                                       SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
