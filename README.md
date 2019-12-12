@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 
     Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
     controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
-    window->close();
+        window->close();
     });
 
     //===================================
