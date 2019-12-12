@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <string>
 
@@ -28,14 +27,9 @@
 //#include <OVR_CAPI.h>
 //#include <OVR_CAPI_GL.h>
 
-namespace LORE
-{
-
-    class Window
-    {
-
+namespace LORE {
+    class Window {
         public:
-
             Window(std::string tittle = "First window", int width = 512, int height = 512, int fps = 60);
             virtual ~Window();
 
@@ -53,7 +47,7 @@ namespace LORE
             GLFWwindow* getWindow() { return m__window; };
             void setCamera(Camera* camera) { m__camera = camera; };
             Camera* getCamera() { return m__camera; };
-            
+
             void setScene(Scene* scene) { m__scene = scene; };
             Scene* getScene() { return m__scene; };
 
@@ -61,7 +55,6 @@ namespace LORE
             int getHeight() { return m__height; };
 
         private:
-
             GLFWwindow* m__window;
 
             std::string m__title;
@@ -80,9 +73,5 @@ namespace LORE
             static void window_focus_callback(GLFWwindow* window, int state);
             static void window_close_callback(GLFWwindow* window);
             static void mouse_move_callback(GLFWwindow* window, double x, double y);
-
     };
-
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef POSTPROCESS_H
-#define POSTPROCESS_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -7,23 +6,11 @@
 #include <GL/glew.h>
 #include <SOIL.h>
 
-namespace LORE
-{
-
-    class PostProcess
-    {
-
+namespace LORE {
+    class PostProcess {
         public:
-
             PostProcess();
             virtual ~PostProcess();
-
             void load();
-
-        protected:
-
     };
-
 }
-
-#endif

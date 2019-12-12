@@ -1,25 +1,13 @@
-#ifndef CUBE_H
-#define CUBE_H
+#pragma once
 
 #include <string>
 
 #include "Mesh.h"
 
-namespace LORE
-{
-
-    class Cube: public Mesh
-    {
-
+namespace LORE {
+    class Cube: public Mesh {
         public:
-
             Cube();
             ~Cube();
-
-        private:
-
     };
-
 }
-
-#endif

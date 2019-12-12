@@ -1,10 +1,8 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #ifndef PI
 #define PI 3.14159265359
 #endif
-
 
 #include <GL/glew.h>
 #include <SOIL.h>
@@ -20,12 +18,8 @@
 #include "Texture.h"
 #include "Mesh.h"
 
-namespace LORE
-{
-
-    class Camera: public Node
-    {
-
+namespace LORE {
+    class Camera: public Node {
         public:
             Camera(int width = 768, int height = 768, glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 pointCible = glm::vec3(1, 0, 0), glm::vec3 axeVertical = glm::vec3(0, 1, 0), float sensibilite = 0.04, float vitesse = 0.001);
             virtual ~Camera();
@@ -42,7 +36,6 @@ namespace LORE
 
             virtual void render();
             virtual void render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model);
-
 
             virtual bool isEmpty() { return false; };
             virtual bool isObject() { return false; };
@@ -74,7 +67,6 @@ namespace LORE
             GLuint getEnvironmentMap() { return m__environmentMap; };
 
         private:
-
             glm::mat4 getView();
             void updatePerspective();
 
@@ -108,9 +100,5 @@ namespace LORE
             Texture* m__render;
             GLuint m__environmentMap;
             Mesh* m__environmentCube;
-
     };
-
 }
-
-#endif

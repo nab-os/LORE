@@ -7,31 +7,20 @@ using namespace LORE;
 FrameBuffer::FrameBuffer(int width, int height):
 m__width(width),
 m__height(height),
-m__renderTexture()
-{
-
+m__renderTexture() {
 	cout << this << " [FrameBuffer] constructor" << endl;
-
 }
 
-
-FrameBuffer::~FrameBuffer()
-{
-
+FrameBuffer::~FrameBuffer() {
 	delete m__renderTexture;
-
 }
 
-
-void FrameBuffer::load()
-{
-
+void FrameBuffer::load() {
 	m__renderTexture = new Texture();
     m__renderTexture->load();
 
     glGenFramebuffers(1, &m__bufferID);
 	glBindFramebuffer(GL_FRAMEBUFFER, m__bufferID);
-
 		glBindTexture(GL_TEXTURE_2D, m__renderTexture->getID());
 
 			// Give an empty image to OpenGL ( the last "0" )
@@ -55,19 +44,11 @@ void FrameBuffer::load()
 			glDrawBuffers(1, drawBuffers); // "1" is the size of DrawBuffers
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 }
 
-
-void FrameBuffer::render()
-{
-
+void FrameBuffer::render() {
 	glBindFramebuffer(GL_FRAMEBUFFER, m__bufferID);
-
 	m__camera->render();
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 }

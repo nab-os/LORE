@@ -14,83 +14,66 @@ using namespace glm;
 using namespace std;
 using namespace LORE;
 
-Importer::Importer(string file): m__filePath(file)
-{
-}
+Importer::Importer(string file): m__filePath(file) {}
 
-Importer::~Importer()
-{
-}
+Importer::~Importer() {}
 
-Scene* Importer::import()
-{
-
+Scene* Importer::import() {
     cout << "[Importer]: import()" << endl;
 
-    if(m__filePath.substr(m__filePath.find_last_of(".") + 1) != "gltf")
-    {
+    if(m__filePath.substr(m__filePath.find_last_of(".") + 1) != "gltf") {
         cout << "File extension must be .gltf" << endl;
         exit(1);
         return NULL;
     }
 
     gltf2::Asset asset = gltf2::load(m__filePath);
-    
-    cout << "[Importer]: import(): copyright " << asset.metadata.copyright << endl; 
-    cout << "[Importer]: import(): version " << asset.metadata.version << endl; 
-    cout << "[Importer]: import(): generator " << asset.metadata.generator << endl; 
 
-    for(unsigned int i = 0; i < asset.scenes.size(); ++i)
-    {
+    cout << "[Importer]: import(): copyright " << asset.metadata.copyright << endl;
+    cout << "[Importer]: import(): version " << asset.metadata.version << endl;
+    cout << "[Importer]: import(): generator " << asset.metadata.generator << endl;
+
+    for(unsigned int i = 0; i < asset.scenes.size(); ++i) {
         importScene(asset, i);
     }
-    
-    for(unsigned int i = 0; i < asset.cameras.size(); ++i)
-    {
+
+    for(unsigned int i = 0; i < asset.cameras.size(); ++i) {
         importCamera(asset, i);
     }
 
-    for(unsigned int i = 0; i < asset.images.size(); ++i)
-    {
+    for(unsigned int i = 0; i < asset.images.size(); ++i) {
         cout << "[Import] Texture: " << i << endl;
         importTexture(asset, i);
     }
 
-    for(unsigned int i = 0; i < asset.materials.size(); ++i)
-    {
+    for(unsigned int i = 0; i < asset.materials.size(); ++i) {
         cout << "[Import] Material: " << i << endl;
         importMaterial(asset, i);
     }
 
     /*
-    for(unsigned int i = 0; i < asset..size(); ++i)
-    {
+    for(unsigned int i = 0; i < asset..size(); ++i) {
         cout << "[Import] Shader: " << i << endl;
         importShader(asset, i);
     }*/
 
-    for(unsigned int i = 0; i < asset.nodes.size(); ++i)
-    {
+    for(unsigned int i = 0; i < asset.nodes.size(); ++i) {
         importNode(asset, i);
     }
 
-    for(unsigned int i = 0; i < asset.meshes.size(); ++i)
-    {
+    for(unsigned int i = 0; i < asset.meshes.size(); ++i) {
         cout << "[Import] Mesh: " << i << endl;
         importMesh(asset, i);
     }
 
-    for(unsigned int i = 0; i < asset.scenes.size(); ++i)
-    {
+    for(unsigned int i = 0; i < asset.scenes.size(); ++i) {
         buildTree(asset, i);
     }
 
     return m__scenes[asset.scene];
-
 }
 
-void Importer::importScene(gltf2::Asset asset, unsigned int i)
-{
+void Importer::importScene(gltf2::Asset asset, unsigned int i) {
     gltf2::Scene gscene = asset.scenes[i];
 	string name = gscene.name;
 	if(name == "")
@@ -100,9 +83,7 @@ void Importer::importScene(gltf2::Asset asset, unsigned int i)
 	m__scenes.push_back(scene);
 }
 
-
-void Importer::importCamera(gltf2::Asset asset, unsigned int i)
-{
+void Importer::importCamera(gltf2::Asset asset, unsigned int i) {
     gltf2::Camera gcamera = asset.cameras[i];
 	string name = gcamera.name;
 	if(name == "")
@@ -116,9 +97,7 @@ void Importer::importCamera(gltf2::Asset asset, unsigned int i)
     camera->setNear(gcamera.perspective.near);
 }
 
-
-void Importer::importTexture(gltf2::Asset asset, unsigned int i)
-{
+void Importer::importTexture(gltf2::Asset asset, unsigned int i) {
     gltf2::Image image = asset.images[i];
     cout << "[Importer]: Texture: " << image.name << endl;
     Texture* texture = Lore::createTexture(image.uri);
@@ -126,9 +105,7 @@ void Importer::importTexture(gltf2::Asset asset, unsigned int i)
     texture->load();
 }
 
-
-void Importer::importMaterial(gltf2::Asset asset, unsigned int i)
-{
+void Importer::importMaterial(gltf2::Asset asset, unsigned int i) {
     gltf2::Material gmaterial = asset.materials[i];
 	string name = gmaterial.name;
 	if(name == "")
@@ -152,33 +129,28 @@ void Importer::importMaterial(gltf2::Asset asset, unsigned int i)
     material->setDiffuseColor(glm::vec4(pbr.baseColorFactor[0], pbr.baseColorFactor[1], pbr.baseColorFactor[2], pbr.baseColorFactor[3]));
     material->setMetallness(pbr.metallicFactor);
     material->setRoughness(pbr.roughnessFactor);
-    
+
     material->setCulling(!gmaterial.doubleSided);
 
     material->load();
 
 }
 
-
-void Importer::importNode(gltf2::Asset asset, unsigned int i)
-{
+void Importer::importNode(gltf2::Asset asset, unsigned int i) {
     gltf2::Node gnode = asset.nodes[i];
 
     Node* node;
 	string name = gnode.name;
 
-    if(gnode.camera != -1)
-    {
+    if(gnode.camera != -1) {
 		if(name == "")
 			name = "CameraNode";
         node = m__cameras[gnode.camera];
-    }else if(gnode.mesh != -1)
-    {
+    }else if(gnode.mesh != -1) {
 		if(name == "")
 			name = "Object";
         node = Lore::createObject(name);
-    }else if(gnode.skin != -1)
-    {
+    }else if(gnode.skin != -1) {
 		if(name == "")
 			name = "Skin";
         cout << "[Importer] Skin not implemented" << endl;
@@ -190,15 +162,13 @@ void Importer::importNode(gltf2::Asset asset, unsigned int i)
     }
     cout << "[Importer]: Node: " << name << endl;
 	m__nodes.push_back(node);
-    
+
     node->setPosition(vec3(gnode.translation[0], gnode.translation[1], gnode.translation[2]));
     node->setScale(vec3(gnode.scale[0], gnode.scale[1], gnode.scale[2]));
 
 }
 
-
-void Importer::importMesh(gltf2::Asset asset, unsigned int i)
-{
+void Importer::importMesh(gltf2::Asset asset, unsigned int i) {
     gltf2::Mesh gmesh = asset.meshes[i];
 	string name = gmesh.name;
 	if(name == "")
@@ -206,15 +176,12 @@ void Importer::importMesh(gltf2::Asset asset, unsigned int i)
     cout << "[Importer]: Mesh: " << name << endl;
     Mesh* mesh = Lore::createMesh(name);
 	m__meshes.push_back(mesh);
-    
-    for(auto primitive: gmesh.primitives)
-    {
-        if(primitive.indices != -1)
-        {
+
+    for(auto primitive: gmesh.primitives) {
+        if(primitive.indices != -1) {
             vector<float> indices_temp = importData(asset, asset.accessors[primitive.indices]);
             vector<unsigned int> indices;
-            for(auto it: indices_temp)
-            {
+            for(auto it: indices_temp) {
                 //cout << "[Importer] Indice: " << it << endl;
                 indices.push_back((unsigned int)it);
             }
@@ -226,35 +193,29 @@ void Importer::importMesh(gltf2::Asset asset, unsigned int i)
         }
 
         mesh->setMode((int)primitive.mode);
-        
+
         gltf2::Attributes attributes = primitive.attributes;
-        for(auto it: attributes)
-        {
+        for(auto it: attributes) {
             gltf2::Accessor accessor = asset.accessors[it.second];
             vector<float> values = importData(asset, accessor);
             cout << "[Importer]: " << values.size() << endl;
-            if( it.first == "POSITION")
-            {
+            if( it.first == "POSITION") {
                 cout << "[Importer]: " << "POSITION attribute: " << (int)accessor.componentType << endl;
                 mesh->setVertices(values);
-            }else if(it.first == "NORMAL")
-            {
+            }else if(it.first == "NORMAL") {
                 cout << "[Importer]: " << "NORMAL attribute" << endl;
                 mesh->setNormals(values);
-            }else if(it.first == "TANGENT")
-            {    
+            }else if(it.first == "TANGENT") {
                 cout << "[Importer]: " << "TANGENT attribute" << endl;
                 mesh->setTangents(values);
-            }else if(it.first == "COLOR_0")
-            {    
+            }else if(it.first == "COLOR_0") {
                 cout << "[Importer]: " << "COLOR_0 attribute" << endl;
                 mesh->setColors(values);
-            }else if(it.first == "TEXCOORD_0")
-            {        
+            }else if(it.first == "TEXCOORD_0") {
                 cout << "[Importer]: " << "TEXCOORD_0 attribute: " << (int)accessor.type << endl;
                 mesh->setUVs(values);
-            }else   
-            {    
+            }else
+            {
                 cout << "[Importer]: " << it.first << " not implemented." << endl;
             }
         }
@@ -269,9 +230,7 @@ void Importer::importMesh(gltf2::Asset asset, unsigned int i)
     mesh->load();
 }
 
-
-vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
-{
+vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor) {
     gltf2::BufferView buffer_view = asset.bufferViews[accessor.bufferView];
     gltf2::Buffer buffer = asset.buffers[buffer_view.buffer];
     unsigned int begin = accessor.byteOffset + buffer_view.byteOffset;
@@ -282,13 +241,11 @@ vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
     unsigned int size;
 
     vector<float> values;
-    switch(accessor.componentType)
-    {
+    switch(accessor.componentType) {
         case(gltf2::Accessor::ComponentType::Byte):
             cout << "[Import] Byte component type" << endl;
             size = sizeof(char);
-            for(unsigned int ptr = begin; ptr < end; ptr+=size)
-            {
+            for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
                     //cout << "Value: " << (int)(*(char*)&buffer.data[ptr]) << endl;
@@ -299,8 +256,7 @@ vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
         case(gltf2::Accessor::ComponentType::UnsignedByte):
             cout << "[Import] UnsignedByte component type" << endl;
             size = sizeof(unsigned char);
-            for(unsigned int ptr = begin; ptr < end; ptr+=size)
-            {
+            for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
                     //cout << "Value: " << (int)(*(unsigned char*)&buffer.data[ptr]) << endl;
@@ -311,8 +267,7 @@ vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
         case(gltf2::Accessor::ComponentType::Short):
             cout << "[Import] Short component type" << endl;
             size = sizeof(short);
-            for(unsigned int ptr = begin; ptr < end; ptr+=size)
-            {
+            for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
                     //cout << "Value: " << *(short*)&buffer.data[ptr] << endl;
@@ -323,8 +278,7 @@ vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
         case(gltf2::Accessor::ComponentType::UnsignedShort):
             cout << "[Import] UnsignedShort component type" << endl;
             size = sizeof(unsigned short);
-            for(unsigned int ptr = begin; ptr < end; ptr+=size)
-            {
+            for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
                     //cout << "Value: " << *(unsigned short*)&buffer.data[ptr] << endl;
@@ -335,8 +289,7 @@ vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
         case(gltf2::Accessor::ComponentType::UnsignedInt):
             cout << "[Import] UnsignedInt component type" << endl;
             size = sizeof(unsigned int);
-            for(unsigned int ptr = begin; ptr < end; ptr+=size)
-            {
+            for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
                     //cout << "Value: " << *(unsigned int*)&buffer.data[ptr] << endl;
@@ -347,8 +300,7 @@ vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
         case(gltf2::Accessor::ComponentType::Float):
             cout << "[Import] Float component type: " << sizeof(float) << endl;
             size = sizeof(float);
-            for(unsigned int ptr = begin; ptr < end; ptr+=size)
-            {
+            for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
                     //cout << "Value: " << *(float*)&buffer.data[ptr] << endl;
@@ -362,42 +314,33 @@ vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor)
     return values;
 }
 
-
-void Importer::buildTree(gltf2::Asset asset, unsigned int i)
-{
+void Importer::buildTree(gltf2::Asset asset, unsigned int i) {
     gltf2::Scene gscene = asset.scenes[i];
     Scene* scene = m__scenes[i];
-    
-    for(unsigned int j = 0; j < gscene.nodes.size(); ++j)
-    {
+
+    for(unsigned int j = 0; j < gscene.nodes.size(); ++j) {
         scene->addChild(m__nodes[gscene.nodes[j]]);
         buildNodeTree(asset, scene, j);
     }
 }
 
-
-void Importer::buildNodeTree(gltf2::Asset asset, Scene* scene, unsigned int i)
-{
+void Importer::buildNodeTree(gltf2::Asset asset, Scene* scene, unsigned int i) {
     cout << "[Importer]: buildNodeTree: " << i << endl;
-    if(asset.nodes.size() > i)
-    {
+    if(asset.nodes.size() > i) {
         gltf2::Node gnode = asset.nodes[i];
         Node* node = m__nodes[i];
-        
-        if(gnode.camera != -1)
-        {
+
+        if(gnode.camera != -1) {
             Camera* camera = (Camera*)node;
     		camera->setScene(scene);
         }
-        
-		if(gnode.mesh != -1)
-        {
+
+		if(gnode.mesh != -1) {
             Object* obj = (Object*)node;
             obj->setMesh(m__meshes[gnode.mesh]);
         }
 
-        for(unsigned int j = 0; j < gnode.children.size(); ++j)
-        {
+        for(unsigned int j = 0; j < gnode.children.size(); ++j) {
             node->addChild(m__nodes[gnode.children[j]]);
             buildNodeTree(asset, scene, gnode.children[j]);
         }

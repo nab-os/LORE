@@ -1,5 +1,4 @@
-#ifndef IMPORTER_H
-#define IMPORTER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -12,21 +11,15 @@
 #include "Material.h"
 #include "Texture.h"
 
-namespace LORE
-{
-
-    class Importer
-    {
-
+namespace LORE {
+    class Importer {
         public:
-
             Importer(std::string file);
             ~Importer();
 
             Scene* import();
 
         private:
-
             void importScene(gltf2::Asset asset, unsigned int i);
             void importCamera(gltf2::Asset asset, unsigned int i);
             void importNode(gltf2::Asset asset, unsigned int i);
@@ -49,9 +42,5 @@ namespace LORE
             std::vector<Node*> m__nodes;
             std::vector<Material*> m__materials;
             std::vector<Texture*> m__textures;
-
     };
-
 }
-
-#endif

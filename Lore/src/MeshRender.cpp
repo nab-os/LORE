@@ -10,11 +10,8 @@ MeshRender::MeshRender():	Mesh(),
 							m__VAO(),
 							m__VBO(),
 							m__UVs(),
-							m__normals()
-{
-
+							m__normals() {
 	cout << this << " [MeshRender] constructor" << endl;
-
 }
 
 
@@ -22,9 +19,7 @@ MeshRender::MeshRender(const MeshRender*) : Mesh(),
 												m__VAO(),
 												m__VBO(),
 												m__UVs(),
-												m__normals()
-{
-
+												m__normals() {
 	cout << this << " [MeshRender] copy-constructor" << endl;
 
 	m__UVs.push_back(vec2(1, 0));
@@ -34,17 +29,11 @@ MeshRender::MeshRender(const MeshRender*) : Mesh(),
 	m__normals.push_back(vec3(-1, 0, 0));
 	m__normals.push_back(vec3(0, 1, 0));
 	m__normals.push_back(vec3(1, 0, 0));
-
 }
 
-
-MeshRender::~MeshRender()
-{
-
+MeshRender::~MeshRender() {
 	cout << this << " [MeshRender] destructor" << endl;
-
 }
-
 
 void MeshRender::computeTangentBasis(   // inputs
 	std::vector<glm::vec3> & vertices,
@@ -53,38 +42,30 @@ void MeshRender::computeTangentBasis(   // inputs
 
 	// outputs
 	std::vector<glm::vec3> & tangents,
-	std::vector<glm::vec3> & bitangents)
-{
+	std::vector<glm::vec3> & bitangents) {
 
 	for (unsigned int i = 0; i<vertices.size(); i += 3) {
-
-
 		// Shortcuts for vertices
 		glm::vec3 & v0 = vertices[i + 0];
 		glm::vec3 & v1 = vertices[i + 1];
 		glm::vec3 & v2 = vertices[i + 2];
-
 
 		// Shortcuts for UVs
 		glm::vec2 & uv0 = uvs[i + 0];
 		glm::vec2 & uv1 = uvs[i + 1];
 		glm::vec2 & uv2 = uvs[i + 2];
 
-
 		// Edges of the triangle : postion delta
 		glm::vec3 deltaPos1 = v1 - v0;
 		glm::vec3 deltaPos2 = v2 - v0;
-
 
 		// UV delta
 		glm::vec2 deltaUV1 = uv1 - uv0;
 		glm::vec2 deltaUV2 = uv2 - uv0;
 
-
 		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
 		glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
 		glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
-
 
 		// Set the same tangent for all three vertices of the triangle.
 
@@ -97,15 +78,10 @@ void MeshRender::computeTangentBasis(   // inputs
 		bitangents.push_back(bitangent);
 		bitangents.push_back(bitangent);
 		bitangents.push_back(bitangent);
-
 	}
-
 }
 
-
-void MeshRender::load()
-{
-
+void MeshRender::load() {
 	Mesh::load();
 
 	cout << this << " [MeshRender] load" << endl;
@@ -127,8 +103,6 @@ void MeshRender::load()
 	float* tangents = this->vec3ToFloat(vecTangents);
 	float* bytangents = this->vec3ToFloat(vecBytangents);
 
-
-
 	GLuint& idVAO = this->getVAO();
 	GLuint& idVBO = this->getVBO();
 
@@ -138,18 +112,14 @@ void MeshRender::load()
 	if (glIsBuffer(idVBO) == GL_TRUE)
 		glDeleteBuffers(1, &idVBO);
 
-
 	// Génération de l'ID
 	glGenBuffers(1, &idVBO);
-
 
 	// Verrouillage du VBO
 	glBindBuffer(GL_ARRAY_BUFFER, idVBO);
 
-
 		// Allocation de la mémoire vidéo
 		glBufferData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes*3, 0, GL_STATIC_DRAW); // * 3 for Tangent and Bytangent
-
 
 		// Transfert des données
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeVerticesBytes, vertices);
@@ -158,8 +128,6 @@ void MeshRender::load()
 		glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes,  sizeNormalsBytes, normals);
 		glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes, sizeNormalsBytes, tangents);
 		glBufferSubData(GL_ARRAY_BUFFER, sizeVerticesBytes + sizeUVsBytes + sizeNormalsBytes * 2, sizeNormalsBytes, bytangents);
-
-
 
 	// Déverrouillage de l'objet
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -170,18 +138,14 @@ void MeshRender::load()
 	if (glIsVertexArray(idVAO) == GL_TRUE)
 		glDeleteVertexArrays(1, &idVAO);
 
-
 	// Génération de l'identifiant du VAO
 	glGenVertexArrays(1, &idVAO);
-
 
 	// Verrouillage du VAO
 	glBindVertexArray(idVAO);
 
-
 		// Verrouillage du VBO
 		glBindBuffer(GL_ARRAY_BUFFER, idVBO);
-
 
 			// Accès aux vertices dans la mémoire vidéo
 
@@ -241,13 +205,9 @@ void MeshRender::load()
 	free(vertices);
 	free(UVs);
 	free(normals);
-
 }
 
-
-void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID)
-{
-
+void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint environmentMapID) {
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
@@ -294,10 +254,8 @@ void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint enviro
 
 	//s->envoyerFloat("spreadFactor", Light::getInstance()->spread);
 
-
 	/*glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, shadowMap);*/
-
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, environmentMapID);
@@ -388,120 +346,66 @@ void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint enviro
 	std::vector<glm::vec3> vertices = this->getVertices();
 
 	for (unsigned int i=0; i < vertices.size()-1; i++){
-
 		glm::vec3 p = vertices[i];
 		glVertex3fv(&p.x);
 
 		glm::vec3 o = glm::normalize(m__normals[i]);
 		p+=o*0.1f;
 		glVertex3fv(&p.x);
-
 	}
-
 	glEnd();
-
 }
-
 
 //=====VAO/VBO=====
-GLuint& MeshRender::getVAO()
-{
-
+GLuint& MeshRender::getVAO() {
 	return m__VAO;
-
 }
 
-
-GLuint& MeshRender::getVBO()
-{
-
+GLuint& MeshRender::getVBO() {
 	return m__VBO;
-
 }
-
-
 
 //=====UVs=====
-int MeshRender::getUVCount()
-{
-
+int MeshRender::getUVCount() {
 	return m__UVs.size();
-
 }
 
-
-int MeshRender::getUVsSize()
-{
-
+int MeshRender::getUVsSize() {
 	return m__UVs.size() * 2 * sizeof(float);
-
 }
 
-
-vector<vec2> MeshRender::getUVs()
-{
-
+vector<vec2> MeshRender::getUVs() {
 	return m__UVs;
-
 }
 
-
-float* MeshRender::getUVsFloat()
-{
-
+float* MeshRender::getUVsFloat() {
 	float* res = (float*)malloc(sizeof(float) * m__UVs.size() * 2);
-
-	for (unsigned int i = 0; i < m__UVs.size(); i++)
-	{
-
+	for (unsigned int i = 0; i < m__UVs.size(); i++) {
 		res[i*2] = m__UVs[i].x;
 		res[i*2 + 1] = m__UVs[i].y;
-
 	}
-
 	return res;
-
 }
 
 //=====Normals=====
-int MeshRender::getNormalCount()
-{
-
+int MeshRender::getNormalCount() {
 	return m__normals.size();
-
 }
 
-
-int MeshRender::getNormalsSize()
-{
-
+int MeshRender::getNormalsSize() {
 	return m__normals.size() * 3 * sizeof(float);
-
 }
 
-
-vector<vec3> MeshRender::getNormals()
-{
-
+vector<vec3> MeshRender::getNormals() {
 	return m__normals;
-
 }
 
-
-float* MeshRender::getNormalsFloat()
-{
-
+float* MeshRender::getNormalsFloat() {
 	float* res = (float*)malloc(sizeof(float) * m__normals.size() * 3);
-
-	for (unsigned int i = 0; i < m__normals.size(); i += 3)
-	{
-
+	for (unsigned int i = 0; i < m__normals.size(); i += 3) {
 		res[i] = m__normals[i].x;
 		res[i + 1] = m__normals[i].y;
 		res[i + 2] = m__normals[i].z;
-
 	}
-
 	return res;
-
 }

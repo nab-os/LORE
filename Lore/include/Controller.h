@@ -1,5 +1,4 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#pragma once
 
 #include <string>
 #include <map>
@@ -11,14 +10,9 @@
 
 #include "Window.h"
 
-namespace LORE
-{
-
-    class Controller
-    {
-
+namespace LORE {
+    class Controller {
         public:
-
             Controller();
             virtual ~Controller();
 
@@ -34,16 +28,11 @@ namespace LORE
             void toggleCaptureCursor() { m__captureCursor = !m__captureCursor; };
 
         private:
-
             std::map<const int, std::function<void(double x, double y)>> m__keyBindings;
 
             std::function<void(double x, double y, double dx, double dy)> m__mouseEvent;
 
             bool m__visibleCursor;
             bool m__captureCursor;
-
     };
-
 }
-
-#endif

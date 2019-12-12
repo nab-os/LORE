@@ -10,14 +10,11 @@
 using namespace std;
 using namespace LORE;
 
-Thread::Thread()
-{}
+Thread::Thread() {}
 
 
-Thread::~Thread()
-{}
+Thread::~Thread() {}
 
-void Thread::sleep(int ms)
-{
+void Thread::sleep(int ms) {
     Sleep(ms);
 }

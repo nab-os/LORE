@@ -1,5 +1,4 @@
-#ifndef LORE_H
-#define LORE_H
+#pragma once
 
 #include <string>
 
@@ -22,14 +21,9 @@
 #include "Camera.h"
 #include "Shader.h"
 
-namespace LORE
-{
-
-    class Lore
-    {
-
+namespace LORE{
+    class Lore {
         public:
-
             static LORE::Window* init();
             static void unload();
 
@@ -58,7 +52,6 @@ namespace LORE
             static Shader* getShader(std::string id);
 
         private:
-
             Lore();
             virtual ~Lore();
 
@@ -72,9 +65,5 @@ namespace LORE
             static Library<Material>* m__materialLibrary;
             static Library<Texture>* m__textureLibrary;
             static Library<Shader>* m__shaderLibrary;
-
     };
-
 }
-
-#endif

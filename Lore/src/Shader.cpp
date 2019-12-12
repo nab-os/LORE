@@ -17,22 +17,13 @@ Shader::Shader(std::string shaderName): m__programID(),
 										m__tessControlShaderFile("Shaders/" + shaderName + "/tessControl.shader"),
 										m__tessEvaluationShaderFile("Shaders/" + shaderName + "/tessEvaluation.shader"),
 										m__geometryShaderFile("Shaders/" + shaderName + "/geometry.shader"),
-										m__fragmentShaderFile("Shaders/" + shaderName + "/fragment.shader")
-{
+										m__fragmentShaderFile("Shaders/" + shaderName + "/fragment.shader") {
 	cout << this << " [Shader] constructor" << endl;
 }
 
+Shader::~Shader() {}
 
-Shader::~Shader()
-{
-
-
-
-}
-
-
-bool Shader::load()
-{
+bool Shader::load() {
 	cout << this << " [Shader] load" << endl;
 
     // Destruction d'un éventuel ancien Shader
@@ -53,7 +44,6 @@ bool Shader::load()
 
 	if (glIsProgram(m__programID) == GL_TRUE)
 		glDeleteProgram(m__programID);
-
 
     cout << this << " [Shader]: " << m__programID << endl;
 	cout << this << " [Shader] load() 1 : " << m__vertexShaderFile << endl;
@@ -101,8 +91,7 @@ bool Shader::load()
 	glGetProgramiv(m__programID, GL_LINK_STATUS, &erreurLink);
 
 	// S'il y a eu une erreur
-	if (erreurLink != GL_TRUE)
-	{
+	if (erreurLink != GL_TRUE) {
 		// Récupération de la taille de l'erreur
 		GLint tailleErreur(0);
 		glGetProgramiv(m__programID, GL_INFO_LOG_LENGTH, &tailleErreur);
@@ -127,253 +116,155 @@ bool Shader::load()
 	}
 }
 
-
-bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSource)
-{
+bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSource) {
 
 	// Création du shader
 	shader = glCreateShader(type);
 
-
 	// Vérification du shader
-	if (shader == 0)
-	{
+	if (shader == 0) {
 		std::cout << "Erreur, le type de shader (" << type << ") n'existe pas" << std::endl;
 		return false;
 	}
 
-
 	// Flux de lecture
 	ifstream fichier(fichierSource.c_str());
 
-
 	// Test d'ouverture
-	if (!fichier)
-	{
+	if (!fichier) {
 		std::cout << "Erreur le fichier " << fichierSource << " est introuvable" << std::endl;
 		glDeleteShader(shader);
 
 		return false;
 	}
 
-
 	// Strings permettant de lire le code source
 	std::string ligne;
 	std::string codeSource;
-
 
 	// Lecture
 	while (getline(fichier, ligne))
 		codeSource += ligne + '\n';
 
-
 	// Fermeture du fichier
 	fichier.close();
-
 
 	// Récupération de la chaine C du code source
 	const GLchar* chaineCodeSource = codeSource.c_str();
 
-
 	// Envoi du code source au shader
 	glShaderSource(shader, 1, &chaineCodeSource, 0);
 
-
 	// Compilation du shader
 	glCompileShader(shader);
-
 
 	// Vérification de la compilation
 	GLint erreurCompilation(0);
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &erreurCompilation);
 
-
 	// S'il y a eu une erreur
-	if (erreurCompilation != GL_TRUE)
-	{
-
+	if (erreurCompilation != GL_TRUE) {
 		// Récupération de la taille de l'erreur
 		GLint tailleErreur(0);
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &tailleErreur);
 
-
 		// Allocation de mémoire
 		char *erreur = new char[tailleErreur + 1];
-
 
 		// Récupération de l'erreur
 		glGetShaderInfoLog(shader, tailleErreur, &tailleErreur, erreur);
 		erreur[tailleErreur] = '\0';
 
-
 		// Affichage de l'erreur
 		std::cout << erreur << std::endl;
-
 
 		// Libération de la mémoire et retour du booléen false
 		delete[] erreur;
 		glDeleteShader(shader);
 
 		return false;
-	}
-
-
-	// Sinon c'est que tout s'est bien passé
-	else
+	} else {
 		return true;
+    }
 
 }
 
-
-void Shader::sendMat4Uniform(string nom, glm::mat4 matrice)
-{
-
-	// Localisation de la matrice
+void Shader::sendMat4Uniform(string nom, glm::mat4 matrice) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-
-	// Envoi des valeurs
 	glUniformMatrix4fv(localisation, 1, GL_FALSE, glm::value_ptr(matrice));
-
 }
 
-
-void Shader::sendMat3Uniform(string nom, glm::mat3 matrice)
-{
-
-	// Localisation de la matrice
+void Shader::sendMat3Uniform(string nom, glm::mat3 matrice) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-
-	// Envoi des valeurs
 	glUniformMatrix3fv(localisation, 1, GL_FALSE, glm::value_ptr(matrice));
-
 }
 
-
-void Shader::sendVec4Uniform(std::string nom, glm::vec4 vecteur)
-{
-
-	// Localisation de la matrice
+void Shader::sendVec4Uniform(std::string nom, glm::vec4 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-
-	// Envoi des valeurs
 	glUniform4f(localisation, vecteur.x, vecteur.y, vecteur.z, vecteur.w);
-
 }
 
-
-void Shader::sendVec3Uniform(std::string nom, glm::vec3 vecteur)
-{
-
-	// Localisation de la matrice
+void Shader::sendVec3Uniform(std::string nom, glm::vec3 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-
-	// Envoi des valeurs
 	glUniform3f(localisation, vecteur.x, vecteur.y, vecteur.z);
-
 }
 
-
-void Shader::sendVec2Uniform(std::string nom, glm::vec2 vecteur)
-{
-
-	// Localisation de la matrice
+void Shader::sendVec2Uniform(std::string nom, glm::vec2 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-
-	// Envoi des valeurs
 	glUniform2f(localisation, vecteur.x, vecteur.y);
-
 }
 
-
-void Shader::sendIntUniform(std::string nom, GLuint id)
-{
-
-	// Localisation de la matrice
+void Shader::sendIntUniform(std::string nom, GLuint id) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-
-	// Envoi des valeurs
 	glUniform1i(localisation, id);
-
 }
 
-
-void Shader::sendFloatUniform(std::string nom, float val)
-{
-
-	// Localisation de la matrice
+void Shader::sendFloatUniform(std::string nom, float val) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-
-	// Envoi des valeurs
 	glUniform1f(localisation, val);
-
 }
 
-
-GLuint Shader::getProgramID()
-{
+GLuint Shader::getProgramID() {
 	return m__programID;
 }
 
-
 //=====Shaders=====
-string Shader::getVertexShaderFile()
-{
+string Shader::getVertexShaderFile() {
 	return m__vertexShaderFile;
 }
 
-
-void Shader::setVertexShaderFile(string val)
-{
+void Shader::setVertexShaderFile(string val) {
 	m__vertexShaderFile = val;
 }
 
-
-string Shader::getTessControlShaderFile()
-{
+string Shader::getTessControlShaderFile() {
 	return m__tessControlShaderFile;
 }
 
-
-void Shader::setTessControlShaderFile(string val)
-{
+void Shader::setTessControlShaderFile(string val) {
 	m__tessControlShaderFile = val;
 }
 
-
-string Shader::getTessEvaluationShaderFile()
-{
+string Shader::getTessEvaluationShaderFile() {
 	return m__tessEvaluationShaderFile;
 }
 
-
-void Shader::setTessEvaluationShaderFile(string val)
-{
+void Shader::setTessEvaluationShaderFile(string val) {
 	m__tessEvaluationShaderFile = val;
 }
 
-
-
-string Shader::getGeometryShaderFile()
-{
+string Shader::getGeometryShaderFile() {
 	return m__geometryShaderFile;
 }
 
-
-void Shader::setGeometryShaderFile(string val)
-{
+void Shader::setGeometryShaderFile(string val) {
 	m__geometryShaderFile = val;
 }
 
-
-
-string Shader::getFragmentShaderFile()
-{
+string Shader::getFragmentShaderFile() {
 	return m__fragmentShaderFile;
 }
 
-
-void Shader::setFragmentShaderFile(string val)
-{
+void Shader::setFragmentShaderFile(string val) {
 	m__fragmentShaderFile = val;
 }
-

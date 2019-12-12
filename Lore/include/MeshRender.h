@@ -1,25 +1,16 @@
-#ifndef MODELRENDER_H
-#define MODELRENDER_H
+#pragma once
 
 #include <vector>
 
 #include "Mesh.h"
 
-
 #ifndef BUFFER_OFFSET
-
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
-
 #endif
 
-namespace LORE
-{
-
-    class ModelRender :	public Mesh
-    {
-
+namespace LORE {
+    class ModelRender: public Mesh {
         public:
-
             explicit ModelRender();
             explicit ModelRender(const ModelRender*);
             ~ModelRender();
@@ -53,15 +44,10 @@ namespace LORE
             float* getNormalsFloat();
 
         private :
-
             GLuint m__VAO;
             GLuint m__VBO;
 
             std::vector<glm::vec2> m__UVs;
             std::vector<glm::vec3> m__normals;
-
     };
-
 }
-
-#endif

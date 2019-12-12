@@ -1,19 +1,12 @@
-#ifndef THREAD_H
-#define THREAD_H
+#pragma once
 
 #include <string>
 
-namespace LORE{
-
-    class Thread
-    {
+namespace LORE {
+    class Thread {
         public:
             Thread();
             virtual ~Thread();
-
             static void sleep(int ms);
     };
-
 }
-
-#endif

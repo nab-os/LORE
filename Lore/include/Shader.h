@@ -1,5 +1,4 @@
-#ifndef SHADER_H
-#define SHADER_H
+#pragma once
 
 #include <string>
 
@@ -10,21 +9,15 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace LORE
-{
-
-    class Shader
-    {
-
+namespace LORE {
+    class Shader {
         public:
-
             Shader(std::string shaderName = "default");
             virtual ~Shader();
 
             bool load();
 
             GLuint getProgramID();
-
 
             void sendMat4Uniform(std::string nom, glm::mat4 matrice);
             void sendMat3Uniform(std::string nom, glm::mat3 matrice);
@@ -33,7 +26,6 @@ namespace LORE
             void sendVec2Uniform(std::string nom, glm::vec2 vecteur);
             void sendIntUniform(std::string nom, GLuint id);
             void sendFloatUniform(std::string nom, float val);
-
 
             std::string getVertexShaderFile();
             void setVertexShaderFile(std::string val);
@@ -51,7 +43,6 @@ namespace LORE
             void setFragmentShaderFile(std::string val);
 
         private:
-
             GLuint m__programID;
 
             GLuint m__vertexID;
@@ -67,9 +58,5 @@ namespace LORE
             std::string m__fragmentShaderFile;
 
             bool compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource);
-
     };
-
 }
-
-#endif

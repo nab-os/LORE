@@ -1,5 +1,4 @@
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -16,30 +15,20 @@
 #include "Light.h"
 #include "CubeMap.h"
 
-namespace LORE
-{
-    
-    class Scene: public Node
-    {
-
+namespace LORE {
+    class Scene: public Node {
         public:
-
             Scene();
             virtual ~Scene();
 
             bool getPaused(){ return m__paused; };
 
         private:
-
             bool m__paused;
 
             CubeMap* m__environmentMap;
             std::vector<Light*> m__lights;
 
             void renderLights();
-
     };
-
 }
-
-#endif

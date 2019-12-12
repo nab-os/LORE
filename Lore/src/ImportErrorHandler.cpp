@@ -1,23 +1,12 @@
 #include "ImportErrorHandler.h"
 
-
 using namespace LORE;
 
-ImportErrorHandler::ImportErrorHandler()
-    : mHasCriticalError( false  )
-{
+ImportErrorHandler::ImportErrorHandler(): mHasCriticalError(false) {}
 
-}
+ImportErrorHandler::~ImportErrorHandler() {}
 
-
-ImportErrorHandler::~ImportErrorHandler()
-{
-
-}
-
-
-bool ImportErrorHandler::handleError( const COLLADASaxFWL::IError* error  )
-{
+bool ImportErrorHandler::handleError(const COLLADASaxFWL::IError* error) {
     /*std::string msg;
     COLLADASaxFWL::IError::Severity severity = error->getSeverity();
     switch ( error->getErrorClass() )
@@ -38,13 +27,9 @@ bool ImportErrorHandler::handleError( const COLLADASaxFWL::IError* error  )
 
     return criticalError ? true : false;
 */
-
     return false;
 }
 
-
-bool ImportErrorHandler::hasCriticalError()
-{
+bool ImportErrorHandler::hasCriticalError() {
     return mHasCriticalError;
-
 }

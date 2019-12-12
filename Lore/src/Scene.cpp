@@ -11,22 +11,13 @@ using namespace LORE;
 Scene::Scene():	Node(),
                 m__paused(false),
                 m__environmentMap(),
-                m__lights()
-{
+                m__lights() {
 	cout << this << " [Scene] constructor" << endl;
 }
 
-
-Scene::~Scene()
-{
+Scene::~Scene() {
 	cout << this << " [ModelRender] destructor" << endl;
 }
 
-
-void Scene::renderLights()
-{
-
-
-
+void Scene::renderLights() {
 }
-

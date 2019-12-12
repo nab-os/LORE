@@ -1,5 +1,4 @@
-#ifndef MODELBULLET_H
-#define MODELBULLET_H
+#pragma once
 
 #include <vector>
 
@@ -7,21 +6,13 @@
 
 #include "Mesh.h"
 
-
 #ifndef BUFFER_OFFSET
-
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
-
 #endif
 
-namespace LORE
-{
-
-    class ModelBullet : public Mesh
-    {
-
+namespace LORE {
+    class ModelBullet : public Mesh {
         public:
-
             ModelBullet();
             ~ModelBullet();
 
@@ -38,17 +29,11 @@ namespace LORE
 
             btRigidBody* getRigidBody(){ return m__fallRigidBody; };
 
-
         private:
-
             btCollisionShape* m__fallShape;
             btDefaultMotionState* m__fallMotionState;
             btRigidBody* m__fallRigidBody;
 
             bool m__active;
-
     };
-
 }
-
-#endif

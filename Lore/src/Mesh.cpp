@@ -19,26 +19,19 @@ Mesh::Mesh(): m__VAO(),
     m__vertices(),
     m__indexed(false),
     m__mode(GL_TRIANGLES),
-    m__polyMode(GL_FILL)
-{
+    m__polyMode(GL_FILL) {
 	//cout << this << " [Mesh] constructor" << endl;
 }
 
-
-Mesh::~Mesh()
-{
+Mesh::~Mesh() {
 	//cout << this << " [Mesh] destructor" << endl;
 }
 
-
-void Mesh::load()
-{
-
+void Mesh::load() {
 	cout << "[Mesh] load: " << m__vertices.size() << endl;
 	/*
     cout << "[Mesh] load() : Indices : " << endl;
-    for(unsigned int i = 0; i < m__indices.size(); i++)
-    {
+    for(unsigned int i = 0; i < m__indices.size(); i++) {
 		//cout << (i/3) << ": " << m__indices[i] << ", " << m__indices[i+1] << ", " << m__indices[i+2] << endl;
         vec3 normal(m__normals[m__indices[i]*3], m__normals[m__indices[i]*3 + 1], m__normals[m__indices[i]*3 + 1]);
         vec3 tangent(m__tangents[m__indices[i]*3], m__tangents[m__indices[i]*3 + 1], m__tangents[m__indices[i]*3 + 1]);
@@ -49,9 +42,7 @@ void Mesh::load()
 	}*/
 
 	//===============================VBOs================================
-
-    if(m__indexed)
-    {
+    if(m__indexed) {
         // Destruction d'un éventuel ancien VBO
         if (glIsBuffer(m__elementBuffer) == GL_TRUE)
             glDeleteBuffers(1, &m__elementBuffer);
@@ -84,10 +75,9 @@ void Mesh::load()
 
 	// Déverrouillage de l'objet
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
-    
-    if(m__UVs.size() > 0)
-    {
+
+
+    if(m__UVs.size() > 0) {
         // Destruction d'un éventuel ancien VBO
         if (glIsBuffer(m__UVBuffer) == GL_TRUE)
             glDeleteBuffers(1, &m__UVBuffer);
@@ -104,10 +94,9 @@ void Mesh::load()
         // Déverrouillage de l'objet
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
-	
-    
-    if(m__normals.size() > 0)
-    {
+
+
+    if(m__normals.size() > 0) {
         // Destruction d'un éventuel ancien VBO
         if (glIsBuffer(m__normalBuffer) == GL_TRUE)
             glDeleteBuffers(1, &m__normalBuffer);
@@ -124,7 +113,7 @@ void Mesh::load()
         // Déverrouillage de l'objet
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
-	
+
     computeTangentBasis();
     if(m__normals.size() > 0 && m__tangents.size() > 0)
         computeBitangents();
@@ -132,13 +121,11 @@ void Mesh::load()
         computeTangentBasis();
     else
         cout << "[Mesh] Cant compute tangent basis" << endl;
-    
-    if(m__tangents.size() > 0)
-    {
+
+    if(m__tangents.size() > 0) {
         /*
         cout << "[Mesh] load() : Tangents : " << endl;
-        for (int i = 0; i < m__tangents.size(); i+=3)
-        {
+        for (int i = 0; i < m__tangents.size(); i+=3) {
 
             cout << m__tangents[i] << ", " << m__tangents[i+1] << ", " << m__tangents[i+2] << endl;
 
@@ -161,8 +148,7 @@ void Mesh::load()
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    if(m__bitangents.size() > 0)
-    {
+    if(m__bitangents.size() > 0) {
         // Destruction d'un éventuel ancien VBO
         if (glIsBuffer(m__bitangentBuffer) == GL_TRUE)
             glDeleteBuffers(1, &m__bitangentBuffer);
@@ -179,10 +165,9 @@ void Mesh::load()
         // Déverrouillage de l'objet
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
-	
-    
-    if(m__colors.size() > 0)
-    {
+
+
+    if(m__colors.size() > 0) {
         // Destruction d'un éventuel ancien VBO
         if (glIsBuffer(m__colorBuffer) == GL_TRUE)
             glDeleteBuffers(1, &m__colorBuffer);
@@ -225,8 +210,7 @@ void Mesh::load()
 		// Déverrouillage du VBO
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        if(m__UVs.size() > 0)
-        {
+        if(m__UVs.size() > 0) {
             // Verrouillage du VBO
             glBindBuffer(GL_ARRAY_BUFFER, m__UVBuffer);
 
@@ -240,8 +224,7 @@ void Mesh::load()
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
-        if(m__normals.size() > 0)
-        {
+        if(m__normals.size() > 0) {
             // Verrouillage du VBO
             glBindBuffer(GL_ARRAY_BUFFER, m__normalBuffer);
 
@@ -255,8 +238,7 @@ void Mesh::load()
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
-        if(m__tangents.size() > 0)
-        {
+        if(m__tangents.size() > 0) {
             // Verrouillage du VBO
             glBindBuffer(GL_ARRAY_BUFFER, m__tangentBuffer);
 
@@ -270,8 +252,7 @@ void Mesh::load()
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
-        if(m__bitangents.size() > 0)
-        {
+        if(m__bitangents.size() > 0) {
             // Verrouillage du VBO
             glBindBuffer(GL_ARRAY_BUFFER, m__bitangentBuffer);
 
@@ -285,8 +266,7 @@ void Mesh::load()
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
-        if(m__colors.size() > 0)
-        {
+        if(m__colors.size() > 0) {
             // Verrouillage du VBO
             glBindBuffer(GL_ARRAY_BUFFER, m__colorBuffer);
 
@@ -304,9 +284,7 @@ void Mesh::load()
 	glBindVertexArray(0);
 }
 
-
-void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint environmentMapID)
-{
+void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint environmentMapID) {
     //cout << this << "[Mesh] render" << endl;
 
 	glEnable(GL_DEPTH_TEST);
@@ -339,69 +317,63 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
     glBindTexture(GL_TEXTURE_CUBE_MAP, ((Camera*)renderer)->getEnvironmentMap());
     s->sendIntUniform("u_environmentMap", 9);
 
-    if(m__colors.size() >  0)
-    {
-        s->sendIntUniform("u_useVertexColor", 1); 
+    if(m__colors.size() >  0) {
+        s->sendIntUniform("u_useVertexColor", 1);
     }else
     {
-        s->sendIntUniform("u_useVertexColor", 0); 
+        s->sendIntUniform("u_useVertexColor", 0);
     }
 
-    if(m__material->getDiffuseTexture())
-    {
+    if(m__material->getDiffuseTexture()) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m__material->getDiffuseTexture()->getID());
-        s->sendIntUniform("u_diffuseTexture", 0); 
-        s->sendIntUniform("u_useDiffuseTexture", 1); 
+        s->sendIntUniform("u_diffuseTexture", 0);
+        s->sendIntUniform("u_useDiffuseTexture", 1);
     }else
     {
-        s->sendIntUniform("u_useDiffuseTexture", 0); 
+        s->sendIntUniform("u_useDiffuseTexture", 0);
     }
-    
-    if(m__material->getPbrTexture())
-    {
+
+    if(m__material->getPbrTexture()) {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, m__material->getPbrTexture()->getID());
-        s->sendIntUniform("u_pbrTexture", 1); 
-        s->sendIntUniform("u_usePbrTexture", 1); 
+        s->sendIntUniform("u_pbrTexture", 1);
+        s->sendIntUniform("u_usePbrTexture", 1);
     }else
     {
-        s->sendIntUniform("u_usePbrTexture", 0); 
+        s->sendIntUniform("u_usePbrTexture", 0);
     }
 
     if(m__material)
         m__material->sendCustomUniforms();
-    
-    if(m__material->getNormalTexture())
-    {
+
+    if(m__material->getNormalTexture()) {
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, m__material->getNormalTexture()->getID());
-        s->sendIntUniform("u_normalTexture", 2); 
-        s->sendIntUniform("u_useNormalTexture", 1); 
+        s->sendIntUniform("u_normalTexture", 2);
+        s->sendIntUniform("u_useNormalTexture", 1);
     }else
     {
-        s->sendIntUniform("u_useNormalTexture", 0); 
+        s->sendIntUniform("u_useNormalTexture", 0);
     }
-    
-    if(m__material->getOcclusionTexture())
-    {
+
+    if(m__material->getOcclusionTexture()) {
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, m__material->getOcclusionTexture()->getID());
-        s->sendIntUniform("u_occlusionTexture", 3); 
-        s->sendIntUniform("u_useOcclusionTexture", 1); 
+        s->sendIntUniform("u_occlusionTexture", 3);
+        s->sendIntUniform("u_useOcclusionTexture", 1);
     }else
     {
-        s->sendIntUniform("u_useOcclusionTexture", 0); 
+        s->sendIntUniform("u_useOcclusionTexture", 0);
     }
 
     /*glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDrawArrays(GL_PATCHES, 0, getVertexCount());*/
     //cout << this << "[Mesh] render 2" << endl;
-    
+
     glPolygonMode(GL_FRONT_AND_BACK, m__polyMode);
 
-    if(m__indexed)
-    {
+    if(m__indexed) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m__elementBuffer);
 
         // Draw the triangles !
@@ -417,14 +389,12 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
     {
         glDrawArrays(m__mode, 0, m__vertices.size());
     }
-    
+
     glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindVertexArray(0);
 
 	glUseProgram(0);
-
-
 
     /*
 	glMatrixMode(GL_PROJECTION);
@@ -438,8 +408,7 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
 
 	glBegin(GL_LINES);
 
-	for (unsigned int i=0; i < m__vertices.size(); i+=3)
-    {
+	for (unsigned int i=0; i < m__vertices.size(); i+=3) {
 
        // cout << "[Mesh] render(): b : " << m__vertices[i] << " ; " << m__vertices[i] << " ; " << m__vertices[i] << endl;
 
@@ -458,43 +427,36 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
     */
 }
 
-
-void Mesh::computeBitangents()
-{
+void Mesh::computeBitangents() {
     cout << "[Mesh] Computing tangent basis from Normals and Tangent" << endl;
     m__bitangents = m__tangents;
-    for(unsigned int i = 0; i < m__indices.size(); ++i)
-    {
+    for(unsigned int i = 0; i < m__indices.size(); ++i) {
         unsigned int index = m__indices[i]*3;
 
         vec3 normal = vec3(m__normals[index], m__normals[index+1], m__normals[index+2]);
         vec3 tangent = vec3(m__tangents[index], m__tangents[index+1], m__tangents[index+2]);
         vec3 bitangent = cross(normal, tangent);
-    
+
         m__bitangents[index] = bitangent.x;
         m__bitangents[index+1] = bitangent.y;
         m__bitangents[index+2] = bitangent.z;
     }
-    /*for(unsigned int i = 0; i < m__normals.size(); i+=3)
-    {
+    /*for(unsigned int i = 0; i < m__normals.size(); i+=3) {
         vec3 normal = vec3(m__normals[i], m__normals[i+1], m__normals[i+2]);
         vec3 tangent = vec3(m__tangents[i], m__tangents[i+1], m__tangents[i+2]);
         vec3 bitangent = cross(normal, tangent);
-    
+
         m__bitangents.push_back(bitangent.x);
         m__bitangents.push_back(bitangent.y);
         m__bitangents.push_back(bitangent.z);
     }*/
 }
 
-
-void Mesh::computeTangentBasis()
-{
+void Mesh::computeTangentBasis() {
     cout << "[Mesh] Computing tangent basis from Normals and UVs directions" << endl;
     m__tangents = m__normals;
     m__bitangents = m__normals;
-    if(m__indexed && m__UVs.size() > 0)
-    {
+    if(m__indexed && m__UVs.size() > 0) {
         for (unsigned int i=0; i < m__indices.size(); i+=3){
 
             // Shortcuts for vertices
@@ -527,7 +489,7 @@ void Mesh::computeTangentBasis()
             glm::vec3 bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
             //cout << i << ": " << m__tangents[index1_vec3] << ", " << m__tangents[index1_vec3+1] << ", " << m__tangents[index1_vec3+2] << endl;
             //cout << i << ": " << tangent.x << ", " << tangent.y << ", " << tangent.z << endl;
-            
+
             m__tangents[index1_vec3] = tangent.x;
             m__tangents[index1_vec3 + 1] = tangent.y;
             m__tangents[index1_vec3 + 2] = tangent.z;
@@ -537,7 +499,7 @@ void Mesh::computeTangentBasis()
             m__tangents[index3_vec3] = tangent.x;
             m__tangents[index3_vec3 + 1] = tangent.y;
             m__tangents[index3_vec3 + 2] = tangent.z;
-            
+
             m__bitangents[index1_vec3] = bitangent.x;
             m__bitangents[index1_vec3 + 1] = bitangent.y;
             m__bitangents[index1_vec3 + 2] = bitangent.z;
@@ -547,8 +509,6 @@ void Mesh::computeTangentBasis()
             m__bitangents[index3_vec3] = bitangent.x;
             m__bitangents[index3_vec3 + 1] = bitangent.y;
             m__bitangents[index3_vec3 + 2] = bitangent.z;
-
         }
-
     }
 }

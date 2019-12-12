@@ -1,5 +1,4 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -15,14 +14,9 @@
 #include "Mesh.h"
 #include "Material.h"
 
-namespace LORE
-{
-
-    class Object: public Node
-    {
-
+namespace LORE {
+    class Object: public Node {
         public:
-
             Object();
             ~Object();
 
@@ -38,11 +32,6 @@ namespace LORE
             Mesh* getMesh() { return m__mesh; };
 
         private:
-
             Mesh* m__mesh;
-
     };
-
 }
-
-#endif

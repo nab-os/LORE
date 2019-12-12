@@ -1,19 +1,13 @@
-#ifndef IMPORTERERRORHANDLER_H
-#define IMPORTERERRORHANDLER_H
+#pragma once
 
 #include <COLLADASaxFrameworkLoader/COLLADASaxFWLIErrorHandler.h>
 
-namespace LORE
-{
-
-    class ImportErrorHandler: public COLLADASaxFWL::IErrorHandler
-    {
-
+namespace LORE {
+    class ImportErrorHandler: public COLLADASaxFWL::IErrorHandler {
         private:
             bool mHasCriticalError;
 
         public:
-
             /** Constructor. */
             ImportErrorHandler();
 
@@ -28,16 +22,10 @@ namespace LORE
             bool hasCriticalError();
 
         private:
-
             /** Disable default copy ctor. */
             ImportErrorHandler( const ImportErrorHandler& pre  );
 
             /** Disable default assignment operator. */
             const ImportErrorHandler& operator= ( const ImportErrorHandler& pre  );
-
-
     };
-
 }
-
-#endif

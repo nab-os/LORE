@@ -1,5 +1,4 @@
-#ifndef MODEL_H
-#define MODEL_H
+#pragma once
 
 #include <vector>
 
@@ -10,7 +9,6 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
 #include "Light.h"
 #include "Material.h"
 #include "Node.h"
@@ -20,10 +18,8 @@
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
 #endif
 
-namespace LORE
-{
-    class Mesh
-    {
+namespace LORE {
+    class Mesh {
         public:
             Mesh();
             ~Mesh();
@@ -67,7 +63,6 @@ namespace LORE
             void computeTangentBasis();
 
         private :
-
             GLuint m__VAO;
             GLuint m__elementBuffer;
             GLuint m__vertexBuffer;
@@ -93,5 +88,3 @@ namespace LORE
             int m__polyMode;
     };
 }
-
-#endif

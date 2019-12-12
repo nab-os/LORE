@@ -2,17 +2,6 @@
 
 using namespace LORE;
 
-Player::Player()
-{
+Player::Player() {}
 
-
-
-}
-
-
-Player::~Player()
-{
-
-
-
-}
+Player::~Player() {}

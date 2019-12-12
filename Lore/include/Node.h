@@ -1,5 +1,4 @@
-#ifndef NODE_H
-#define NODE_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -11,14 +10,9 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace LORE
-{
-
-    class Node
-    {
-
+namespace LORE {
+    class Node {
         public:
-
             Node();
             virtual ~Node();
 
@@ -43,15 +37,10 @@ namespace LORE
             virtual bool isCamera() { return false; };
 
         private:
-
             std::vector<Node*> m__childs;
 
             glm::vec3 m__position;
             glm::quat m__rotation;
             glm::vec3 m__scale;
-
     };
-
 }
-
-#endif

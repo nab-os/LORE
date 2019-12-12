@@ -1,5 +1,4 @@
-#ifndef MATERIAL_H
-#define MATERIAL_H
+#pragma once
 
 #include <map>
 
@@ -11,14 +10,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
-namespace LORE
-{
-
-    class Material
-    {
-
+namespace LORE {
+    class Material {
         public:
-
             Material();
             virtual ~Material();
 
@@ -60,7 +54,6 @@ namespace LORE
             void sendTextures();
 
         private:
-
             Shader* m__shader;
 
             glm::vec4 m__diffuseColor;
@@ -80,9 +73,5 @@ namespace LORE
             std::map<std::string, std::pair<GLuint, GLuint>> m__textures;
 
             bool m__culling;
-
     };
-
 }
-
-#endif
