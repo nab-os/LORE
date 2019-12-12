@@ -3,7 +3,7 @@
 Lore, Light OpenGL Rendering Engine, allows you to create/import 3D environment.
 You can create games, use it to visualize raw data, etc...
 
-##Exemple
+## Exemple
 
 A simple window that closes when ESCAPE key is pressed
 
