@@ -13,55 +13,39 @@ A simple window that closes when ESCAPE key is pressed
 
 using namespace std;
 using namespace LORE;
-int main(int argc, char** argv)
-{
-
+int main(int argc, char** argv) {
 	cout << "===== INIT =====" << endl;
 
 	LORE::Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
-	if(!window)
-	{
+	if(!window) {
 		cout << "Error during OpenGL context initialization." << endl;
 		Lore::unload();
 		return -1;
 	}
 
     //----------
-
     Camera* camera = new Camera();
     window->setCamera(camera);
 
 	Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
-
 	controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
-
 		window->close();
-
     });
 
 	//===================================
 	cout << "===== RENDER =====" << endl;
 
-	while (!window->shouldClose())
-	{
-
+	while (!window->shouldClose()) {
 		int start = window->startFrame(); // Begin the frame render process
-
 		controller->check(window); // Checks all bindings for the Window and execute de fonction if it matches
-
-		window->render(); //
-
+		window->render();
 		window->endFrame(start); // End the frame render process and display the image on the window
-
 	}
 
 	//================================
 	cout << "===== END =====" << endl;
-
 	Lore::unload(); // Unload all dictionnaries, and unload OpenGL context
-
     return 0;
-
 }
 ```
 ## Why ?
@@ -81,7 +65,7 @@ and install gcc if it's not done yet
 apt install gcc
 ```
 
-### Dependencies 
+### Dependencies
 
 You will need to install multiple libraries :
 
