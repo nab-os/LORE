@@ -93,7 +93,7 @@ bool Shader::load() {
 	// S'il y a eu une erreur
 	if (erreurLink != GL_TRUE) {
 		// Récupération de la taille de l'erreur
-		GLint tailleErreur(0);
+		GLint tailleErreur = 0;
 		glGetProgramiv(m__programID, GL_INFO_LOG_LENGTH, &tailleErreur);
 
 		// Allocation de mémoire
@@ -117,7 +117,6 @@ bool Shader::load() {
 }
 
 bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSource) {
-
 	// Création du shader
 	shader = glCreateShader(type);
 

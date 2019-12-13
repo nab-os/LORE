@@ -17,21 +17,18 @@ using namespace std;
 using namespace glm;
 using namespace LORE;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     cout << "===== INIT =====" << endl;
 
     LORE::Window* window = LORE::Lore::init(); // Initializes OpenGL context and creates a Window
-    if(!window)
-    {
+    if(!window) {
         cout << "Error during OpenGL context initialization." << endl;
         Lore::unload();
         return -1;
     }
 
     string file = "./Objects/empty.gltf";
-    if(argc >= 2)
-    {
+    if(argc >= 2) {
         file = argv[1];
     }
 
@@ -40,8 +37,7 @@ int main(int argc, char** argv)
     cout << "===Finished importing===" << endl;
     cout << "Scene_ " << default_scene << endl;
     Camera* camera = Lore::getCamera("Camera");
-    if(!camera)
-    {
+    if(!camera) {
         cout << "Could'nt find Camera, creating one..." << endl;
         camera = Lore::createCamera("Camera");
         camera->setPosition(vec3(5, 5, 5));
@@ -77,51 +73,51 @@ int main(int argc, char** argv)
 
     Controller* controller = new Controller(); // a Controller to bind the ESCAPE key to the Window
 
-    controller->bind(GLFW_KEY_ESCAPE, [&window](double x, double y) {
+    controller->bindKey(GLFW_KEY_ESCAPE, [&window]() {
         window->close();
     });
 
-    controller->bind(GLFW_KEY_W, [&window](double x, double y) {
+    controller->bindKey(GLFW_KEY_W, [&window]() {
         window->getCamera()->forward();
     });
-    controller->bind(GLFW_KEY_S, [&window](double x, double y) {
+    controller->bindKey(GLFW_KEY_S, [&window]() {
         window->getCamera()->backward();
     });
-    controller->bind(GLFW_KEY_A, [&window](double x, double y) {
+    controller->bindKey(GLFW_KEY_A, [&window]() {
         window->getCamera()->left();
     });
-    controller->bind(GLFW_KEY_D, [&window](double x, double y) {
+    controller->bindKey(GLFW_KEY_D, [&window]() {
         window->getCamera()->right();
     });
-    controller->bind(GLFW_KEY_SPACE, [&window](double x, double y) {
+    controller->bindKey(GLFW_KEY_SPACE, [&window]() {
         window->getCamera()->up();
     });
-    controller->bind(GLFW_KEY_LEFT_SHIFT, [&window](double x, double y) {
+    controller->bindKey(GLFW_KEY_LEFT_SHIFT, [&window]() {
         window->getCamera()->down();
     });
 
-    controller->setMouseEvent([&window](double x, double y, double dx, double dy){
-        window->getCamera()->setOrientation(dx, dy);
+    controller->bindMove([&window](auto origin, auto offset){
+        window->getCamera()->setOrientation(offset.x, offset.y);
     });
 
-	controller->bind(GLFW_KEY_T, [&window](double x, double y) {
+	controller->bindKey(GLFW_KEY_T, [&window]() {
 		window->setCamera(Lore::getCamera("Camera"));
     });
 
-	controller->bind(GLFW_KEY_G, [&window](double x, double y) {
+	controller->bindKey(GLFW_KEY_G, [&window]() {
 		window->setCamera(Lore::getCamera("Camera_1"));
     });
+
+    controller->listen(window);
 
     float a = 0;
 
     //===================================
     cout << "===== RENDER =====" << endl;
-
-    while (!window->shouldClose())
-    {
+    while (!window->shouldClose()) {
         int start = window->startFrame(); // Begin the frame render process
 
-        controller->check(window); // Checks all bindings for the Window and execute the fonction if it matches
+        controller->check(); // Checks all bindings for the Window and execute the fonction if it matches
         cameraPos = camera->getPosition();
         a += 0.01;
         Light::lightPosition = vec3(sin(a)*6, 3, cos(a)*6);
@@ -130,7 +126,6 @@ int main(int argc, char** argv)
         obj->setRotation(myQuat);
 
         window->render(); //
-
         window->endFrame(start); // End the frame render process and display the image on the window
     }
 
