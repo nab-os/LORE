@@ -22,7 +22,9 @@ std::mutex Controller::m_wheel_mutex;
 
 
 LORE::Controller::Controller():
-    m_key_bindings(),
+    m_key_pressed_bindings(),
+    m_key_pressing_bindings(),
+    m_key_released_bindings(),
     m_click_bindings(),
     m_drag_bindings(){}
 
@@ -31,8 +33,32 @@ LORE::Controller::~Controller() {}
 void LORE::Controller::check() {
     glm::vec2 diff = m_mouse_pos - m_last_mouse_pos;
 
-    //Simple key release event
-    for (const auto p : m_key_bindings) {
+    //Simple key pressed event
+    for (const auto p : m_key_pressed_bindings) {
+        bool success = true;
+        for (const auto s : p.first) {
+            if ((m_last_key_states[s] != 0 && m_last_key_states[s] != 0) || m_key_states[s] != 0) {
+                success = false;
+                break;
+            }
+        }
+        if (success) p.second();
+    }
+
+    //Simple key pressing event
+    for (const auto p : m_key_pressing_bindings) {
+        bool success = true;
+        for (const auto s : p.first) {
+            if (m_key_states[s] != 1  && m_key_states[s] != 2) {
+                success = false;
+                break;
+            }
+        }
+        if (success) p.second();
+    }
+
+    //Simple key released event
+    for (const auto p : m_key_released_bindings) {
         bool success = true;
         for (const auto s : p.first) {
             if (m_last_key_states[s] != 0  || (m_key_states[s] != 1  && m_key_states[s] != 2)) {

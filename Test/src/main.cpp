@@ -77,22 +77,22 @@ int main(int argc, char** argv) {
         window->close();
     });
 
-    controller->bindKey(GLFW_KEY_W, [&window]() {
+    controller->bindKey(GLFW_KEY_W, LORE::KeyState::PRESSING, [&window]() {
         window->getCamera()->forward();
     });
-    controller->bindKey(GLFW_KEY_S, [&window]() {
+    controller->bindKey(GLFW_KEY_S, LORE::KeyState::PRESSING, [&window]() {
         window->getCamera()->backward();
     });
-    controller->bindKey(GLFW_KEY_A, [&window]() {
+    controller->bindKey(GLFW_KEY_A, LORE::KeyState::PRESSING, [&window]() {
         window->getCamera()->left();
     });
-    controller->bindKey(GLFW_KEY_D, [&window]() {
+    controller->bindKey(GLFW_KEY_D, LORE::KeyState::PRESSING, [&window]() {
         window->getCamera()->right();
     });
-    controller->bindKey(GLFW_KEY_SPACE, [&window]() {
+    controller->bindKey(GLFW_KEY_SPACE, LORE::KeyState::PRESSING, [&window]() {
         window->getCamera()->up();
     });
-    controller->bindKey(GLFW_KEY_LEFT_SHIFT, [&window]() {
+    controller->bindKey(GLFW_KEY_LEFT_SHIFT, LORE::KeyState::PRESSING, [&window]() {
         window->getCamera()->down();
     });
 
