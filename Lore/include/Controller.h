@@ -20,6 +20,12 @@
 #include "Window.h"
 
 namespace LORE {
+    enum KeyState {
+        PRESSED,
+        PRESSING,
+        RELEASED
+    };
+
     class Controller {
         private:
             static std::map<const int, int> m_key_states;
@@ -40,7 +46,9 @@ namespace LORE {
             static std::mutex m_wheel_mutex;
 
             // [keys, action] key release event
-            std::map<const std::vector<int>, std::function<void()>> m_key_bindings;
+            std::map<const std::vector<int>, std::function<void()>> m_key_pressed_bindings;
+            std::map<const std::vector<int>, std::function<void()>> m_key_pressing_bindings;
+            std::map<const std::vector<int>, std::function<void()>> m_key_released_bindings;
 
             // [keys, click, action] clicking event
             std::map<const std::pair<std::vector<int>, int>, std::function<void(glm::vec2, glm::vec2)>> m_click_bindings;
@@ -66,23 +74,54 @@ namespace LORE {
             // ===== Key binding =====
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a std::function. Will be checked when key is released
              * \param key the keycode to bind
              * \param action the function that should be executed
              */
             void bindKey(const int key, std::function<void()> action) {
-                std::vector<int> temp = {key};
-                m_key_bindings[temp] = action;
+                std::vector<int> keys = {key};
+                bindKey(keys, KeyState::RELEASED, action);
             };
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a std::function. Will be checked when key is pressed, being pressed, or released
+             * \param key the keycode to bind
+             * \param state key state to check
+             * \param action the function that should be executed
+             */
+            void bindKey(const int key, const KeyState state, std::function<void()> action) {
+                std::vector<int> keys = {key};
+                bindKey(keys, state, action);
+            };
+
+            /*!
+             * \brief Bind a key list to a std::function. Will be checked when keys are released
              * \param keys keycode list to bind
              * \param action the function that should be executed
              */
             void bindKey(const std::vector<int> keys, std::function<void()> action) {
-                m_key_bindings[keys] = action;
+                bindKey(keys, KeyState::RELEASED, action);
             };
+
+            /*!
+             * \brief Bind a key list to a std::function. Will be checked when keys are pressed, being pressed, or released
+             * \param keys keycode list to bind
+             * \param state keys state to check
+             * \param action the function that should be executed
+             */
+            void bindKey(const std::vector<int> keys, KeyState state, std::function<void()> action) {
+                switch(state) {
+                    case KeyState::PRESSED:
+                        m_key_pressed_bindings[keys] = action;
+                        break;
+                    case KeyState::PRESSING:
+                        m_key_pressing_bindings[keys] = action;
+                        break;
+                    case KeyState::RELEASED:
+                        m_key_released_bindings[keys] = action;
+                        break;
+                }
+            }
 
             // ===== Click binding =====
 
@@ -221,14 +260,18 @@ namespace LORE {
              */
             void unbind(const int key) {
                 std::vector<int> temp = {key};
-                m_key_bindings.erase(temp);
+                m_key_pressed_bindings.erase(temp);
+                m_key_pressing_bindings.erase(temp);
+                m_key_released_bindings.erase(temp);
             };
 
             /*!
              * \brief Unbind every keys
              */
             void unbindKeys() {
-                m_key_bindings.clear();
+                m_key_pressed_bindings.clear();
+                m_key_pressing_bindings.clear();
+                m_key_released_bindings.clear();
             };
 
             /*!
@@ -278,7 +321,6 @@ namespace LORE {
 
             static void keyEvent(GLFWwindow* window, const int key, const int scancode, const int state, const int mods) {
                 m_key_mutex.lock();
-                std::cout << "Key event: " << key << " = " << state << std::endl;
                 m_last_key_states[key] = m_key_states[key];
                 m_key_states[key] = state;
                 m_key_mutex.unlock();
