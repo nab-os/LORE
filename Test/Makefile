@@ -8,7 +8,7 @@ OBJ_DIR=obj
 OBJECTS=${SOURCES:%.cpp=$(OBJ_DIR)/%.o}
 
 ifeq ($(OS),Windows_NT)
-	
+
 	IDIR=-isystem ../Lore/include \
 		 -I include \
 		 -I C://Mingw/include \
@@ -17,15 +17,15 @@ ifeq ($(OS),Windows_NT)
 		 -I C://Mingw/SOIL/src \
 		 -I C://Mingw/glm \
 		 -I ../Lore/glTF2-loader/include
-	
+
 	LDIR=-L C://Mingw/lib \
 		 -L C://MinGW/glew/lib/Release/Win32 \
 		 -L C://Mingw/glfw/lib-mingw \
 		 -L C://Mingw/SOIL/lib \
 		 -L ../Lore/lib \
 		 -L ../Lore/glTF2-loader/build
-		 
-	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
+
+	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++14 -Wno-unused-variable -Wno-unused-parameter
 	LFLAGS=-lstdc++ \
 		   -lLore \
 		   -lSOIL \
@@ -39,15 +39,15 @@ else
 		 -I /usr/include/SOIL \
 		 -I /usr/include/libdrm \
 		 -I ../Lore/glTF2-loader/include
-	
+
 	LDIR=-L /usr/lib \
 		 -L /usr/local/lib \
 		 -L /usr/lib64 \
 		 -L /usr/lib/x86_64-linux-gnu \
 		 -L ../Lore/lib \
 		 -L ../Lore/glTF2-loader/build
-		 
-	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++11 -Wno-unused-variable -Wno-unused-parameter
+
+	CFLAGS=-Wall -Wextra -O3 -g3 -std=c++14 -Wno-unused-variable -Wno-unused-parameter
 	LFLAGS=-lstdc++ \
 		   -lLore \
 		   -lXi -lGLEW -lm -lGL -lm -lpthread -ldl -ldrm \

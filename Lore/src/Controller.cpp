@@ -1,42 +1,118 @@
 #include "Controller.h"
 
-using namespace std;
 using namespace LORE;
 
-Controller::Controller(): m__keyBindings(), m__visibleCursor(false), m__captureCursor(true) {}
 
-Controller::~Controller() {}
+std::map<const int, int> Controller::m_key_states;
+std::map<const int, int> Controller::m_last_key_states;
 
-void Controller::bind(const int key, function<void(double dx, double dy)> action) {
-	m__keyBindings.insert(pair<const int, function<void(double dx, double dy)>>(key, action));
-}
+std::map<const int, int> Controller::m_click_states;
+std::map<const int, int> Controller::m_last_click_states;
 
-void Controller::unbind(const int key) {
-	m__keyBindings.erase(key);
-}
+int Controller::m_wheel_state;
 
-void Controller::unbind() {
-	m__keyBindings.clear();
-}
+glm::vec2 Controller::m_mouse_pos;
+glm::vec2 Controller::m_last_mouse_pos;
+glm::vec2 Controller::m_origin_mouse_pos;
 
-void Controller::check(Window* w) {
-	double x, y;
-	glfwGetCursorPos(w->getWindow(), &x, &y);
-	double dx = x - double(w->getWidth())/2, dy = y - double(w->getHeight())/2;
+std::mutex Controller::m_key_mutex;
+std::mutex Controller::m_mouse_mutex;
+std::mutex Controller::m_click_mutex;
+std::mutex Controller::m_wheel_mutex;
 
-	if(m__mouseEvent) {
-		m__mouseEvent(x, y, dx, dy);
+
+LORE::Controller::Controller():
+    m_key_bindings(),
+    m_click_bindings(),
+    m_drag_bindings(){}
+
+LORE::Controller::~Controller() {}
+
+void LORE::Controller::check() {
+    glm::vec2 diff = m_mouse_pos - m_last_mouse_pos;
+
+    //Simple key release event
+    for (const auto p : m_key_bindings) {
+        bool success = true;
+        for (const auto s : p.first) {
+            if (m_last_key_states[s] != 0  || (m_key_states[s] != 1  && m_key_states[s] != 2)) {
+                success = false;
+                break;
+            }
+        }
+        if (success) p.second();
     }
 
-	for (const auto p : m__keyBindings) {
-		if (glfwGetKey(w->getWindow(), p.first) == GLFW_PRESS) {
-			p.second(x, y);
-		}
-	}
-
-	glfwSetInputMode(w->getWindow(), GLFW_CURSOR, (m__visibleCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN));
-
-	if(m__captureCursor) {
-		glfwSetCursorPos(w->getWindow(), double(w->getWidth())/2, double(w->getHeight())/2);
+    //Click + key pressing event
+    for (const auto p : m_click_bindings) {
+        bool success = true;
+        for (const auto s : p.first.first) {
+            if (m_key_states[s] != 1) {
+                success = false;
+                break;
+            }
+        }
+        if (success && (m_last_click_states.find(p.first.second) == m_last_click_states.end()))
+            success = false;
+        if (success && (m_click_states.find(p.first.second) == m_click_states.end()))
+            success = false;
+        if (success && m_last_click_states[p.first.second] != 1)
+            success = false;
+        if (success && m_click_states[p.first.second] != 0)
+            success = false;
+        if (success && (m_origin_mouse_pos != m_mouse_pos))
+            success = false;
+        if (success) p.second(m_mouse_pos, diff);
     }
+
+    //Drag + key pressing event
+    for (const auto p : m_drag_bindings) {
+        bool success = true;
+        for (const auto s : p.first.first) {
+            if (m_key_states[s] != 1) {
+                success = false;
+                break;
+            }
+        }
+        if (success && (m_click_states.find(p.first.second) == m_click_states.end()))
+            success = false;
+        if (success && m_click_states[p.first.second] != 1)
+            success = false;
+        if (success && diff == glm::vec2(0, 0))
+            success = false;
+        if (success) p.second(m_origin_mouse_pos, m_mouse_pos, diff);
+    }
+
+    //Move + key pressing event
+    for (const auto p : m_move_bindings) {
+        bool success = true;
+        for (const auto s : p.first) {
+            if (m_key_states[s] != 1) {
+                success = false;
+                break;
+            }
+        }
+        if (success && diff == glm::vec2(0, 0))
+            success = false;
+        if (success) p.second(m_mouse_pos, diff);
+    }
+
+    //Wheel event
+    for (const auto p : m_wheel_bindings) {
+        bool success = true;
+        for (const auto s : p.first.first) {
+            if (m_key_states[s] != 1) {
+                success = false;
+                break;
+            }
+        }
+        if (success && m_wheel_state != p.first.second)
+            success = false;
+        if (success) p.second();
+    }
+
+    m_last_click_states = m_click_states;
+    m_last_key_states = m_key_states;
+    m_last_mouse_pos = m_mouse_pos;
+    m_wheel_state = 0;
 }
