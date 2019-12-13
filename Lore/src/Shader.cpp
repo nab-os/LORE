@@ -3,11 +3,13 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
-using namespace glm;
-using namespace LORE;
+using std::cout;
+using std::endl;
+using std::string;
+using std::ifstream;
+using LORE::Shader;
 
-Shader::Shader(std::string shaderName): m__programID(),
+Shader::Shader(string shaderName): m__programID(),
 										m__vertexID(),
 										m__tessControlID(),
 										m__tessEvaluationID(),
@@ -122,7 +124,7 @@ bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSo
 
 	// Vérification du shader
 	if (shader == 0) {
-		std::cout << "Erreur, le type de shader (" << type << ") n'existe pas" << std::endl;
+		cout << "Erreur, le type de shader (" << type << ") n'existe pas" << endl;
 		return false;
 	}
 
@@ -131,15 +133,15 @@ bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSo
 
 	// Test d'ouverture
 	if (!fichier) {
-		std::cout << "Erreur le fichier " << fichierSource << " est introuvable" << std::endl;
+		cout << "Erreur le fichier " << fichierSource << " est introuvable" << endl;
 		glDeleteShader(shader);
 
 		return false;
 	}
 
 	// Strings permettant de lire le code source
-	std::string ligne;
-	std::string codeSource;
+	string ligne;
+	string codeSource;
 
 	// Lecture
 	while (getline(fichier, ligne))
@@ -175,7 +177,7 @@ bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSo
 		erreur[tailleErreur] = '\0';
 
 		// Affichage de l'erreur
-		std::cout << erreur << std::endl;
+		cout << erreur << endl;
 
 		// Libération de la mémoire et retour du booléen false
 		delete[] erreur;
@@ -198,27 +200,27 @@ void Shader::sendMat3Uniform(string nom, glm::mat3 matrice) {
 	glUniformMatrix3fv(localisation, 1, GL_FALSE, glm::value_ptr(matrice));
 }
 
-void Shader::sendVec4Uniform(std::string nom, glm::vec4 vecteur) {
+void Shader::sendVec4Uniform(string nom, glm::vec4 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform4f(localisation, vecteur.x, vecteur.y, vecteur.z, vecteur.w);
 }
 
-void Shader::sendVec3Uniform(std::string nom, glm::vec3 vecteur) {
+void Shader::sendVec3Uniform(string nom, glm::vec3 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform3f(localisation, vecteur.x, vecteur.y, vecteur.z);
 }
 
-void Shader::sendVec2Uniform(std::string nom, glm::vec2 vecteur) {
+void Shader::sendVec2Uniform(string nom, glm::vec2 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform2f(localisation, vecteur.x, vecteur.y);
 }
 
-void Shader::sendIntUniform(std::string nom, GLuint id) {
+void Shader::sendIntUniform(string nom, GLuint id) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform1i(localisation, id);
 }
 
-void Shader::sendFloatUniform(std::string nom, float val) {
+void Shader::sendFloatUniform(string nom, float val) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform1f(localisation, val);
 }

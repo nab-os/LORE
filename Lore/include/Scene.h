@@ -15,6 +15,8 @@
 #include "Light.h"
 #include "CubeMap.h"
 
+using std::vector;
+
 namespace LORE {
     class Scene: public Node {
         public:
@@ -27,7 +29,7 @@ namespace LORE {
             bool m__paused;
 
             CubeMap* m__environmentMap;
-            std::vector<Light*> m__lights;
+            vector<Light*> m__lights;
 
             void renderLights();
     };

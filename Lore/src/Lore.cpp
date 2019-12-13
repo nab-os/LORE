@@ -2,8 +2,20 @@
 
 #include <iostream>
 
-using namespace std;
-using namespace LORE;
+using std::cout;
+using std::endl;
+using std::string;
+using LORE::Lore;
+using LORE::Texture;
+using LORE::Scene;
+using LORE::Camera;
+using LORE::Node;
+using LORE::Mesh;
+using LORE::Material;
+using LORE::Texture;
+using LORE::Shader;
+using LORE::Library;
+using LORE::Object;
 
 Library<LORE::Window>* Lore::m__windowLibrary = new Library<Window>();
 Library<Scene>* Lore::m__sceneLibrary = new Library<Scene>();
@@ -32,7 +44,7 @@ LORE::Window* Lore::init() {
 	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit()) {
-		std::cout << "Failed to initialize GLFW\n";
+		cout << "Failed to initialize GLFW\n";
 		return nullptr;
 	}
 
@@ -55,7 +67,7 @@ LORE::Window* Lore::init() {
 	// Si l'initialisation a échoué :
 	if (initialisationGLEW != GLEW_OK) {
 		// On affiche l'erreur grâce à la fonction : glewGetErrorString(GLenum code)
-		std::cout << "Erreur d'initialisation de GLEW : " << glewGetErrorString(initialisationGLEW) << std::endl;
+		cout << "Erreur d'initialisation de GLEW : " << glewGetErrorString(initialisationGLEW) << endl;
 
 		glfwTerminate();
 		exit(EXIT_FAILURE);

@@ -3,14 +3,14 @@
 #include <iostream>
 #include <string>
 
-#include <SOIL.h>
-
 #include "Texture.h"
+
+using std::string;
 
 namespace LORE {
     class CubeMap: public Texture {
         public:
-            CubeMap(std::string name = "default_cube_map");
+            CubeMap(string name = "default_cube_map");
             virtual ~CubeMap();
             void load();
     };

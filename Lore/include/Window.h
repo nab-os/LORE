@@ -27,10 +27,12 @@
 //#include <OVR_CAPI.h>
 //#include <OVR_CAPI_GL.h>
 
+using std::string;
+
 namespace LORE {
     class Window {
         public:
-            Window(std::string tittle = "First window", int width = 512, int height = 512, int fps = 60);
+            Window(string tittle = "First window", int width = 512, int height = 512, int fps = 60);
             virtual ~Window();
 
             void close();
@@ -57,7 +59,7 @@ namespace LORE {
         private:
             GLFWwindow* m__window;
 
-            std::string m__title;
+            string m__title;
 
             int m__width;
             int m__height;

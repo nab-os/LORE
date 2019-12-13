@@ -3,31 +3,28 @@
 #include <stdio.h>
 #include <string.h>
 
-using namespace std;
-using namespace LORE;
-
-CubeMap::CubeMap(std::string name): Texture(name) {
-	cout << this << " [Texture] constructor" << endl;
+LORE::CubeMap::CubeMap(std::string name): Texture(name) {
+	std::cout << this << " [Texture] constructor" << std::endl;
 }
 
-CubeMap::~CubeMap() {}
+LORE::CubeMap::~CubeMap() {}
 
-void CubeMap::load() {
-	cout << this << " [CubeMap] load" << endl;
+void LORE::CubeMap::load() {
+    std::cout << this << " [CubeMap] load" << std::endl;
 
-	string left = (m__filePath + "/left.jpg");
-	string right = (m__filePath + "/right.jpg");
-	string top = (m__filePath + "/top.jpg");
-	string back = (m__filePath + "/back.jpg");
-	string front = (m__filePath + "/front.jpg");
-	string bottom = (m__filePath + "/bottom.jpg");
+	std::string left = (m__filePath + "/left.jpg");
+	std::string right = (m__filePath + "/right.jpg");
+	std::string top = (m__filePath + "/top.jpg");
+	std::string back = (m__filePath + "/back.jpg");
+	std::string front = (m__filePath + "/front.jpg");
+	std::string bottom = (m__filePath + "/bottom.jpg");
 
-	cout << this << " [CubeMap] load(): " << left << endl;
-	cout << this << " [CubeMap] load(): " << right << endl;
-	cout << this << " [CubeMap] load(): " << top << endl;
-	cout << this << " [CubeMap] load(): " << back << endl;
-	cout << this << " [CubeMap] load(): " << front << endl;
-	cout << this << " [CubeMap] load(): " << bottom << endl;
+	std::cout << this << " [CubeMap] load(): " << left << std::endl;
+	std::cout << this << " [CubeMap] load(): " << right << std::endl;
+	std::cout << this << " [CubeMap] load(): " << top << std::endl;
+	std::cout << this << " [CubeMap] load(): " << back << std::endl;
+	std::cout << this << " [CubeMap] load(): " << front << std::endl;
+	std::cout << this << " [CubeMap] load(): " << bottom << std::endl;
 
 	m__id = SOIL_load_OGL_cubemap((char*)left.c_str(),
                                   (char*)right.c_str(),

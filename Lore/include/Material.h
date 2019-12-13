@@ -10,6 +10,10 @@
 #include "Shader.h"
 #include "Texture.h"
 
+using std::string;
+using std::map;
+using std::pair;
+
 namespace LORE {
     class Material {
         public:
@@ -45,10 +49,10 @@ namespace LORE {
             bool getCulling() { return m__culling; };
             void setCulling(bool culling) { m__culling = culling; };
 
-            void addCustomIntUniform(std::string name, int* value);
-            void addCustomFloatUniform(std::string name, float* value);
-            void addCustomVec2Uniform(std::string name, glm::vec2* value);
-            void addCustomVec3Uniform(std::string name, glm::vec3* value);
+            void addCustomIntUniform(string name, int* value);
+            void addCustomFloatUniform(string name, float* value);
+            void addCustomVec2Uniform(string name, glm::vec2* value);
+            void addCustomVec3Uniform(string name, glm::vec3* value);
 
             void sendCustomUniforms();
             void sendTextures();
@@ -60,17 +64,17 @@ namespace LORE {
             float m__metallness;
             float m__roughness;
 
-            std::map<std::string, int*> m__customIntUniforms;
-            std::map<std::string, float*> m__customFloatUniforms;
-            std::map<std::string, glm::vec2*> m__customVec2Uniforms;
-            std::map<std::string, glm::vec3*> m__customVec3Uniforms;
+            map<string, int*> m__customIntUniforms;
+            map<string, float*> m__customFloatUniforms;
+            map<string, glm::vec2*> m__customVec2Uniforms;
+            map<string, glm::vec3*> m__customVec3Uniforms;
 
             Texture* m__pbrTexture;
             Texture* m__diffuseTexture;
             Texture* m__normalTexture;
             Texture* m__occlusionTexture;
 
-            std::map<std::string, std::pair<GLuint, GLuint>> m__textures;
+            map<string, pair<GLuint, GLuint>> m__textures;
 
             bool m__culling;
     };

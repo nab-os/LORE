@@ -4,7 +4,12 @@
 #include <string>
 #include <map>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
+using std::map;
+using std::pair;
+using std::to_string;
 
 namespace LORE {
     template <class T>
@@ -14,22 +19,22 @@ namespace LORE {
 
             ~Library() {}
 
-            bool has(std::string path) {
+            bool has(string path) {
                 return m__objects.find(path) != m__objects.end();
             }
 
-            void add(std::string path, T* object) {
+            void add(string path, T* object) {
                 string path_ = path;
                 int i = 1;
                 while(has(path_)) {
-                    path_ = path + "_" + std::to_string(i);
+                    path_ = path + "_" + to_string(i);
                     i++;
                 }
                 cout << "Resulting path: " << path_ << endl;
                 m__objects.insert(pair<string, T*>(path_, object));
             }
 
-            T* get(std::string path) {
+            T* get(string path) {
                 if(has(path))
                     return m__objects.at(path);
                 else
@@ -38,7 +43,7 @@ namespace LORE {
 
             void list() {
                 for(auto it: m__objects)
-                    std::cout << "[Library]: " << it.first << std::endl;
+                    cout << "[Library]: " << it.first << endl;
             }
 
             void flush() {
@@ -48,6 +53,6 @@ namespace LORE {
             }
 
         private:
-            std::map<std::string, T*> m__objects;
+            map<string, T*> m__objects;
     };
 }

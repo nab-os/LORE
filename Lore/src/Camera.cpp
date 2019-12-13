@@ -7,27 +7,23 @@
 #include <Lore.h>
 #include <Cube.h>
 
-using namespace std;
-using namespace glm;
-using namespace LORE;
-
-Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalAxis, float sensibility, float speed): Node(),
+LORE::Camera::Camera(int width, int height, glm::vec3 position, glm::vec3 target, glm::vec3 verticalAxis, float sensibility, float speed): Node(),
     m__scene(),
     m_target(target),
     m_verticalAxis(verticalAxis),
     m_phi(0),
     m_theta(0),
-    m_orientation(vec3(1, 0, 0)),
+    m_orientation(glm::vec3(1, 0, 0)),
     m_sensibility(sensibility),
     m_speed(0.05),
     m__ratio(16.0/9.0),
     m__far(500.0),
     m__near(0.1),
-    m__backgroundColor(vec3(0.2, 0.2, 0.2)),
+    m__backgroundColor(glm::vec3(0.2, 0.2, 0.2)),
     m__fbo(),
-    m__render(),
-    m__rbo() {
-    cout << this << " [Camera] constructor" << endl;
+    m__rbo(),
+    m__render() {
+    std::cout << this << " [Camera] constructor" << std::endl;
 
 	updatePerspective();
 
@@ -64,7 +60,7 @@ Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalA
 /*
     m__render = new Texture();
     m__render->load();
-    cout << "Texture loaded" << endl;
+    std::cout << "Texture loaded" << std::endl;
     glBindTexture(GL_TEXTURE_2D, m__render->getID());
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -72,20 +68,20 @@ Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalA
         //glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 800, 600, 0,
         //        GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
     glBindTexture(GL_TEXTURE_2D, 0);
-    cout << "BBBB" << endl;
+    std::cout << "BBBB" << std::endl;
 
     glGenFramebuffers(1, &m__fbo);
-    cout << "BBBB_" << endl;
+    std::cout << "BBBB_" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, m__fbo);
-        cout << "CCC" << endl;
+        std::cout << "CCC" << std::endl;
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m__render->getID(), 0);
         //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m__render->getID(), 0);
-        cout << "DDD" << endl;
+        std::cout << "DDD" << std::endl;
 
         glGenRenderbuffers(1, &m__rbo);
         glBindRenderbuffer(GL_RENDERBUFFER, m__rbo);
-            cout << "EEE" << endl;
+            std::cout << "EEE" << std::endl;
 
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m__rbo);
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
@@ -94,28 +90,28 @@ Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalA
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    cout << "FFF" << endl;*/
+    std::cout << "FFF" << std::endl;*/
 
     m__environmentCube = new Cube();
     m__environmentCube->load();
     m__environmentCube->setMaterial(Lore::getMaterial("environmentMap"));
 }
 
-Camera::~Camera() {
-    cout << this << " [Camera] destructor" << endl;
+LORE::Camera::~Camera() {
+    std::cout << this << " [Camera] destructor" << std::endl;
     delete m__render;
     delete m__environmentCube;
 }
 
-void Camera::render() {
-    //cout << this << " [Camera] render" << endl;
-    render(NULL, m__projection, getView(), getModel(mat4(1.0)));
+void LORE::Camera::render() {
+    //cout << this << " [Camera] render" << std::endl;
+    render(NULL, m__projection, getView(), getModel(glm::mat4(1.0)));
 }
 
-void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model) {
+void LORE::Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model) {
 //    if(renderer != this)
 //   {
-        //cout << this << " [Camera] render" << endl;
+        //cout << this << " [Camera] render" << std::endl;
        // glBindFramebuffer(GL_FRAMEBUFFER, m__fbo);
             glViewport(0, 0, 1280, 768);
 
@@ -127,12 +123,12 @@ void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::m
             glm::mat4 _view = getView();
 
             glDepthMask(GL_FALSE);
-            m__environmentCube->render(this, m__projection, mat4(mat3(_view)), mat4(1.0));
+            m__environmentCube->render(this, m__projection, glm::mat4(glm::mat3(_view)), glm::mat4(1.0));
             glDepthMask(GL_TRUE);
             if(m__scene)
-                m__scene->render(this, m__projection, _view, mat4(1.0));
+                m__scene->render(this, m__projection, _view, glm::mat4(1.0));
             else
-                cout << "[Camera]: Scene not set !" << endl;
+                std::cout << "[Camera]: Scene not set !" << std::endl;
 
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 //    }
@@ -141,11 +137,11 @@ void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::m
 
 // Méthodes
 
-void Camera::updatePerspective() {
-    m__projection = perspective(90.0, m__ratio, m__near, m__far);
+void LORE::Camera::updatePerspective() {
+    m__projection = glm::perspective(90.0, m__ratio, m__near, m__far);
 }
 
-void Camera::setOrientation(double xRel, double yRel) {
+void LORE::Camera::setOrientation(double xRel, double yRel) {
     // Récupération des angles
     m_phi += -yRel * m_sensibility;
     m_theta += -xRel * m_sensibility;
@@ -186,49 +182,49 @@ void Camera::setOrientation(double xRel, double yRel) {
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::move(glm::vec3 pos) {
+void LORE::Camera::move(glm::vec3 pos) {
     Node::move(pos);
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::forward() {
+void LORE::Camera::forward() {
     move(m_orientation * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::backward() {
+void LORE::Camera::backward() {
     move(-m_orientation * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::left() {
+void LORE::Camera::left() {
     glm::vec3 side = normalize(cross(m_verticalAxis, m_orientation));
     move(side * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::right() {
+void LORE::Camera::right() {
     glm::vec3 side = normalize(cross(m_verticalAxis, m_orientation));
     move(-side * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::up() {
+void LORE::Camera::up() {
     move(m_verticalAxis * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::down() {
+void LORE::Camera::down() {
     move(-m_verticalAxis * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
 
-glm::mat4 Camera::getView() {
+glm::mat4 LORE::Camera::getView() {
     return glm::lookAt(Node::getPosition(), m_target, glm::vec3(0, 1, 0));
 }
 
 // Getters et Setters
-void Camera::setTarget(glm::vec3 target) {
+void LORE::Camera::setTarget(glm::vec3 target) {
     // Calcul du vecteur orientation
     glm::vec3 position = Node::getPosition();
 
@@ -269,22 +265,22 @@ void Camera::setTarget(glm::vec3 target) {
     theta = theta * 180 / PI;
 }
 
-float Camera::getSensibility() const {
+float LORE::Camera::getSensibility() const {
     return m_sensibility;
 }
 
-float Camera::getSpeed() const {
+float LORE::Camera::getSpeed() const {
     return m_speed;
 }
 
-void Camera::setSensibility(float sensibility) {
+void LORE::Camera::setSensibility(float sensibility) {
     m_sensibility = sensibility;
 }
 
-void Camera::setSpeed(float speed) {
+void LORE::Camera::setSpeed(float speed) {
     m_speed = speed;
 }
 
-bool Camera::getFly() const {
+bool LORE::Camera::getFly() const {
     return m_fly;
 }
