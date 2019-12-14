@@ -7,7 +7,7 @@ ImportErrorHandler::ImportErrorHandler(): mHasCriticalError(false) {}
 ImportErrorHandler::~ImportErrorHandler() {}
 
 bool ImportErrorHandler::handleError(const COLLADASaxFWL::IError* error) {
-    /*std::string msg;
+    /*string msg;
     COLLADASaxFWL::IError::Severity severity = error->getSeverity();
     switch ( error->getErrorClass() )
     {

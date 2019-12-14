@@ -7,8 +7,15 @@
 #include <Lore.h>
 #include <Cube.h>
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+using std::string;
+using std::vector;
+using glm::vec3;
+using glm::mat3;
+using glm::mat4;
+using glm::perspective;
+
 using namespace LORE;
 
 Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalAxis, float sensibility, float speed): Node(),
@@ -25,8 +32,8 @@ Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalA
     m__near(0.1),
     m__backgroundColor(vec3(0.2, 0.2, 0.2)),
     m__fbo(),
-    m__render(),
-    m__rbo() {
+    m__rbo(),
+    m__render() {
     cout << this << " [Camera] constructor" << endl;
 
 	updatePerspective();
@@ -34,7 +41,7 @@ Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalA
     glGenTextures(1, &m__environmentMap);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m__environmentMap);
 
-    std::vector<std::string> textures_faces =
+    vector<string> textures_faces =
     {"Textures/right.jpg","Textures/left.jpg","Textures/top.jpg","Textures/bottom.jpg","Textures/back.jpg","Textures/front.jpg"};
     int imageWidth, imageHeight, nrChannels;
     unsigned char *data;
@@ -48,7 +55,7 @@ Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalA
             }
             else
             {
-                std::cout << "Cubemap texture failed to load at path: " << textures_faces[i] << std::endl;
+                cout << "Cubemap texture failed to load at path: " << textures_faces[i] << endl;
                 stbi_image_free(data);
             }
         }
@@ -91,7 +98,7 @@ Camera::Camera(int width, int height, vec3 position, vec3 target, vec3 verticalA
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+            cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     cout << "FFF" << endl;*/
@@ -112,7 +119,7 @@ void Camera::render() {
     render(NULL, m__projection, getView(), getModel(mat4(1.0)));
 }
 
-void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model) {
+void Camera::render(Node* renderer, mat4 projection, mat4 view, mat4 model) {
 //    if(renderer != this)
 //   {
         //cout << this << " [Camera] render" << endl;
@@ -124,7 +131,7 @@ void Camera::render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::m
 
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-            glm::mat4 _view = getView();
+            mat4 _view = getView();
 
             glDepthMask(GL_FALSE);
             m__environmentCube->render(this, m__projection, mat4(mat3(_view)), mat4(1.0));
@@ -186,7 +193,7 @@ void Camera::setOrientation(double xRel, double yRel) {
     m_target = Node::getPosition() + m_orientation;
 }
 
-void Camera::move(glm::vec3 pos) {
+void Camera::move(vec3 pos) {
     Node::move(pos);
     m_target = Node::getPosition() + m_orientation;
 }
@@ -202,13 +209,13 @@ void Camera::backward() {
 }
 
 void Camera::left() {
-    glm::vec3 side = normalize(cross(m_verticalAxis, m_orientation));
+    vec3 side = normalize(cross(m_verticalAxis, m_orientation));
     move(side * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
 
 void Camera::right() {
-    glm::vec3 side = normalize(cross(m_verticalAxis, m_orientation));
+    vec3 side = normalize(cross(m_verticalAxis, m_orientation));
     move(-side * m_speed);
     m_target = Node::getPosition() + m_orientation;
 }
@@ -223,14 +230,14 @@ void Camera::down() {
     m_target = Node::getPosition() + m_orientation;
 }
 
-glm::mat4 Camera::getView() {
-    return glm::lookAt(Node::getPosition(), m_target, glm::vec3(0, 1, 0));
+mat4 Camera::getView() {
+    return lookAt(Node::getPosition(), m_target, vec3(0, 1, 0));
 }
 
 // Getters et Setters
-void Camera::setTarget(glm::vec3 target) {
+void Camera::setTarget(vec3 target) {
     // Calcul du vecteur orientation
-    glm::vec3 position = Node::getPosition();
+    vec3 position = Node::getPosition();
 
     m_orientation = m_target - position;
     m_orientation = normalize(m_orientation);

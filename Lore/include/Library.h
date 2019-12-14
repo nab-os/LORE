@@ -4,8 +4,6 @@
 #include <string>
 #include <map>
 
-using namespace std;
-
 namespace LORE {
     template <class T>
     class Library {
@@ -19,14 +17,14 @@ namespace LORE {
             }
 
             void add(std::string path, T* object) {
-                string path_ = path;
+                std::string path_ = path;
                 int i = 1;
                 while(has(path_)) {
                     path_ = path + "_" + std::to_string(i);
                     i++;
                 }
-                cout << "Resulting path: " << path_ << endl;
-                m__objects.insert(pair<string, T*>(path_, object));
+                std::cout << "Resulting path: " << path_ << std::endl;
+                m__objects.insert(std::pair<std::string, T*>(path_, object));
             }
 
             T* get(std::string path) {

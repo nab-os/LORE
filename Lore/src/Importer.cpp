@@ -10,8 +10,13 @@
 #include "Library.h"
 #include "Lore.h"
 
-using namespace glm;
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
+using std::vector;
+using glm::vec3;
+using glm::vec4;
+
 using namespace LORE;
 
 Importer::Importer(string file): m__filePath(file) {}
@@ -126,7 +131,7 @@ void Importer::importMaterial(gltf2::Asset asset, unsigned int i) {
     if(gmaterial.occlusionTexture.index != -1)
         material->setOcclusionTexture(m__textures[gmaterial.occlusionTexture.index]);
 
-    material->setDiffuseColor(glm::vec4(pbr.baseColorFactor[0], pbr.baseColorFactor[1], pbr.baseColorFactor[2], pbr.baseColorFactor[3]));
+    material->setDiffuseColor(vec4(pbr.baseColorFactor[0], pbr.baseColorFactor[1], pbr.baseColorFactor[2], pbr.baseColorFactor[3]));
     material->setMetallness(pbr.metallicFactor);
     material->setRoughness(pbr.roughnessFactor);
 

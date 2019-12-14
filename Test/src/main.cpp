@@ -13,14 +13,18 @@
 
 #include "Diamond.h"
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+using std::string;
+using glm::vec3;
+using glm::quat;
+
 using namespace LORE;
 
 int main(int argc, char** argv) {
     cout << "===== INIT =====" << endl;
 
-    LORE::Window* window = LORE::Lore::init(); // Initializes OpenGL context and creates a Window
+    Window* window = Lore::init(); // Initializes OpenGL context and creates a Window
     if(!window) {
         cout << "Error during OpenGL context initialization." << endl;
         Lore::unload();

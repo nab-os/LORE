@@ -3,8 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include <SOIL.h>
-
 #include "Texture.h"
 
 namespace LORE {

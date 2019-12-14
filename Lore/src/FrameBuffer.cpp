@@ -1,7 +1,8 @@
 #include "FrameBuffer.h"
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+
 using namespace LORE;
 
 FrameBuffer::FrameBuffer(int width, int height):

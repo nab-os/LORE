@@ -7,8 +7,6 @@
 #ifndef BUFFER_OFFSET
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
 #endif
-
-namespace LORE {
     class ModelRender: public Mesh {
         public:
             explicit ModelRender();

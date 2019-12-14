@@ -2,8 +2,13 @@
 
 #include <iostream>
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+using std::vector;
+using glm::vec2;
+using glm::vec3;
+using glm::mat4;
+
 using namespace LORE;
 
 MeshRender::MeshRender():	Mesh(),
@@ -36,36 +41,36 @@ MeshRender::~MeshRender() {
 }
 
 void MeshRender::computeTangentBasis(   // inputs
-	std::vector<glm::vec3> & vertices,
-	std::vector<glm::vec2> & uvs,
-	std::vector<glm::vec3> & normals,
+	vector<vec3> & vertices,
+	vector<vec2> & uvs,
+	vector<vec3> & normals,
 
 	// outputs
-	std::vector<glm::vec3> & tangents,
-	std::vector<glm::vec3> & bitangents) {
+	vector<vec3> & tangents,
+	vector<vec3> & bitangents) {
 
 	for (unsigned int i = 0; i<vertices.size(); i += 3) {
 		// Shortcuts for vertices
-		glm::vec3 & v0 = vertices[i + 0];
-		glm::vec3 & v1 = vertices[i + 1];
-		glm::vec3 & v2 = vertices[i + 2];
+		vec3 & v0 = vertices[i + 0];
+		vec3 & v1 = vertices[i + 1];
+		vec3 & v2 = vertices[i + 2];
 
 		// Shortcuts for UVs
-		glm::vec2 & uv0 = uvs[i + 0];
-		glm::vec2 & uv1 = uvs[i + 1];
-		glm::vec2 & uv2 = uvs[i + 2];
+		vec2 & uv0 = uvs[i + 0];
+		vec2 & uv1 = uvs[i + 1];
+		vec2 & uv2 = uvs[i + 2];
 
 		// Edges of the triangle : postion delta
-		glm::vec3 deltaPos1 = v1 - v0;
-		glm::vec3 deltaPos2 = v2 - v0;
+		vec3 deltaPos1 = v1 - v0;
+		vec3 deltaPos2 = v2 - v0;
 
 		// UV delta
-		glm::vec2 deltaUV1 = uv1 - uv0;
-		glm::vec2 deltaUV2 = uv2 - uv0;
+		vec2 deltaUV1 = uv1 - uv0;
+		vec2 deltaUV2 = uv2 - uv0;
 
 		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-		glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
-		glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
+		vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
+		vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
 
 		// Set the same tangent for all three vertices of the triangle.
 
@@ -228,8 +233,8 @@ void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint enviro
 	s->envoyerMat4("cameraModel", depthModel);
 	s->envoyerMat4("cameraMVP", depthBias * (depthProjection * (depthView * depthModel)));*/
 
-	/*s->envoyerMat3("MV3x3", glm::mat3(view * model));
-	s->envoyerMat3("M3x3", glm::mat3(model));*/
+	/*s->envoyerMat3("MV3x3", mat3(view * model));
+	s->envoyerMat3("M3x3", mat3(model));*/
 
 	/*s->envoyerVec3("lightPositionWorldspace", Light::getInstance()->getLightPos());*/
 
@@ -335,7 +340,7 @@ void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint enviro
 	glLoadMatrixf((const GLfloat*)&projection[0]);
 
 	glMatrixMode(GL_MODELVIEW);
-	glm::mat4 MV = view * model;
+	mat4 MV = view * model;
 	glLoadMatrixf((const GLfloat*)&MV[0]);
 
 
@@ -343,13 +348,13 @@ void MeshRender::render(mat4 &projection, mat4 &view, mat4 &model, GLuint enviro
 
 	glBegin(GL_LINES);
 
-	std::vector<glm::vec3> vertices = this->getVertices();
+	vector<vec3> vertices = this->getVertices();
 
 	for (unsigned int i=0; i < vertices.size()-1; i++){
-		glm::vec3 p = vertices[i];
+		vec3 p = vertices[i];
 		glVertex3fv(&p.x);
 
-		glm::vec3 o = glm::normalize(m__normals[i]);
+		vec3 o = normalize(m__normals[i]);
 		p+=o*0.1f;
 		glVertex3fv(&p.x);
 	}

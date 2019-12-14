@@ -11,8 +11,11 @@ A simple window that closes when ESCAPE key is pressed
 #include <iostream>
 #include <Lore.h>
 
-using namespace std;
+using std::cout;
+using std::endl;
+
 using namespace LORE;
+
 int main(int argc, char** argv) {
     cout << "===== INIT =====" << endl;
 

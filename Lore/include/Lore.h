@@ -24,7 +24,7 @@
 namespace LORE{
     class Lore {
         public:
-            static LORE::Window* init();
+            static Window* init();
             static void unload();
 
             static Window* createWindow(std::string id, std::string name);

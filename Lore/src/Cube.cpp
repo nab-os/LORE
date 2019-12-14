@@ -2,17 +2,14 @@
 
 #include <iostream>
 
-// Includes GLM
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+using std::cout;
+using std::endl;
+using std::vector;
 
-using namespace std;
-using namespace glm;
 using namespace LORE;
 
 Cube::Cube(): Mesh() {
-	cout << this << " [Cube] constructor" << endl;
+    cout << this << " [Cube] constructor" << endl;
 
     vector<float> vertices = {
     -0.5,  0.5,  0.5,   -0.5, -0.5,  0.5,   0.5, -0.5,  0.5,
@@ -62,5 +59,5 @@ Cube::Cube(): Mesh() {
 }
 
 Cube::~Cube() {
-	cout << this << " [Cube] destructor" << endl;
+    cout << this << " [Cube] destructor" << endl;
 }

@@ -3,17 +3,20 @@
 #include <stdio.h>
 #include <string.h>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
+
 using namespace LORE;
 
-CubeMap::CubeMap(std::string name): Texture(name) {
+CubeMap::CubeMap(string name): Texture(name) {
 	cout << this << " [Texture] constructor" << endl;
 }
 
 CubeMap::~CubeMap() {}
 
 void CubeMap::load() {
-	cout << this << " [CubeMap] load" << endl;
+    cout << this << " [CubeMap] load" << endl;
 
 	string left = (m__filePath + "/left.jpg");
 	string right = (m__filePath + "/right.jpg");

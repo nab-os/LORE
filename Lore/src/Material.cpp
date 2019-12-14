@@ -2,8 +2,14 @@
 
 #include <iostream>
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+using std::string;
+using std::pair;
+using glm::vec2;
+using glm::vec3;
+using glm::vec4;
+
 using namespace LORE;
 
 Material::Material(): m__shader(), m__diffuseColor(vec4(0.5, 0, 0, 1)),
@@ -29,19 +35,19 @@ void Material::load() {
 	cout << this << " [Material] load" << endl;
 }
 
-void Material::addCustomIntUniform(std::string name, int* value) {
+void Material::addCustomIntUniform(string name, int* value) {
     m__customIntUniforms.insert(pair<string, int*>(name, value));
 }
 
-void Material::addCustomFloatUniform(std::string name, float* value) {
+void Material::addCustomFloatUniform(string name, float* value) {
     m__customFloatUniforms.insert(pair<string, float*>(name, value));
 }
 
-void Material::addCustomVec2Uniform(std::string name, glm::vec2* value) {
+void Material::addCustomVec2Uniform(string name, vec2* value) {
     m__customVec2Uniforms.insert(pair<string, vec2*>(name, value));
 }
 
-void Material::addCustomVec3Uniform(std::string name, glm::vec3* value) {
+void Material::addCustomVec3Uniform(string name, vec3* value) {
     m__customVec3Uniforms.insert(pair<string, vec3*>(name, value));
 }
 
