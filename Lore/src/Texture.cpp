@@ -1,9 +1,12 @@
 #include "Texture.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
+
 using namespace LORE;
 
-Texture::Texture(std::string name): m__id(), m__name(name), m__filePath(name) {
+Texture::Texture(string name): m__id(), m__name(name), m__filePath(name) {
 	cout << this << " [Texture] constructor" << endl;
 }
 

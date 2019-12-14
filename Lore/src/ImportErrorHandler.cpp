@@ -1,10 +1,12 @@
 #include "ImportErrorHandler.h"
 
-LORE::ImportErrorHandler::ImportErrorHandler(): mHasCriticalError(false) {}
+using namespace LORE;
 
-LORE::ImportErrorHandler::~ImportErrorHandler() {}
+ImportErrorHandler::ImportErrorHandler(): mHasCriticalError(false) {}
 
-bool LORE::ImportErrorHandler::handleError(const COLLADASaxFWL::IError* error) {
+ImportErrorHandler::~ImportErrorHandler() {}
+
+bool ImportErrorHandler::handleError(const COLLADASaxFWL::IError* error) {
     /*string msg;
     COLLADASaxFWL::IError::Severity severity = error->getSeverity();
     switch ( error->getErrorClass() )
@@ -28,6 +30,6 @@ bool LORE::ImportErrorHandler::handleError(const COLLADASaxFWL::IError* error) {
     return false;
 }
 
-bool LORE::ImportErrorHandler::hasCriticalError() {
+bool ImportErrorHandler::hasCriticalError() {
     return mHasCriticalError;
 }

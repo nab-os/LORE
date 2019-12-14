@@ -1,37 +1,42 @@
 #include "Controller.h"
 
+using std::cout;
+using std::endl;
+using std::map;
+using std::mutex;
+using glm::vec2;
+
 using namespace LORE;
 
+map<const int, int> Controller::m_key_states;
+map<const int, int> Controller::m_last_key_states;
 
-std::map<const int, int> Controller::m_key_states;
-std::map<const int, int> Controller::m_last_key_states;
-
-std::map<const int, int> Controller::m_click_states;
-std::map<const int, int> Controller::m_last_click_states;
+map<const int, int> Controller::m_click_states;
+map<const int, int> Controller::m_last_click_states;
 
 int Controller::m_wheel_state;
 
-glm::vec2 Controller::m_mouse_pos;
-glm::vec2 Controller::m_last_mouse_pos;
-glm::vec2 Controller::m_origin_mouse_pos;
+vec2 Controller::m_mouse_pos;
+vec2 Controller::m_last_mouse_pos;
+vec2 Controller::m_origin_mouse_pos;
 
-std::mutex Controller::m_key_mutex;
-std::mutex Controller::m_mouse_mutex;
-std::mutex Controller::m_click_mutex;
-std::mutex Controller::m_wheel_mutex;
+mutex Controller::m_key_mutex;
+mutex Controller::m_mouse_mutex;
+mutex Controller::m_click_mutex;
+mutex Controller::m_wheel_mutex;
 
 
-LORE::Controller::Controller():
+Controller::Controller():
     m_key_pressed_bindings(),
     m_key_pressing_bindings(),
     m_key_released_bindings(),
     m_click_bindings(),
     m_drag_bindings(){}
 
-LORE::Controller::~Controller() {}
+Controller::~Controller() {}
 
-void LORE::Controller::check() {
-    glm::vec2 diff = m_mouse_pos - m_last_mouse_pos;
+void Controller::check() {
+    vec2 diff = m_mouse_pos - m_last_mouse_pos;
 
     //Simple key pressed event
     for (const auto p : m_key_pressed_bindings) {
@@ -104,7 +109,7 @@ void LORE::Controller::check() {
             success = false;
         if (success && m_click_states[p.first.second] != 1)
             success = false;
-        if (success && diff == glm::vec2(0, 0))
+        if (success && diff == vec2(0, 0))
             success = false;
         if (success) p.second(m_origin_mouse_pos, m_mouse_pos, diff);
     }
@@ -118,7 +123,7 @@ void LORE::Controller::check() {
                 break;
             }
         }
-        if (success && diff == glm::vec2(0, 0))
+        if (success && diff == vec2(0, 0))
             success = false;
         if (success) p.second(m_mouse_pos, diff);
     }

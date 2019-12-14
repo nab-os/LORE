@@ -8,7 +8,7 @@ using std::string;
 
 using namespace LORE;
 
-Library<LORE::Window>* Lore::m__windowLibrary = new Library<Window>();
+Library<Window>* Lore::m__windowLibrary = new Library<Window>();
 Library<Scene>* Lore::m__sceneLibrary = new Library<Scene>();
 Library<Camera>* Lore::m__cameraLibrary = new Library<Camera>();
 Library<Node>* Lore::m__nodeLibrary = new Library<Node>();

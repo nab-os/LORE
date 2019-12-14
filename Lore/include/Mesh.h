@@ -18,8 +18,6 @@
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
 #endif
 
-using std::vector;
-
 namespace LORE {
     class Mesh {
         public:
@@ -34,23 +32,23 @@ namespace LORE {
 
             Material* getMaterial() { return m__material; };
 
-            void setIndices(vector<unsigned int> indices) { m__indices = indices; };
-            vector<unsigned int> getIndices() { return m__indices; };
+            void setIndices(std::vector<unsigned int> indices) { m__indices = indices; };
+            std::vector<unsigned int> getIndices() { return m__indices; };
 
-            void setVertices(vector<float> vertices) { m__vertices = vertices; };
-            vector<float> getVertices() { return m__vertices; };
+            void setVertices(std::vector<float> vertices) { m__vertices = vertices; };
+            std::vector<float> getVertices() { return m__vertices; };
 
-            void setUVs(vector<float> uvs) { m__UVs = uvs; };
-            vector<float> getUVs() { return m__UVs; };
+            void setUVs(std::vector<float> uvs) { m__UVs = uvs; };
+            std::vector<float> getUVs() { return m__UVs; };
 
-            void setNormals(vector<float> normals) { m__normals = normals; };
-            vector<float> getNormals() { return m__normals; };
+            void setNormals(std::vector<float> normals) { m__normals = normals; };
+            std::vector<float> getNormals() { return m__normals; };
 
-            void setTangents(vector<float> tangents) { m__tangents = tangents; };
-            vector<float> getTangents() { return m__tangents; };
+            void setTangents(std::vector<float> tangents) { m__tangents = tangents; };
+            std::vector<float> getTangents() { return m__tangents; };
 
-            void setColors(vector<float> colors) { m__colors = colors; };
-            vector<float> getColors() { return m__colors; };
+            void setColors(std::vector<float> colors) { m__colors = colors; };
+            std::vector<float> getColors() { return m__colors; };
 
             void setIndexed(bool indexed) { m__indexed = indexed; };
             bool getIndexed() { return m__indexed; };
@@ -74,16 +72,16 @@ namespace LORE {
             GLuint m__bitangentBuffer;
             GLuint m__colorBuffer;
 
-            vector<float> m__UVs;
-            vector<float> m__normals;
-            vector<float> m__tangents;
-            vector<float> m__bitangents;
-            vector<float> m__colors;
+            std::vector<float> m__UVs;
+            std::vector<float> m__normals;
+            std::vector<float> m__tangents;
+            std::vector<float> m__bitangents;
+            std::vector<float> m__colors;
 
             Material* m__material;
 
-            vector<unsigned int> m__indices;
-            vector<float> m__vertices;
+            std::vector<unsigned int> m__indices;
+            std::vector<float> m__vertices;
 
             bool m__indexed;
             int m__mode;

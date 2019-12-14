@@ -1,7 +1,11 @@
 #include "Light.h"
 
-glm::vec3 LORE::Light::lightPosition = glm::vec3(1.0);
+using glm::vec3;
 
-LORE::Light::Light() {}
+using namespace LORE;
 
-LORE::Light::~Light() {}
+vec3 Light::lightPosition = vec3(1.0);
+
+Light::Light() {}
+
+Light::~Light() {}

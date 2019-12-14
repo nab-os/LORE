@@ -2,7 +2,17 @@
 
 #include <iostream>
 
-LORE::Material::Material(): m__shader(), m__diffuseColor(glm::vec4(0.5, 0, 0, 1)),
+using std::cout;
+using std::endl;
+using std::string;
+using std::pair;
+using glm::vec2;
+using glm::vec3;
+using glm::vec4;
+
+using namespace LORE;
+
+Material::Material(): m__shader(), m__diffuseColor(vec4(0.5, 0, 0, 1)),
     m__metallness(0.0),
     m__roughness(0.5),
     m__customIntUniforms(),
@@ -15,33 +25,33 @@ LORE::Material::Material(): m__shader(), m__diffuseColor(glm::vec4(0.5, 0, 0, 1)
     m__occlusionTexture(),
     m__textures(),
     m__culling(true) {
-	std::cout << this << " [Material] constructor" << std::endl;
+	cout << this << " [Material] constructor" << endl;
 }
 
-LORE::Material::~Material() {
+Material::~Material() {
 }
 
-void LORE::Material::load() {
-	std::cout << this << " [Material] load" << std::endl;
+void Material::load() {
+	cout << this << " [Material] load" << endl;
 }
 
-void LORE::Material::addCustomIntUniform(std::string name, int* value) {
-    m__customIntUniforms.insert(std::pair<std::string, int*>(name, value));
+void Material::addCustomIntUniform(string name, int* value) {
+    m__customIntUniforms.insert(pair<string, int*>(name, value));
 }
 
-void LORE::Material::addCustomFloatUniform(std::string name, float* value) {
-    m__customFloatUniforms.insert(std::pair<std::string, float*>(name, value));
+void Material::addCustomFloatUniform(string name, float* value) {
+    m__customFloatUniforms.insert(pair<string, float*>(name, value));
 }
 
-void LORE::Material::addCustomVec2Uniform(std::string name, glm::vec2* value) {
-    m__customVec2Uniforms.insert(std::pair<std::string, glm::vec2*>(name, value));
+void Material::addCustomVec2Uniform(string name, vec2* value) {
+    m__customVec2Uniforms.insert(pair<string, vec2*>(name, value));
 }
 
-void LORE::Material::addCustomVec3Uniform(std::string name, glm::vec3* value) {
-    m__customVec3Uniforms.insert(std::pair<std::string, glm::vec3*>(name, value));
+void Material::addCustomVec3Uniform(string name, vec3* value) {
+    m__customVec3Uniforms.insert(pair<string, vec3*>(name, value));
 }
 
-void LORE::Material::sendCustomUniforms() {
+void Material::sendCustomUniforms() {
     for(auto p: m__customIntUniforms) {
         m__shader->sendIntUniform(p.first, *p.second);
     }
@@ -59,11 +69,11 @@ void LORE::Material::sendCustomUniforms() {
     }
 }
 
-void LORE::Material::sendTextures() {
+void Material::sendTextures() {
 /*
     int i = 0;
     for(auto it: m__textures) {
-        std::string name = it.first;
+        string name = it.first;
         GLuint texture_type = it.second.first;
         GLuint texture_id = it.second.second;
 

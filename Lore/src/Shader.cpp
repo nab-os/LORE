@@ -7,7 +7,13 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::ifstream;
-using LORE::Shader;
+using glm::vec2;
+using glm::vec3;
+using glm::vec4;
+using glm::mat3;
+using glm::mat4;
+
+using namespace LORE;
 
 Shader::Shader(string shaderName): m__programID(),
 										m__vertexID(),
@@ -190,27 +196,27 @@ bool Shader::compilerShader(GLuint &shader, GLenum type, string const &fichierSo
 
 }
 
-void Shader::sendMat4Uniform(string nom, glm::mat4 matrice) {
+void Shader::sendMat4Uniform(string nom, mat4 matrice) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-	glUniformMatrix4fv(localisation, 1, GL_FALSE, glm::value_ptr(matrice));
+	glUniformMatrix4fv(localisation, 1, GL_FALSE, value_ptr(matrice));
 }
 
-void Shader::sendMat3Uniform(string nom, glm::mat3 matrice) {
+void Shader::sendMat3Uniform(string nom, mat3 matrice) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
-	glUniformMatrix3fv(localisation, 1, GL_FALSE, glm::value_ptr(matrice));
+	glUniformMatrix3fv(localisation, 1, GL_FALSE, value_ptr(matrice));
 }
 
-void Shader::sendVec4Uniform(string nom, glm::vec4 vecteur) {
+void Shader::sendVec4Uniform(string nom, vec4 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform4f(localisation, vecteur.x, vecteur.y, vecteur.z, vecteur.w);
 }
 
-void Shader::sendVec3Uniform(string nom, glm::vec3 vecteur) {
+void Shader::sendVec3Uniform(string nom, vec3 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform3f(localisation, vecteur.x, vecteur.y, vecteur.z);
 }
 
-void Shader::sendVec2Uniform(string nom, glm::vec2 vecteur) {
+void Shader::sendVec2Uniform(string nom, vec2 vecteur) {
 	int localisation = glGetUniformLocation(m__programID, nom.c_str());
 	glUniform2f(localisation, vecteur.x, vecteur.y);
 }

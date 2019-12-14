@@ -6,7 +6,9 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-LORE::Cube::Cube(): Mesh() {
+using namespace LORE;
+
+Cube::Cube(): Mesh() {
     cout << this << " [Cube] constructor" << endl;
 
     vector<float> vertices = {
@@ -56,6 +58,6 @@ LORE::Cube::Cube(): Mesh() {
     setMode(GL_TRIANGLES);
 }
 
-LORE::Cube::~Cube() {
+Cube::~Cube() {
     cout << this << " [Cube] destructor" << endl;
 }

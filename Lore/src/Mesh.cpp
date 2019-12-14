@@ -3,8 +3,12 @@
 #include <iostream>
 #include "Camera.h"
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+using glm::vec2;
+using glm::vec3;
+using glm::mat4;
+
 using namespace LORE;
 
 Mesh::Mesh(): m__VAO(),
@@ -401,7 +405,7 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
 	glLoadMatrixf((const GLfloat*)&projection[0]);
 
 	glMatrixMode(GL_MODELVIEW);
-	glm::mat4 MV = view * model;
+	mat4 MV = view * model;
 	glLoadMatrixf((const GLfloat*)&MV[0]);
 
 	glColor3f(0,0,1);
@@ -417,7 +421,7 @@ void Mesh::render(Node* renderer, mat4 projection, mat4 view, mat4 model, GLuint
         vec3 p(m__vertices[i], m__vertices[i+1], m__vertices[i+2]);
         vec3 o(m__normals[i], m__normals[i+1], m__normals[i+2]);
 
-		o = glm::normalize(o);
+		o = normalize(o);
 		p += o*0.1f;
 		glVertex3fv(&p.x);
 
@@ -467,26 +471,26 @@ void Mesh::computeTangentBasis() {
             unsigned int index2_vec3 = m__indices[i + 1] * 3;
             unsigned int index3_vec3 = m__indices[i + 2] * 3;
 
-            glm::vec3 v0 = vec3(m__vertices[index1_vec3], m__vertices[index1_vec3 + 1], m__vertices[index1_vec3 + 2]);
-            glm::vec3 v1 = vec3(m__vertices[index2_vec3], m__vertices[index2_vec3 + 1], m__vertices[index2_vec3 + 2]);
-            glm::vec3 v2 = vec3(m__vertices[index3_vec3], m__vertices[index3_vec3 + 1], m__vertices[index3_vec3 + 2]);
+            vec3 v0 = vec3(m__vertices[index1_vec3], m__vertices[index1_vec3 + 1], m__vertices[index1_vec3 + 2]);
+            vec3 v1 = vec3(m__vertices[index2_vec3], m__vertices[index2_vec3 + 1], m__vertices[index2_vec3 + 2]);
+            vec3 v2 = vec3(m__vertices[index3_vec3], m__vertices[index3_vec3 + 1], m__vertices[index3_vec3 + 2]);
 
             // Shortcuts for UVs
-            glm::vec2 uv0 = vec2(m__UVs[index1_vec2], m__UVs[index1_vec2 + 1]);
-            glm::vec2 uv1 = vec2(m__UVs[index2_vec2], m__UVs[index2_vec2 + 1]);
-            glm::vec2 uv2 = vec2(m__UVs[index3_vec2], m__UVs[index3_vec2 + 1]);
+            vec2 uv0 = vec2(m__UVs[index1_vec2], m__UVs[index1_vec2 + 1]);
+            vec2 uv1 = vec2(m__UVs[index2_vec2], m__UVs[index2_vec2 + 1]);
+            vec2 uv2 = vec2(m__UVs[index3_vec2], m__UVs[index3_vec2 + 1]);
 
             // Edges of the triangle : postion delta
-            glm::vec3 deltaPos1 = v1-v0;
-            glm::vec3 deltaPos2 = v2-v0;
+            vec3 deltaPos1 = v1-v0;
+            vec3 deltaPos2 = v2-v0;
 
             // UV delta
-            glm::vec2 deltaUV1 = uv1-uv0;
-            glm::vec2 deltaUV2 = uv2-uv0;
+            vec2 deltaUV1 = uv1-uv0;
+            vec2 deltaUV2 = uv2-uv0;
 
             float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-            glm::vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
-            glm::vec3 bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
+            vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
+            vec3 bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
             //cout << i << ": " << m__tangents[index1_vec3] << ", " << m__tangents[index1_vec3+1] << ", " << m__tangents[index1_vec3+2] << endl;
             //cout << i << ": " << tangent.x << ", " << tangent.y << ", " << tangent.z << endl;
 

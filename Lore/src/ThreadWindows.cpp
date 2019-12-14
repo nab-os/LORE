@@ -7,11 +7,9 @@
 #include <conio.h>
 #include <process.h>
 
-using namespace std;
 using namespace LORE;
 
 Thread::Thread() {}
-
 
 Thread::~Thread() {}
 

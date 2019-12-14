@@ -6,12 +6,10 @@
 #include <GL/glew.h>
 #include <SOIL.h>
 
-using std::string;
-
 namespace LORE {
     class Texture {
         public:
-            Texture(string name = "");
+            Texture(std::string name = "");
             virtual ~Texture();
 
             void load();
@@ -21,7 +19,7 @@ namespace LORE {
         protected:
             GLuint m__id;
 
-            string m__name;
-            string m__filePath;
+            std::string m__name;
+            std::string m__filePath;
     };
 }

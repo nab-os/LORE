@@ -5,12 +5,10 @@
 
 #include "Texture.h"
 
-using std::string;
-
 namespace LORE {
     class CubeMap: public Texture {
         public:
-            CubeMap(string name = "default_cube_map");
+            CubeMap(std::string name = "default_cube_std::map");
             virtual ~CubeMap();
             void load();
     };

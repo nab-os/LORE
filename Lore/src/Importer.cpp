@@ -10,24 +10,33 @@
 #include "Library.h"
 #include "Lore.h"
 
-LORE::Importer::Importer(std::string file): m__filePath(file) {}
+using std::cout;
+using std::endl;
+using std::string;
+using std::vector;
+using glm::vec3;
+using glm::vec4;
 
-LORE::Importer::~Importer() {}
+using namespace LORE;
 
-LORE::Scene* LORE::Importer::import() {
-    std::cout << "[Importer]: import()" << std::endl;
+Importer::Importer(string file): m__filePath(file) {}
+
+Importer::~Importer() {}
+
+Scene* Importer::import() {
+    cout << "[Importer]: import()" << endl;
 
     if(m__filePath.substr(m__filePath.find_last_of(".") + 1) != "gltf") {
-        std::cout << "File extension must be .gltf" << std::endl;
+        cout << "File extension must be .gltf" << endl;
         exit(1);
         return NULL;
     }
 
     gltf2::Asset asset = gltf2::load(m__filePath);
 
-    std::cout << "[Importer]: import(): copyright " << asset.metadata.copyright << std::endl;
-    std::cout << "[Importer]: import(): version " << asset.metadata.version << std::endl;
-    std::cout << "[Importer]: import(): generator " << asset.metadata.generator << std::endl;
+    cout << "[Importer]: import(): copyright " << asset.metadata.copyright << endl;
+    cout << "[Importer]: import(): version " << asset.metadata.version << endl;
+    cout << "[Importer]: import(): generator " << asset.metadata.generator << endl;
 
     for(unsigned int i = 0; i < asset.scenes.size(); ++i) {
         importScene(asset, i);
@@ -38,18 +47,18 @@ LORE::Scene* LORE::Importer::import() {
     }
 
     for(unsigned int i = 0; i < asset.images.size(); ++i) {
-        std::cout << "[Import] Texture: " << i << std::endl;
+        cout << "[Import] Texture: " << i << endl;
         importTexture(asset, i);
     }
 
     for(unsigned int i = 0; i < asset.materials.size(); ++i) {
-        std::cout << "[Import] Material: " << i << std::endl;
+        cout << "[Import] Material: " << i << endl;
         importMaterial(asset, i);
     }
 
     /*
     for(unsigned int i = 0; i < asset..size(); ++i) {
-        std::cout << "[Import] Shader: " << i << std::endl;
+        cout << "[Import] Shader: " << i << endl;
         importShader(asset, i);
     }*/
 
@@ -58,7 +67,7 @@ LORE::Scene* LORE::Importer::import() {
     }
 
     for(unsigned int i = 0; i < asset.meshes.size(); ++i) {
-        std::cout << "[Import] Mesh: " << i << std::endl;
+        cout << "[Import] Mesh: " << i << endl;
         importMesh(asset, i);
     }
 
@@ -69,22 +78,22 @@ LORE::Scene* LORE::Importer::import() {
     return m__scenes[asset.scene];
 }
 
-void LORE::Importer::importScene(gltf2::Asset asset, unsigned int i) {
+void Importer::importScene(gltf2::Asset asset, unsigned int i) {
     gltf2::Scene gscene = asset.scenes[i];
-	std::string name = gscene.name;
+	string name = gscene.name;
 	if(name == "")
 		name = "Scene";
-    std::cout << "[Importer]: Scene: " << name << std::endl;
+    cout << "[Importer]: Scene: " << name << endl;
     Scene* scene = Lore::createScene(name);
 	m__scenes.push_back(scene);
 }
 
-void LORE::Importer::importCamera(gltf2::Asset asset, unsigned int i) {
+void Importer::importCamera(gltf2::Asset asset, unsigned int i) {
     gltf2::Camera gcamera = asset.cameras[i];
-	std::string name = gcamera.name;
+	string name = gcamera.name;
 	if(name == "")
 		name = "Camera";
-    std::cout << "[Importer]: Camera: " << name << std::endl;
+    cout << "[Importer]: Camera: " << name << endl;
     Camera* camera = Lore::createCamera(name);
 	m__cameras.push_back(camera);
 
@@ -93,20 +102,20 @@ void LORE::Importer::importCamera(gltf2::Asset asset, unsigned int i) {
     camera->setNear(gcamera.perspective.near);
 }
 
-void LORE::Importer::importTexture(gltf2::Asset asset, unsigned int i) {
+void Importer::importTexture(gltf2::Asset asset, unsigned int i) {
     gltf2::Image image = asset.images[i];
-    std::cout << "[Importer]: Texture: " << image.name << std::endl;
+    cout << "[Importer]: Texture: " << image.name << endl;
     Texture* texture = Lore::createTexture(image.uri);
 	m__textures.push_back(texture);
     texture->load();
 }
 
-void LORE::Importer::importMaterial(gltf2::Asset asset, unsigned int i) {
+void Importer::importMaterial(gltf2::Asset asset, unsigned int i) {
     gltf2::Material gmaterial = asset.materials[i];
-	std::string name = gmaterial.name;
+	string name = gmaterial.name;
 	if(name == "")
 		name = "Material";
-    std::cout << "[Importer]: Material: " << name << std::endl;
+    cout << "[Importer]: Material: " << name << endl;
     Material* material = Lore::createMaterial(name);
 	m__materials.push_back(material);
 
@@ -122,7 +131,7 @@ void LORE::Importer::importMaterial(gltf2::Asset asset, unsigned int i) {
     if(gmaterial.occlusionTexture.index != -1)
         material->setOcclusionTexture(m__textures[gmaterial.occlusionTexture.index]);
 
-    material->setDiffuseColor(glm::vec4(pbr.baseColorFactor[0], pbr.baseColorFactor[1], pbr.baseColorFactor[2], pbr.baseColorFactor[3]));
+    material->setDiffuseColor(vec4(pbr.baseColorFactor[0], pbr.baseColorFactor[1], pbr.baseColorFactor[2], pbr.baseColorFactor[3]));
     material->setMetallness(pbr.metallicFactor);
     material->setRoughness(pbr.roughnessFactor);
 
@@ -132,11 +141,11 @@ void LORE::Importer::importMaterial(gltf2::Asset asset, unsigned int i) {
 
 }
 
-void LORE::Importer::importNode(gltf2::Asset asset, unsigned int i) {
+void Importer::importNode(gltf2::Asset asset, unsigned int i) {
     gltf2::Node gnode = asset.nodes[i];
 
     Node* node;
-	std::string name = gnode.name;
+	string name = gnode.name;
 
     if(gnode.camera != -1) {
 		if(name == "")
@@ -149,36 +158,36 @@ void LORE::Importer::importNode(gltf2::Asset asset, unsigned int i) {
     }else if(gnode.skin != -1) {
 		if(name == "")
 			name = "Skin";
-        std::cout << "[Importer] Skin not implemented" << std::endl;
+        cout << "[Importer] Skin not implemented" << endl;
     }else
     {
 		if(name == "")
 			name = "Node";
         node = Lore::createNode(name);
     }
-    std::cout << "[Importer]: Node: " << name << std::endl;
+    cout << "[Importer]: Node: " << name << endl;
 	m__nodes.push_back(node);
 
-    node->setPosition(glm::vec3(gnode.translation[0], gnode.translation[1], gnode.translation[2]));
-    node->setScale(glm::vec3(gnode.scale[0], gnode.scale[1], gnode.scale[2]));
+    node->setPosition(vec3(gnode.translation[0], gnode.translation[1], gnode.translation[2]));
+    node->setScale(vec3(gnode.scale[0], gnode.scale[1], gnode.scale[2]));
 
 }
 
-void LORE::Importer::importMesh(gltf2::Asset asset, unsigned int i) {
+void Importer::importMesh(gltf2::Asset asset, unsigned int i) {
     gltf2::Mesh gmesh = asset.meshes[i];
-	std::string name = gmesh.name;
+	string name = gmesh.name;
 	if(name == "")
 		name = "Mesh";
-    std::cout << "[Importer]: Mesh: " << name << std::endl;
+    cout << "[Importer]: Mesh: " << name << endl;
     Mesh* mesh = Lore::createMesh(name);
 	m__meshes.push_back(mesh);
 
     for(auto primitive: gmesh.primitives) {
         if(primitive.indices != -1) {
-            std::vector<float> indices_temp = importData(asset, asset.accessors[primitive.indices]);
-            std::vector<unsigned int> indices;
+            vector<float> indices_temp = importData(asset, asset.accessors[primitive.indices]);
+            vector<unsigned int> indices;
             for(auto it: indices_temp) {
-                //cout << "[Importer] Indice: " << it << std::endl;
+                //cout << "[Importer] Indice: " << it << endl;
                 indices.push_back((unsigned int)it);
             }
             mesh->setIndexed(true);
@@ -193,124 +202,124 @@ void LORE::Importer::importMesh(gltf2::Asset asset, unsigned int i) {
         gltf2::Attributes attributes = primitive.attributes;
         for(auto it: attributes) {
             gltf2::Accessor accessor = asset.accessors[it.second];
-            std::vector<float> values = importData(asset, accessor);
-            std::cout << "[Importer]: " << values.size() << std::endl;
+            vector<float> values = importData(asset, accessor);
+            cout << "[Importer]: " << values.size() << endl;
             if( it.first == "POSITION") {
-                std::cout << "[Importer]: " << "POSITION attribute: " << (int)accessor.componentType << std::endl;
+                cout << "[Importer]: " << "POSITION attribute: " << (int)accessor.componentType << endl;
                 mesh->setVertices(values);
             }else if(it.first == "NORMAL") {
-                std::cout << "[Importer]: " << "NORMAL attribute" << std::endl;
+                cout << "[Importer]: " << "NORMAL attribute" << endl;
                 mesh->setNormals(values);
             }else if(it.first == "TANGENT") {
-                std::cout << "[Importer]: " << "TANGENT attribute" << std::endl;
+                cout << "[Importer]: " << "TANGENT attribute" << endl;
                 mesh->setTangents(values);
             }else if(it.first == "COLOR_0") {
-                std::cout << "[Importer]: " << "COLOR_0 attribute" << std::endl;
+                cout << "[Importer]: " << "COLOR_0 attribute" << endl;
                 mesh->setColors(values);
             }else if(it.first == "TEXCOORD_0") {
-                std::cout << "[Importer]: " << "TEXCOORD_0 attribute: " << (int)accessor.type << std::endl;
+                cout << "[Importer]: " << "TEXCOORD_0 attribute: " << (int)accessor.type << endl;
                 mesh->setUVs(values);
             }else
             {
-                std::cout << "[Importer]: " << it.first << " not implemented." << std::endl;
+                cout << "[Importer]: " << it.first << " not implemented." << endl;
             }
         }
 
-        std::cout << "[Importer] Material: " << primitive.material << std::endl;
+        cout << "[Importer] Material: " << primitive.material << endl;
         if(primitive.material != -1)
             mesh->setMaterial(m__materials[primitive.material]);
         else
             mesh->setMaterial(Lore::getMaterial("default"));
     }
-    std::cout << " [Importer]: Finished mesh import" << std::endl;
+    cout << " [Importer]: Finished mesh import" << endl;
     mesh->load();
 }
 
-std::vector<float> LORE::Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor) {
+vector<float> Importer::importData(gltf2::Asset asset, gltf2::Accessor accessor) {
     gltf2::BufferView buffer_view = asset.bufferViews[accessor.bufferView];
     gltf2::Buffer buffer = asset.buffers[buffer_view.buffer];
     unsigned int begin = accessor.byteOffset + buffer_view.byteOffset;
     unsigned int end = buffer_view.byteLength + buffer_view.byteOffset;
     unsigned int all = end - begin;
-    std::cout << "Target: " << (int)buffer_view.target << std::endl;
-    std::cout << "Begin: " << begin << " End: " << end << " Buffer size: " << all << " Count: " << accessor.count << std::endl;
+    cout << "Target: " << (int)buffer_view.target << endl;
+    cout << "Begin: " << begin << " End: " << end << " Buffer size: " << all << " Count: " << accessor.count << endl;
     unsigned int size;
 
-    std::vector<float> values;
+    vector<float> values;
     switch(accessor.componentType) {
         case(gltf2::Accessor::ComponentType::Byte):
-            std::cout << "[Import] Byte component type" << std::endl;
+            cout << "[Import] Byte component type" << endl;
             size = sizeof(char);
             for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
-                    //cout << "Value: " << (int)(*(char*)&buffer.data[ptr]) << std::endl;
+                    //cout << "Value: " << (int)(*(char*)&buffer.data[ptr]) << endl;
                     values.push_back(*(char*)&buffer.data[ptr]);
                 //}
             }
             break;
         case(gltf2::Accessor::ComponentType::UnsignedByte):
-            std::cout << "[Import] UnsignedByte component type" << std::endl;
+            cout << "[Import] UnsignedByte component type" << endl;
             size = sizeof(unsigned char);
             for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
-                    //cout << "Value: " << (int)(*(unsigned char*)&buffer.data[ptr]) << std::endl;
+                    //cout << "Value: " << (int)(*(unsigned char*)&buffer.data[ptr]) << endl;
                     values.push_back(*(unsigned char*)&buffer.data[ptr]);
                 //}
             }
             break;
         case(gltf2::Accessor::ComponentType::Short):
-            std::cout << "[Import] Short component type" << std::endl;
+            cout << "[Import] Short component type" << endl;
             size = sizeof(short);
             for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
-                    //cout << "Value: " << *(short*)&buffer.data[ptr] << std::endl;
+                    //cout << "Value: " << *(short*)&buffer.data[ptr] << endl;
                     values.push_back(*(short*)&buffer.data[ptr]);
                 //}
             }
             break;
         case(gltf2::Accessor::ComponentType::UnsignedShort):
-            std::cout << "[Import] UnsignedShort component type" << std::endl;
+            cout << "[Import] UnsignedShort component type" << endl;
             size = sizeof(unsigned short);
             for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
-                    //cout << "Value: " << *(unsigned short*)&buffer.data[ptr] << std::endl;
+                    //cout << "Value: " << *(unsigned short*)&buffer.data[ptr] << endl;
                     values.push_back(*(unsigned short*)&buffer.data[ptr]);
                 //}
             }
             break;
         case(gltf2::Accessor::ComponentType::UnsignedInt):
-            std::cout << "[Import] UnsignedInt component type" << std::endl;
+            cout << "[Import] UnsignedInt component type" << endl;
             size = sizeof(unsigned int);
             for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
-                    //cout << "Value: " << *(unsigned int*)&buffer.data[ptr] << std::endl;
+                    //cout << "Value: " << *(unsigned int*)&buffer.data[ptr] << endl;
                     values.push_back(*(unsigned int*)&buffer.data[ptr]);
                 //}
             }
             break;
         case(gltf2::Accessor::ComponentType::Float):
-            std::cout << "[Import] Float component type: " << sizeof(float) << std::endl;
+            cout << "[Import] Float component type: " << sizeof(float) << endl;
             size = sizeof(float);
             for(unsigned int ptr = begin; ptr < end; ptr+=size) {
                 //if(ptr != buffer_view.byteStride)
                 //{
-                    //cout << "Value: " << *(float*)&buffer.data[ptr] << std::endl;
+                    //cout << "Value: " << *(float*)&buffer.data[ptr] << endl;
                     values.push_back(*(float*)(&buffer.data[ptr]));
                 //}
             }
             break;
         default:
-            std::cout << "Unknown component type." << std::endl;
+            cout << "Unknown component type." << endl;
     }
     return values;
 }
 
-void LORE::Importer::buildTree(gltf2::Asset asset, unsigned int i) {
+void Importer::buildTree(gltf2::Asset asset, unsigned int i) {
     gltf2::Scene gscene = asset.scenes[i];
     Scene* scene = m__scenes[i];
 
@@ -320,8 +329,8 @@ void LORE::Importer::buildTree(gltf2::Asset asset, unsigned int i) {
     }
 }
 
-void LORE::Importer::buildNodeTree(gltf2::Asset asset, Scene* scene, unsigned int i) {
-    std::cout << "[Importer]: buildNodeTree: " << i << std::endl;
+void Importer::buildNodeTree(gltf2::Asset asset, Scene* scene, unsigned int i) {
+    cout << "[Importer]: buildNodeTree: " << i << endl;
     if(asset.nodes.size() > i) {
         gltf2::Node gnode = asset.nodes[i];
         Node* node = m__nodes[i];
@@ -342,6 +351,6 @@ void LORE::Importer::buildNodeTree(gltf2::Asset asset, Scene* scene, unsigned in
         }
     }else
     {
-        std::cout << "[Importer] Import error: node not found during tree construction!" << std::endl;
+        cout << "[Importer] Import error: node not found during tree construction!" << endl;
     }
 }

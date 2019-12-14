@@ -1,17 +1,22 @@
 #include "FrameBuffer.h"
 
-LORE::FrameBuffer::FrameBuffer(int width, int height):
+using std::cout;
+using std::endl;
+
+using namespace LORE;
+
+FrameBuffer::FrameBuffer(int width, int height):
 m__width(width),
 m__height(height),
 m__renderTexture() {
-	std::cout << this << " [FrameBuffer] constructor" << std::endl;
+	cout << this << " [FrameBuffer] constructor" << endl;
 }
 
-LORE::FrameBuffer::~FrameBuffer() {
+FrameBuffer::~FrameBuffer() {
 	delete m__renderTexture;
 }
 
-void LORE::FrameBuffer::load() {
+void FrameBuffer::load() {
 	m__renderTexture = new Texture();
     m__renderTexture->load();
 
@@ -43,7 +48,7 @@ void LORE::FrameBuffer::load() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void LORE::FrameBuffer::render() {
+void FrameBuffer::render() {
 	glBindFramebuffer(GL_FRAMEBUFFER, m__bufferID);
 	m__camera->render();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

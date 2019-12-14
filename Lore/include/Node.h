@@ -10,9 +10,6 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-using std::string;
-using std::vector;
-
 namespace LORE {
     class Node {
         public:
@@ -21,9 +18,9 @@ namespace LORE {
 
             virtual void render(Node* renderer, glm::mat4 projection, glm::mat4 view, glm::mat4 model, GLuint environmentMapID = 0);
 
-            Node* addChild(string path = "default");
+            Node* addChild(std::string path = "default");
             void addChild(Node* obj);
-            vector<Node*> getChilds();
+            std::vector<Node*> getChilds();
 
             void move(glm::vec3 pos);
             void setPosition(glm::vec3 pos);
@@ -40,7 +37,7 @@ namespace LORE {
             virtual bool isCamera() { return false; };
 
         private:
-            vector<Node*> m__childs;
+            std::vector<Node*> m__childs;
 
             glm::vec3 m__position;
             glm::quat m__rotation;

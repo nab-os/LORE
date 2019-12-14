@@ -11,13 +11,10 @@
 #include "Material.h"
 #include "Texture.h"
 
-using std::string;
-using std::vector;
-
 namespace LORE {
     class Importer {
         public:
-            Importer(string file);
+            Importer(std::string file);
             ~Importer();
 
             Scene* import();
@@ -35,15 +32,15 @@ namespace LORE {
             void buildTree(gltf2::Asset asset, unsigned int i);
             void buildNodeTree(gltf2::Asset asset, Scene* scene, unsigned int i);
 
-            vector<float> importData(gltf2::Asset asset, gltf2::Accessor accessor);
+            std::vector<float> importData(gltf2::Asset asset, gltf2::Accessor accessor);
 
-            string m__filePath;
+            std::string m__filePath;
 
-            vector<Scene*> m__scenes;
-            vector<Camera*> m__cameras;
-            vector<Mesh*> m__meshes;
-            vector<Node*> m__nodes;
-            vector<Material*> m__materials;
-            vector<Texture*> m__textures;
+            std::vector<Scene*> m__scenes;
+            std::vector<Camera*> m__cameras;
+            std::vector<Mesh*> m__meshes;
+            std::vector<Node*> m__nodes;
+            std::vector<Material*> m__materials;
+            std::vector<Texture*> m__textures;
     };
 }

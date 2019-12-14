@@ -4,8 +4,9 @@
 
 #include "Camera.h"
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+
 using namespace LORE;
 
 Scene::Scene():	Node(),

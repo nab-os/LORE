@@ -2,37 +2,16 @@
 
 #include <string>
 
-#if defined(_WIN32)
-#define GLFW_EXPOSE_NATIVE_WIN32
-#define GLFW_EXPOSE_NATIVE_WGL
-#define OVR_OS_WIN32
-#elif defined(__APPLE__)
-#define GLFW_EXPOSE_NATIVE_COCOA
-#define GLFW_EXPOSE_NATIVE_NSGL
-#define OVR_OS_MAC
-#elif defined(__linux__)
-#define GLFW_EXPOSE_NATIVE_X11
-#define GLFW_EXPOSE_NATIVE_GLX
-#define OVR_OS_LINUX
-#endif
-
 #include <GL/glew.h>
-
 #include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
 
 #include "Camera.h"
 #include "Scene.h"
 
-//#include <OVR_CAPI.h>
-//#include <OVR_CAPI_GL.h>
-
-using std::string;
-
 namespace LORE {
     class Window {
         public:
-            Window(string tittle = "First window", int width = 512, int height = 512, int fps = 60);
+            Window(std::string tittle = "First window", int width = 512, int height = 512, int fps = 60);
             virtual ~Window();
 
             void close();
@@ -59,7 +38,7 @@ namespace LORE {
         private:
             GLFWwindow* m__window;
 
-            string m__title;
+            std::string m__title;
 
             int m__width;
             int m__height;

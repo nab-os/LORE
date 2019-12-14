@@ -6,11 +6,13 @@
 #include <thread>
 #include "Thread.h"
 
-using namespace std;
-using namespace glm;
+using std::cout;
+using std::endl;
+using std::string;
+
 using namespace LORE;
 
-LORE::Window::Window(std::string tittle, int width, int height, int fps): m__window(),
+Window::Window(string tittle, int width, int height, int fps): m__window(),
 																		m__title(tittle),
 																		m__width(width),
 																		m__height(height),
@@ -18,46 +20,46 @@ LORE::Window::Window(std::string tittle, int width, int height, int fps): m__win
 																	    m__camera(),
                                                                         m__scene() {}
 
-LORE::Window::~Window() {
+Window::~Window() {
 	cout << this << " [Window] destructor" << endl;
 }
 
-void LORE::Window::error_callback(int error, const char* description) {
+void Window::error_callback(int error, const char* description) {
 	cout << "[Window] error_callback() :" << description << "\n";
 }
 
-void LORE::Window::window_size_callback(GLFWwindow* window, int width, int height) {
+void Window::window_size_callback(GLFWwindow* window, int width, int height) {
 	cout << "[Window] window_size_callback" << endl;
 }
 
-void LORE::Window::window_focus_callback(GLFWwindow* window, int state) {
+void Window::window_focus_callback(GLFWwindow* window, int state) {
 	cout << "[Window] window_focus_callback: " << state << endl;
 	//static_cast<Window*>(glfwGetWindowUserPointer(window))->m__paused = !state;
 }
 
-void LORE::Window::window_close_callback(GLFWwindow* window) {
+void Window::window_close_callback(GLFWwindow* window) {
 	cout << "[Window] window_close_callback" << endl;
 	Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
 	w->close();
 }
 
-void LORE::Window::mouse_move_callback(GLFWwindow* window, double x, double y) {
+void Window::mouse_move_callback(GLFWwindow* window, double x, double y) {
 	//cout << "[Window] mouse_move_callback" << endl;
 }
 
-void LORE::Window::load() {
+void Window::load() {
     cout << this << " [Window] load" << endl;
 
 	// Création de la fenêtre
 	m__window = glfwCreateWindow(m__width, m__height, m__title.c_str(), NULL, NULL);
 	if (!m__window) {
-		std::cout << "Erreur lors de la creation de la fenetre" << std::endl;
+		cout << "Erreur lors de la creation de la fenetre" << endl;
 
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
 
-	//glfwSetKeyCallback(m__window, LORE::Window::key_callback);
+	//glfwSetKeyCallback(m__window, Window::key_callback);
 
 	glfwMakeContextCurrent(m__window);
 
@@ -71,20 +73,20 @@ void LORE::Window::load() {
 
 }
 
-void LORE::Window::close() {
+void Window::close() {
 	glfwSetWindowShouldClose(m__window, GL_TRUE);
 }
 
-int LORE::Window::shouldClose() {
+int Window::shouldClose() {
 	return glfwWindowShouldClose(m__window);
 }
 
-int LORE::Window::startFrame() {
+int Window::startFrame() {
 	int startTime = int(glfwGetTime() * 1000);
 	return startTime;
 }
 
-void LORE::Window::endFrame(int startTime) {
+void Window::endFrame(int startTime) {
 	glfwSwapBuffers(m__window);
 
 	glfwPollEvents();
@@ -98,7 +100,7 @@ void LORE::Window::endFrame(int startTime) {
 		Thread::sleep(m__frameRate - elapsedTime);
 }
 
-void LORE::Window::render() {
+void Window::render() {
 	glfwMakeContextCurrent(m__window);
 	if(m__camera)
 		m__camera->render();

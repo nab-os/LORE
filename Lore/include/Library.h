@@ -4,13 +4,6 @@
 #include <string>
 #include <map>
 
-using std::cout;
-using std::endl;
-using std::string;
-using std::map;
-using std::pair;
-using std::to_string;
-
 namespace LORE {
     template <class T>
     class Library {
@@ -19,22 +12,22 @@ namespace LORE {
 
             ~Library() {}
 
-            bool has(string path) {
+            bool has(std::string path) {
                 return m__objects.find(path) != m__objects.end();
             }
 
-            void add(string path, T* object) {
-                string path_ = path;
+            void add(std::string path, T* object) {
+                std::string path_ = path;
                 int i = 1;
                 while(has(path_)) {
-                    path_ = path + "_" + to_string(i);
+                    path_ = path + "_" + std::to_string(i);
                     i++;
                 }
-                cout << "Resulting path: " << path_ << endl;
-                m__objects.insert(pair<string, T*>(path_, object));
+                std::cout << "Resulting path: " << path_ << std::endl;
+                m__objects.insert(std::pair<std::string, T*>(path_, object));
             }
 
-            T* get(string path) {
+            T* get(std::string path) {
                 if(has(path))
                     return m__objects.at(path);
                 else
@@ -43,7 +36,7 @@ namespace LORE {
 
             void list() {
                 for(auto it: m__objects)
-                    cout << "[Library]: " << it.first << endl;
+                    std::cout << "[Library]: " << it.first << std::endl;
             }
 
             void flush() {
@@ -53,6 +46,6 @@ namespace LORE {
             }
 
         private:
-            map<string, T*> m__objects;
+            std::map<std::string, T*> m__objects;
     };
 }

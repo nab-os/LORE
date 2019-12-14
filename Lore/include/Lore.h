@@ -57,7 +57,7 @@ namespace LORE{
 
             static void error_callback(int error, const char* description);
 
-            static Library<LORE::Window>* m__windowLibrary;
+            static Library<Window>* m__windowLibrary;
             static Library<Scene>* m__sceneLibrary;
             static Library<Camera>* m__cameraLibrary;
             static Library<Node>*	m__nodeLibrary;
