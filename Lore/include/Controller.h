@@ -73,9 +73,9 @@ namespace LORE {
             // ===== Key binding =====
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is released
+             * \brief Bind a key to a function. Will be checked when key is released
              * \param key the keycode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindKey(const int key, std::function<void()> action) {
                 std::vector<int> keys = {key};
@@ -83,10 +83,10 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed, being pressed, or released
+             * \brief Bind a key to a function. Will be checked when key is pressed, being pressed, or released
              * \param key the keycode to bind
              * \param state key state to check
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindKey(const int key, const KeyState state, std::function<void()> action) {
                 std::vector<int> keys = {key};
@@ -94,19 +94,19 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key list to a std::function. Will be checked when keys are released
+             * \brief Bind a key list to a function. Will be checked when keys are released
              * \param keys keycode list to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindKey(const std::vector<int> keys, std::function<void()> action) {
                 bindKey(keys, KeyState::RELEASED, action);
             };
 
             /*!
-             * \brief Bind a key list to a std::function. Will be checked when keys are pressed, being pressed, or released
+             * \brief Bind a key list to a function. Will be checked when keys are pressed, being pressed, or released
              * \param keys keycode list to bind
              * \param state keys state to check
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindKey(const std::vector<int> keys, KeyState state, std::function<void()> action) {
                 switch(state) {
@@ -125,9 +125,9 @@ namespace LORE {
             // ===== Click binding =====
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a function. Will be checked when key is pressed
              * \param click clickcode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindClick(const int click, std::function<void(glm::vec2, glm::vec2)> action) {
                 std::vector<int> temp;
@@ -135,10 +135,10 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a function. Will be checked when key is pressed
              * \param key the keycode to bind
              * \param click clickcode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindClick(const int key, const int click, std::function<void(glm::vec2, glm::vec2)> action) {
                 std::vector<int> temp = {key};
@@ -146,10 +146,10 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a function. Will be checked when key is pressed
              * \param keys the keycode list to bind
              * \param click clickcode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindClick(const std::vector<int> keys, const int click, std::function<void(glm::vec2, glm::vec2)> action) {
                 m_click_bindings[std::pair<const std::vector<int>, int>(keys, click)] = action;
@@ -158,9 +158,9 @@ namespace LORE {
             // ===== Drag binding =====
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a function. Will be checked when key is pressed
              * \param click clickcode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindDrag(const int click, std::function<void(glm::vec2, glm::vec2, glm::vec2)> action) {
                 std::vector<int> temp;
@@ -168,10 +168,10 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a function. Will be checked when key is pressed
              * \param key the keycode to bind
              * \param click clickcode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindDrag(const int key, const int click, std::function<void(glm::vec2, glm::vec2, glm::vec2)> action) {
                 std::vector<int> temp = {key};
@@ -179,10 +179,10 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key to a std::function. Will be checked when key is pressed
+             * \brief Bind a key to a function. Will be checked when key is pressed
              * \param keys the keycode list to bind
              * \param click clickcode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindDrag(const std::vector<int> keys, const int click, std::function<void(glm::vec2, glm::vec2, glm::vec2)> action) {
                 m_drag_bindings[std::pair<const std::vector<int>, int>(keys, click)] = action;
@@ -191,8 +191,8 @@ namespace LORE {
             // ===== Move binding =====
 
             /*!
-             * \brief Bind simple move event to a std::function.
-             * \param action the std::function that should be executed
+             * \brief Bind simple move event to a function.
+             * \param action the function that should be executed
              */
             void bindMove(std::function<void(glm::vec2, glm::vec2)> action) {
                 std::vector<int> temp;
@@ -200,9 +200,9 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key and a move to a std::function. Will be checked when key is pressed
+             * \brief Bind a key and a move to a function. Will be checked when key is pressed
              * \param key the keycode to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindMove(const int key, std::function<void(glm::vec2, glm::vec2)> action) {
                 std::vector<int> temp = {key};
@@ -210,9 +210,9 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key list to a std::function. Will be checked when all the keys are pressed together
+             * \brief Bind a key list to a function. Will be checked when all the keys are pressed together
              * \param keys the keycode list to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindMove(const std::vector<int> keys, std::function<void(glm::vec2, glm::vec2)> action) {
                 m_move_bindings[keys] = action;
@@ -221,9 +221,9 @@ namespace LORE {
             // ===== Wheel binding =====
 
             /*!
-             * \brief Bind simple wheel event to a std::function.
+             * \brief Bind simple wheel event to a function.
              * \param direction wheeling direction to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindWheel(const int direction, std::function<void()> action) {
                 std::vector<int> temp;
@@ -231,10 +231,10 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key and a direction to a std::function. Will be checked when key is pressed
+             * \brief Bind a key and a direction to a function. Will be checked when key is pressed
              * \param key the keycode to bind
              * \param direction wheeling direction to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindWheel(const int key, const int direction, std::function<void()> action) {
                 std::vector<int> temp = {key};
@@ -242,10 +242,10 @@ namespace LORE {
             };
 
             /*!
-             * \brief Bind a key list to a std::function. Will be checked when all the keys are pressed together
+             * \brief Bind a key list to a function. Will be checked when all the keys are pressed together
              * \param keys the keycode list to bind
              * \param direction wheeling direction to bind
-             * \param action the std::function that should be executed
+             * \param action the function that should be executed
              */
             void bindWheel(const std::vector<int> keys, const int direction, std::function<void()> action) {
                 m_wheel_bindings[std::pair<const std::vector<int>, int>(keys, direction)] = action;
