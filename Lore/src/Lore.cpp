@@ -5,17 +5,8 @@
 using std::cout;
 using std::endl;
 using std::string;
-using LORE::Lore;
-using LORE::Texture;
-using LORE::Scene;
-using LORE::Camera;
-using LORE::Node;
-using LORE::Mesh;
-using LORE::Material;
-using LORE::Texture;
-using LORE::Shader;
-using LORE::Library;
-using LORE::Object;
+
+using namespace LORE;
 
 Library<LORE::Window>* Lore::m__windowLibrary = new Library<Window>();
 Library<Scene>* Lore::m__sceneLibrary = new Library<Scene>();
@@ -38,7 +29,7 @@ void Lore::error_callback(int error, const char* description) {
  * Initialize Glfw and Glew and returns a Window
  * @return returns a window
  **/
-LORE::Window* Lore::init() {
+Window* Lore::init() {
 	cout << "[Lore] init" << endl;
 
 	glfwSetErrorCallback(error_callback);
@@ -50,7 +41,7 @@ LORE::Window* Lore::init() {
 
 	//=====================
 
-    LORE::Window* w = Lore::createWindow("Window_1", "Test");
+    Window* w = Lore::createWindow("Window_1", "Test");
 	w->load();
 
 	//=====================
@@ -127,8 +118,8 @@ bool Lore::importMesh(string id, Mesh* mesh) {
     return true;
 }
 
-LORE::Window* Lore::createWindow(string id, string name) {
-    LORE::Window* w = new Window(name);
+Window* Lore::createWindow(string id, string name) {
+    Window* w = new Window(name);
 	Lore::m__windowLibrary->add(id, w);
 	return w;
 }
