@@ -8,7 +8,7 @@
 namespace LORE {
     class CubeMap: public Texture {
         public:
-            CubeMap(std::string name = "default_cube_std::map");
+            CubeMap(std::string name = "default_cube_map");
             virtual ~CubeMap();
             void load();
     };
